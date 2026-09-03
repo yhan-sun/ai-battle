@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#07111f" />
+    <title>Nova Stride: Rift Runner</title>
+  </head>
+  <body>
+    <main id="app">
+      <div id="render-root" aria-label="Nova Stride 游戏画面"></div>
+
+      <section id="hud" aria-live="polite">
+        <div class="hud-top">
+          <div class="brand-lockup">
+            <span class="brand-spark">✦</span>
+            <div>
+              <p class="eyebrow">TERRA MAX PRESENTS</p>
+              <h1>NOVA <em>STRIDE</em></h1>
+            </div>
+          </div>
+
+          <div class="mode-readout">
+            <span class="mode-dot"></span>
+            <span id="mode-name">暮空航道</span>
+            <small id="mode-note">SECTOR 01</small>
+          </div>
+
+          <div class="score-stack">
+            <p>表现分 <strong id="score-value">000000</strong></p>
+            <p>最高分 <span id="high-score">000000</span></p>
+          </div>
+        </div>
+
+        <div class="hud-middle">
+          <div class="combo-panel">
+            <span class="label">FLOW</span>
+            <strong id="combo-value">x1.0</strong>
+            <span id="combo-caption">保持奔跑</span>
+          </div>
+
+          <div class="event-banner" id="event-banner">
+            <span class="event-mark">✦</span>
+            <span id="event-text">穿过星尘，寻找裂隙门</span>
+          </div>
+
+          <div class="distance-panel">
+            <span class="label">DISTANCE</span>
+            <strong id="distance-value">0m</strong>
+            <span id="speed-value">8.0 AU/S</span>
+          </div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="meter-cluster">
+            <div class="meter-line">
+              <span>骑兽同步</span>
+              <div class="meter"><i id="pet-meter"></i></div>
+              <b id="pet-status">LUMA READY</b>
+            </div>
+            <div class="meter-line">
+              <span>星核技</span>
+              <div class="meter orange"><i id="skill-meter"></i></div>
+              <b id="skill-status">X 释放</b>
+            </div>
+          </div>
+
+          <div class="powerup-panel">
+            <div class="power-chip" id="chip-shield"><span>◇</span> 护盾 <b>--</b></div>
+            <div class="power-chip" id="chip-magnet"><span>⌁</span> 磁场 <b>--</b></div>
+            <div class="power-chip" id="chip-dash"><span>➜</span> 冲刺 <b>--</b></div>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast" role="status"></div>
+
+      <section class="screen visible" id="start-screen">
+        <div class="screen-card start-card">
+          <p class="kicker">AN INFINITE RUN THROUGH THE AURORA</p>
+          <h2>把暮空<br /><span>踩成星河。</span></h2>
+          <p class="intro">骑上发光兽 Luma，穿过会呼吸的无尽地貌。跳跃、俯身、践踏与星核冲刺，都会把这段旅程写进你的表现分。</p>
+          <button class="primary-button" id="start-button"><span>开始奔跑</span><b>SPACE</b></button>
+          <div class="quick-guide">
+            <span><b>SPACE</b> 跳跃 / 二段跳</span>
+            <span><b>↓</b> 俯身穿越</span>
+            <span><b>SHIFT</b> 冲刺</span>
+            <span><b>X</b> 星核技</span>
+          </div>
+          <p class="microcopy">支持键盘与屏幕按键 · P 暂停</p>
+        </div>
+        <div class="orbit-dial" aria-hidden="true">
+          <i></i><i></i><i></i><b>01</b>
+        </div>
+      </section>
+
+      <section class="screen" id="pause-screen">
+        <div class="screen-card compact-card">
+          <p class="kicker">RUN SUSPENDED</p>
+          <h2>航线已冻结</h2>
+          <p>让星尘停在半空。准备好后继续向前。</p>
+          <button class="primary-button" id="resume-button"><span>继续奔跑</span><b>P</b></button>
+          <button class="text-button" id="restart-from-pause">重新开始</button>
+        </div>
+      </section>
+
+      <section class="screen" id="result-screen">
+        <div class="screen-card result-card">
+          <p class="kicker">RUN COMPLETE</p>
+          <h2 id="result-title">轨迹熄灭</h2>
+          <div class="result-score" id="result-score">000000</div>
+          <div class="result-stats">
+            <span><b id="result-distance">0m</b>距离</span>
+            <span><b id="result-coins">0</b>星币</span>
+            <span><b id="result-style">0</b>风格连击</span>
+          </div>
+          <p id="result-note">再来一次，把今天的天空跑得更远。</p>
+          <button class="primary-button" id="restart-button"><span>再次点燃</span><b>SPACE</b></button>
+          <button class="text-button" id="share-button">复制本局成绩</button>
+        </div>
+      </section>
+
+      <div class="touch-controls" aria-label="触屏控制">
+        <button data-action="jump">跃</button>
+        <button data-action="crouch">伏</button>
+        <button data-action="dash">冲</button>
+        <button data-action="skill">核</button>
+      </div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

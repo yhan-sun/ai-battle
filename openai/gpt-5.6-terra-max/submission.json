@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "openai",
+    "name": "OpenAI",
+    "accent": "#FF6B35",
+    "order": 1000
+  },
+  "model": {
+    "slug": "gpt-5.6-terra-max",
+    "name": "OpenAI · GPT-5.6 Terra Max",
+    "order": 1000
+  },
+  "demo": {
+    "title": "Nova Stride: Rift Runner",
+    "tag": "星尘跑酷"
+  }
+}
