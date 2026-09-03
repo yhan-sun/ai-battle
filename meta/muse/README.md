@@ -1,10 +1,10 @@
-# Muse — 星尘酷跑 Star Dash Runner
+# Meta · Muse — 星尘酷跑 Star Dash Runner
 
 天天酷跑风格 2.5D 横版跑酷,Three.js + Vite 从零实现,全部美术/音效代码生成,无外部资源。
 
-> 参赛目录：`muse/`
+> 参赛目录：`meta/muse/`
 >
-> 这是仓库保留的历史作品目录；当前资料没有记录它对应的提供方或具体模型，因此不将它归类为 Anthropic、Claude 或其他模型。
+> 参赛方：Meta · Muse
 
 ## 运行
 
@@ -45,6 +45,6 @@ npm run dev
 ## 自检记录
 
 - `npm run build`：通过
-- Pages 子路径构建：通过（`/ai-battle/muse/`）
+- Pages 子路径构建：通过（`/ai-battle/meta/muse/`）
 - 浏览器冒烟测试：通过（首页、开始、跳跃、下蹲、技能、暂停/恢复）
-- 截图：`../output/playwright/muse.png`
+- 截图：`../../output/playwright/meta-muse.png`

@@ -18,7 +18,7 @@
 - [打开在线体验入口](https://yhan-sun.github.io/ai-battle/)
 - [OpenAI · GPT-5.6 Luna Max](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/)
 - [Google · Gemini 3.8 Flash High](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/)
-- [Muse · Star Dash Runner](https://yhan-sun.github.io/ai-battle/muse/)
+- [Meta · Muse · Star Dash Runner](https://yhan-sun.github.io/ai-battle/meta/muse/)
 
 如果是 Fork 后首次部署，请在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。之后不需要手工上传 `dist`，工作流会根据仓库名自动设置 Pages 子路径，Fork 后的链接也能正常工作。
 
@@ -90,7 +90,7 @@
 └── src/
 ```
 
-例如：`openai/gpt-5.6-luna-max/`、`google/gemini-3.8-flash-high/`、`anthropic/claude-3-7-sonnet/`。这些只是目录格式示例，不代表当前项目的模型归属；仓库里的历史 Muse 项目真实目录是 `muse/`，没有已确认的提供方或具体模型信息，不得擅自归类为 Anthropic、Claude 或其他模型。目录名使用小写字母、数字、连字符和点号；如果目标目录已经存在，应停止覆盖并选择唯一的模型版本 slug。
+例如：`openai/gpt-5.6-luna-max/`、`google/gemini-3.8-flash-high/`、`anthropic/claude-3-7-sonnet/`。这些只是目录格式示例，不代表当前项目的模型归属；当前第三个项目真实目录是 `meta/muse/`，提供方为 Meta，作品/模型标识为 Muse。目录名使用小写字母、数字、连字符和点号；如果目标目录已经存在，应停止覆盖并选择唯一的模型版本 slug。
 
 ### 从 clone 到新分支
 
@@ -174,7 +174,7 @@ git push -u origin feat/add-<provider>-<model-slug>
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | [`openai/gpt-5.6-luna-max`](./openai/gpt-5.6-luna-max) | **OpenAI · GPT-5.6 Luna Max** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:openai` |
 | [`google/gemini-3.8-flash-high`](./google/gemini-3.8-flash-high) | **Google · Gemini 3.8 Flash High** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:google` |
-| [`muse`](./muse) | **Muse** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:muse` |
+| [`meta/muse`](./meta/muse) | **Meta · Muse** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:meta` |
 
 ---
 
@@ -197,10 +197,10 @@ git push -u origin feat/add-<provider>-<model-slug>
       <br /><sub><code>google/gemini-3.8-flash-high</code> · CYBER DASH 3D</sub>
     </td>
     <td align="center">
-      <a href="./output/playwright/muse.png">
-        <img src="./output/playwright/muse.png" alt="Muse gameplay screenshot" width="100%" />
+      <a href="./output/playwright/meta-muse.png">
+        <img src="./output/playwright/meta-muse.png" alt="Meta Muse gameplay screenshot" width="100%" />
       </a>
-      <br /><sub><code>muse</code> · Star Dash Runner</sub>
+      <br /><sub><code>meta/muse</code> · Star Dash Runner</sub>
     </td>
   </tr>
 </table>
@@ -209,7 +209,7 @@ git push -u origin feat/add-<provider>-<model-slug>
 
 ## 🚀 怎么启动 (How to Run)
 
-本项目内每个选手的作品均为**独立开箱即用的前端工程**。新参赛目录按「模型提供方 / 模型名称」组织；历史 Muse 项目保留为 `muse/`。你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
+本项目内每个选手的作品均为**独立开箱即用的前端工程**。目录按「模型提供方 / 模型名称」组织；第三个项目为 Meta · Muse，路径是 `meta/muse/`。你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
 
 ### 方式一：在根目录一键启动（推荐）
 
@@ -222,8 +222,8 @@ npm run dev:openai
 # 启动 Google · Gemini 3.8 Flash High 作品
 npm run dev:google
 
-# 启动 Muse 作品
-npm run dev:muse
+# 启动 Meta · Muse 作品
+npm run dev:meta
 ```
 
 ### 方式二：进入各选手独立目录运行
@@ -239,8 +239,8 @@ cd google/gemini-3.8-flash-high
 npm install
 npm run dev
 
-# 3. 启动 Muse 作品
-cd muse
+# 3. 启动 Meta · Muse 作品
+cd meta/muse
 npm install
 npm run dev
 ```
@@ -251,7 +251,7 @@ npm run dev
 
 ## ✅ 测试与自检 (Test & Self-check)
 
-仓库根目录提供 `npm test`，用于检查所有新建的 `<provider>/<model>` 项目和历史 `muse/` 项目的标准文件、根 README 链接、根启动脚本、`build:all` 覆盖范围和对应实机截图。它不替代浏览器冒烟测试，但会在提交前尽早发现目录或文档遗漏。
+仓库根目录提供 `npm test`，用于检查所有 `<provider>/<model>` 项目的标准文件、根 README 链接、根启动脚本、`build:all` 覆盖范围和对应实机截图。它不替代浏览器冒烟测试，但会在提交前尽早发现目录或文档遗漏。
 
 ```bash
 # 检查目录、入口、README、脚本和截图
