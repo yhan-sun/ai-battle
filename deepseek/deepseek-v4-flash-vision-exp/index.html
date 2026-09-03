@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0a1024" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='13' fill='%234d6bfe'/%3E%3Cpath d='M10 18 L16 8 L22 18' stroke='%2346e0ff' stroke-width='3' fill='none'/%3E%3C/svg%3E" />
+  <title>霓虹疾驰 · NEON RUSH 3D</title>
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- 开始界面 -->
+    <div id="menu-screen" class="screen">
+      <div class="menu-card">
+        <div class="menu-logo">
+          <span class="logo-neon">NEON</span><span class="logo-rush">RUSH</span>
+          <div class="logo-sub">夜 夜 夜 夜 夜 霓虹疾驰 · 3D</div>
+        </div>
+        <div class="menu-tagline">十 字 星 空 下 的 无 尽 奔 跑 · 抢 金 币 冲 奖 励 关</div>
+        <button id="btn-start" class="btn btn-primary">开始奔跑</button>
+        <div class="menu-controls">
+          <div><b>Space / W / ↑</b> 跳跃 · 二段跳 · 三段跳(骑乘)</div>
+          <div><b>S / ↓</b> 下蹲 · 空中俯冲</div>
+          <div><b>F / Shift</b> 技能·冲刺</div>
+          <div><b>Esc</b> 暂停 &nbsp; <b>M</b> 静音 &nbsp; <b>R</b> 重开</div>
+        </div>
+        <div class="menu-best">最高记录 <span id="menu-best-score">0</span> 分</div>
+      </div>
+    </div>
+
+    <!-- HUD -->
+    <div id="hud" class="hud hidden">
+      <div class="hud-top">
+        <div class="hud-stats">
+          <div class="stat"><span class="stat-icon coin">●</span><span id="hud-coins">0</span></div>
+          <div class="stat"><span class="stat-icon star">★</span><span id="hud-score">0</span></div>
+          <div class="stat"><span class="stat-icon meter">═</span><span id="hud-distance">0</span> m</div>
+        </div>
+        <div class="hud-speed"><span class="speed-label">速度</span><span id="hud-speed">x1.0</span></div>
+      </div>
+      <div class="hud-buffers">
+        <div id="buff-skill" class="buffer" title="技能·冲刺">
+          <div class="buffer-fill"></div><span>冲</span>
+        </div>
+        <div id="buff-magnet" class="buffer buffer-item" title="磁铁">
+          <div class="buffer-fill"></div><span>磁</span>
+        </div>
+        <div id="buff-shield" class="buffer buffer-item" title="护盾">
+          <div class="buffer-fill"></div><span>盾</span>
+        </div>
+        <div class="buffer-item-mount" id="hud-mount" title="坐骑">P·赛博滑板</div>
+      </div>
+      <div id="combo-toast" class="combo-toast hidden"></div>
+      <button id="btn-pause" class="icon-btn hud-pause">Ⅱ</button>
+      <button id="btn-sound" class="icon-btn hud-sound">♪</button>
+    </div>
+
+    <!-- 暂停界面 -->
+    <div id="pause-screen" class="screen hidden">
+      <div class="panel">
+        <h2>暂 停</h2>
+        <button id="btn-resume" class="btn btn-primary">继续奔跑</button>
+        <button id="btn-restart" class="btn">重新开始</button>
+        <button id="btn-menu" class="btn">回主菜单</button>
+      </div>
+    </div>
+
+    <!-- 结算界面 -->
+    <div id="gameover-screen" class="screen hidden">
+      <div class="panel">
+        <h2 id="go-title">结 算</h2>
+        <div class="go-stats">
+          <div class="go-row"><span>表现分</span><b id="go-score">0</b></div>
+          <div class="go-row"><span>距离</span><b id="go-distance">0 m</b></div>
+          <div class="go-row"><span>金币</span><b id="go-coins">0</b></div>
+          <div class="go-row highlight-row"><span>最高纪录</span><b id="go-best">0</b></div>
+        </div>
+        <div id="go-new-record" class="new-record hidden">✦ 新纪录 ✦</div>
+        <button id="btn-revive" class="btn btn-primary">复活继续（1 次机会）</button>
+        <button id="btn-retry" class="btn">再来一局</button>
+        <button id="btn-go-menu" class="btn">回主菜单</button>
+      </div>
+    </div>
+
+    <!-- 奖励关横幅 -->
+    <div id="bonus-banner" class="bonus-banner hidden"></div>
+
+    <!-- 移动端触屏控制 -->
+    <div id="touch-ui" class="touch-ui hidden">
+      <button id="touch-jump" class="touch-btn">跳</button>
+      <button id="touch-slide" class="touch-btn">蹲</button>
+    </div>
+  </div>
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
