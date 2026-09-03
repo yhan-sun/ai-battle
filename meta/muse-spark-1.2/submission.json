@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "meta",
+    "name": "Meta",
+    "accent": "#a890ff",
+    "order": 30
+  },
+  "model": {
+    "slug": "muse-spark-1.2",
+    "name": "Muse Spark 1.2",
+    "order": 9
+  },
+  "demo": {
+    "title": "星跃狂奔 · NOVA RUSH",
+    "tag": "NOVA"
+  }
+}
