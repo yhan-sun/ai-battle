@@ -127,7 +127,7 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 
 <!-- BEGIN: AI_BATTLE_MODEL_INDEX -->
 > 本区块由 `npm run sync:readme` 根据各参赛目录的 `submission.json` 自动生成，请勿手工编辑。
-> 当前自动收录 **7** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
+> 当前自动收录 **8** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
 
 | 公司 | 模型 | 作品 | 项目目录 | 在线体验 | 隔离协议 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -138,6 +138,7 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 | DeepSeek | **DeepSeek V4 Flash Vision Exp** | 霓虹疾驰 · NEON RUSH 3D | [deepseek/deepseek-v4-flash-vision-exp](./deepseek/deepseek-v4-flash-vision-exp) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-vision-exp/) | v1 |
 | DeepSeek | **V4 Flash 0731** | 深海疾速 · DEEP DASH 3D | [deepseek/deepseek-v4-flash-0731](./deepseek/deepseek-v4-flash-0731) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/) | v0 |
 | TeleAgent | **TeleAgent Pro** | 以太冲刺 · AETHER DASH | [teleagent/pro](./teleagent/pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/teleagent/pro/) | v0 |
+| OpenAI | **GPT-5.6 Pro** | 光潮跃迁 · LUMEN TIDE | [openai/gpt-5.6-sol-pro](./openai/gpt-5.6-sol-pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-sol-pro/) | v1 |
 <!-- END: AI_BATTLE_MODEL_INDEX -->
 
 ### 作品细节对比（人工补充）
