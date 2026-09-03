@@ -37,46 +37,75 @@
 
 | 选手 / 目录 | 参赛 AI 模型 | 作品名称 | 架构风格 | 坐骑 / 宠物机制 | 特色亮点 | 快速启动命令 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| [`/gemini`](./gemini) | **Gemini** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:gemini` |
-| [`/gpt`](./gpt) | **GPT** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:gpt` |
-| [`/muse`](./muse) | **Muse** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:muse` |
+| [`openai/gpt-5.6-luna-max`](./openai/gpt-5.6-luna-max) | **OpenAI · GPT-5.6 Luna Max** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:openai` |
+| [`google/gemini-3.8-flash-high`](./google/gemini-3.8-flash-high) | **Google · Gemini 3.8 Flash High** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:google` |
+| [`anthropic/cluade-fable-5`](./anthropic/cluade-fable-5) | **Anthropic · Claude Fable 5** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:anthropic` |
+
+---
+
+## 🖼️ 实机截图 (Gameplay Screenshots)
+
+以下截图均来自本地 Vite 开发服务器启动后的实际运行画面，统一使用 1600 × 1000 视口截取。
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="./output/playwright/openai-gpt-5.6-luna-max.png">
+        <img src="./output/playwright/openai-gpt-5.6-luna-max.png" alt="OpenAI GPT-5.6 Luna Max gameplay screenshot" width="100%" />
+      </a>
+      <br /><sub><code>openai/gpt-5.6-luna-max</code> · NEON SPRINT</sub>
+    </td>
+    <td align="center">
+      <a href="./output/playwright/google-gemini-3.8-flash-high.png">
+        <img src="./output/playwright/google-gemini-3.8-flash-high.png" alt="Google Gemini 3.8 Flash High gameplay screenshot" width="100%" />
+      </a>
+      <br /><sub><code>google/gemini-3.8-flash-high</code> · CYBER DASH 3D</sub>
+    </td>
+    <td align="center">
+      <a href="./output/playwright/anthropic-cluade-fable-5.png">
+        <img src="./output/playwright/anthropic-cluade-fable-5.png" alt="Anthropic Claude Fable 5 gameplay screenshot" width="100%" />
+      </a>
+      <br /><sub><code>anthropic/cluade-fable-5</code> · Star Dash Runner</sub>
+    </td>
+  </tr>
+</table>
 
 ---
 
 ## 🚀 怎么启动 (How to Run)
 
-本项目内每个选手的作品均为**独立开箱即用的前端工程**。你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
+本项目内每个选手的作品均为**独立开箱即用的前端工程**。目录按「模型提供方 / 模型名称」组织；你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
 
 ### 方式一：在根目录一键启动（推荐）
 
 确保已安装 [Node.js](https://nodejs.org/)（v18+ 推荐）：
 
 ```bash
-# 启动 Gemini 作品
-npm run dev:gemini
+# 启动 OpenAI · GPT-5.6 Luna Max 作品
+npm run dev:openai
 
-# 启动 GPT 作品
-npm run dev:gpt
+# 启动 Google · Gemini 3.8 Flash High 作品
+npm run dev:google
 
-# 启动 Muse 作品
-npm run dev:muse
+# 启动 Anthropic · Claude Fable 5 作品
+npm run dev:anthropic
 ```
 
 ### 方式二：进入各选手独立目录运行
 
 ```bash
-# 1. 启动 Gemini 选手作品
-cd gemini
+# 1. 启动 OpenAI · GPT-5.6 Luna Max 作品
+cd openai/gpt-5.6-luna-max
 npm install
 npm run dev
 
-# 2. 启动 GPT 选手作品
-cd gpt
+# 2. 启动 Google · Gemini 作品
+cd google/gemini-3.8-flash-high
 npm install
 npm run dev
 
-# 3. 启动 Muse 选手作品
-cd muse
+# 3. 启动 Anthropic · Claude Fable 5 作品
+cd anthropic/cluade-fable-5
 npm install
 npm run dev
 ```
@@ -116,14 +145,14 @@ npm run dev
    ```bash
    git checkout -b feat/add-<model-name>
    ```
-3. 在根目录下以模型名称新建独立目录（例如 `deepseek-v3/`、`claude-3-7-sonnet/`、`grok-3/` 等）。
+3. 在根目录下按「模型提供方 / 模型名称」新建独立目录（例如 `deepseek/deepseek-v3/`、`anthropic/claude-3-7-sonnet/`、`xai/grok-3/` 等）。
 4. 将该 AI 生成的项目完整拷贝进该目录。
 5. 在该子目录下创建 `README.md`，记录：
    - 参赛模型全称与版本号
    - 系统提示词与温度参数（如有）
    - 代码生成环境（IDE、CLI 或 Web 端）与生成轮次
    - 作品的特色玩法与操作说明
-6. 在根目录 `package.json` 中追加该选手的快捷脚本（如 `"dev:<model>": "npm --prefix <model> run dev"`）。
+6. 在根目录 `package.json` 中追加该选手的快捷脚本（如 `"dev:<provider>": "npm --prefix <provider>/<model> run dev"`）。
 7. 在根目录 `README.md` 的【目前参赛选手矩阵】表格中填入新增选手信息。
 8. 提交 Commit 并向本仓库发起 **Pull Request**！
 

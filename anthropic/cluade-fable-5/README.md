@@ -1,4 +1,6 @@
-# 星尘酷跑 Star Dash Runner
+# Anthropic · Claude Fable 5 — 星尘酷跑 Star Dash Runner
+
+> 参赛模型：Anthropic Claude Fable 5
 
 天天酷跑风格 2.5D 横版跑酷,Three.js + Vite 从零实现,全部美术/音效代码生成,无外部资源。
 

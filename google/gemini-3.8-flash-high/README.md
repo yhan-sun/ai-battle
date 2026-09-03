@@ -1,4 +1,6 @@
-# 《天天炫跑 · CYBER DASH 3D》
+# Google · Gemini 3.8 Flash High — 《天天炫跑 · CYBER DASH 3D》
+
+> 参赛模型：Google Gemini 3.8 Flash High
 
 基于 **Three.js + HTML5 / CSS3 / JavaScript (Vite)** 从零打造的 3D/2.5D 横版跑酷游戏，高度还原经典《天天酷跑》的节奏爽感与核心机制。
 
