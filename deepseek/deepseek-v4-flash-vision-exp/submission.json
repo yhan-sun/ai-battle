@@ -4,8 +4,8 @@
   "provider": {
     "slug": "deepseek",
     "name": "DeepSeek",
-    "accent": "#4D6BFE",
-    "order": 1000
+    "accent": "#37e6ff",
+    "order": 40
   },
   "model": {
     "slug": "deepseek-v4-flash-vision-exp",
