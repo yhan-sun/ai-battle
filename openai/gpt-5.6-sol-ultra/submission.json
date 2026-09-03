@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "openai",
+    "name": "OpenAI",
+    "accent": "#10A37F",
+    "order": 1000
+  },
+  "model": {
+    "slug": "gpt-5.6-sol-ultra",
+    "name": "GPT-5.6 Sol Ultra",
+    "order": 1000
+  },
+  "demo": {
+    "title": "霓渊逐光",
+    "tag": "3D霓虹跑酷"
+  }
+}

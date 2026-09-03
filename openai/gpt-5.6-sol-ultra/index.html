@@ -1,0 +1,308 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#050615" />
+    <meta
+      name="description"
+      content="《霓渊逐光》——穿越云海、霓渊与星辉宝库的原创 3D 跑酷体验。"
+    />
+    <title>霓渊逐光｜Neon Rift Runner</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <canvas id="game-canvas" aria-label="霓渊逐光 3D 游戏画面"></canvas>
+
+      <div class="ambient-frame" aria-hidden="true">
+        <div class="ambient-frame__scan"></div>
+        <div class="ambient-frame__flare ambient-frame__flare--cyan"></div>
+        <div class="ambient-frame__flare ambient-frame__flare--magenta"></div>
+        <div class="ambient-frame__noise"></div>
+      </div>
+
+      <header id="hud" class="hud" aria-label="游戏信息" hidden>
+        <section class="hud__left" aria-label="进度信息">
+          <div id="zone-indicator" class="zone-chip">
+            <span class="zone-chip__pulse" aria-hidden="true"></span>
+            <div>
+              <span class="eyebrow">当前界域</span>
+              <strong id="zone-name">云海天穹</strong>
+            </div>
+          </div>
+
+          <div class="progress-rail" aria-label="关卡进度">
+            <span id="zone-progress" class="progress-rail__fill" style="width: 0%"></span>
+          </div>
+        </section>
+
+        <section class="hud__center" aria-label="得分信息">
+          <div class="metric metric--score">
+            <span class="metric__label">灵光积分</span>
+            <strong id="score-value" class="metric__value">000000</strong>
+          </div>
+          <div class="metric metric--distance">
+            <span class="metric__label">跃迁距离</span>
+            <strong><span id="distance-value" class="metric__value">0</span><small>m</small></strong>
+          </div>
+        </section>
+
+        <section class="hud__right" aria-label="游戏操作">
+          <button id="audio-button" class="icon-button" type="button" aria-label="切换声音" aria-pressed="false">
+            <span id="audio-icon" aria-hidden="true">♪</span>
+          </button>
+          <button id="pause-button" class="icon-button" type="button" aria-label="暂停游戏">
+            <span aria-hidden="true">Ⅱ</span>
+          </button>
+        </section>
+
+        <section id="combo-panel" class="combo-card" aria-live="polite">
+          <span class="combo-card__label">流光连击</span>
+          <strong id="combo-value">0</strong>
+          <span id="combo-multiplier" class="combo-card__multiplier">×1</span>
+        </section>
+
+        <section class="vitals" aria-label="角色状态">
+          <div class="vital vital--shield">
+            <div class="vital__meta">
+              <span>护盾</span>
+              <span id="health-value">100</span>
+            </div>
+            <div id="health-bar" class="vital__track" role="progressbar" aria-label="护盾" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+              <span id="health-fill" class="vital__fill" style="width: 100%"></span>
+            </div>
+          </div>
+          <div class="vital vital--energy">
+            <div class="vital__meta">
+              <span>相位能量</span>
+              <span id="energy-value">100</span>
+            </div>
+            <div id="energy-bar" class="vital__track" role="progressbar" aria-label="相位能量" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+              <span id="energy-fill" class="vital__fill" style="width: 100%"></span>
+            </div>
+          </div>
+        </section>
+
+        <div id="skill-status" class="skill-chip" data-ready="true">
+          <span class="skill-chip__key">E</span>
+          <span><small>星环净空</small><strong id="skill-copy">READY</strong></span>
+        </div>
+
+        <section class="runner-hud" aria-label="跑酷详细状态">
+          <div class="runner-hud__metrics">
+            <span><small>速度</small><strong id="speed-value">13.0</strong><em>u/s</em></span>
+            <span><small>金币</small><strong id="coin-value">0</strong></span>
+            <span><small id="mode-label">远征</small><strong id="mode-timer">∞</strong></span>
+          </div>
+          <div class="ability-row">
+            <div class="ability-gauge ability-gauge--gold"><span><b>超级奖励</b><i id="super-text">0%</i></span><div><em id="super-fill"></em></div></div>
+            <div class="ability-gauge ability-gauge--pink"><span><b>流星冲刺</b><i id="dash-text">0%</i></span><div><em id="dash-fill"></em></div></div>
+            <div class="ability-gauge ability-gauge--cyan"><span><b>星环技能</b><i id="skill-text">E 就绪</i></span><div><em id="skill-fill" style="width:100%"></em></div></div>
+          </div>
+          <div class="companion-row">
+            <span id="action-status">自动奔跑中</span>
+            <span id="shield-status">护盾待拾取</span>
+            <span id="mount-status">坐骑待召唤</span>
+            <span id="pet-status">团子自动拾取</span>
+          </div>
+          <p id="mission-value">已探索 0/3 奖励路线</p>
+        </section>
+      </header>
+
+      <section id="mobile-controls" class="mobile-controls" aria-label="触屏操作" hidden>
+        <div class="mobile-controls__cluster">
+          <button id="super-button" class="touch-button touch-button--gold" type="button" aria-label="开启超级奖励">F</button>
+          <button id="skill-button" class="touch-button" type="button" aria-label="释放星环技能">E</button>
+          <button id="dash-button" class="touch-button" type="button" aria-label="流星冲刺">⇧</button>
+        </div>
+        <div class="mobile-controls__cluster">
+          <button id="slide-button" class="touch-button touch-button--small" type="button" aria-label="滑铲">↓</button>
+          <button id="jump-button" class="touch-button touch-button--primary" type="button" aria-label="跳跃">↑</button>
+        </div>
+      </section>
+
+      <aside id="toast-layer" class="toast-layer" aria-live="polite" aria-atomic="true">
+        <div id="mission-toast" class="mission-toast" hidden>
+          <span class="mission-toast__line" aria-hidden="true"></span>
+          <div>
+            <small id="mission-kicker">界域任务</small>
+            <strong id="mission-text">穿过天穹之门</strong>
+          </div>
+        </div>
+
+        <div id="reward-banner" class="reward-banner" hidden>
+          <span class="reward-banner__halo" aria-hidden="true"></span>
+          <small>星辉宝库 · 奖励</small>
+          <strong id="reward-name">晨星棱晶</strong>
+          <span id="reward-value">+1,000</span>
+        </div>
+      </aside>
+
+      <section id="loading-overlay" class="overlay overlay--loading" aria-label="正在加载">
+        <div class="loading-mark" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span>光</span>
+        </div>
+        <p id="loading-copy">正在校准云海航道</p>
+        <div class="loading-track" aria-hidden="true">
+          <span id="loading-progress" style="width: 8%"></span>
+        </div>
+        <small id="loading-percent">8%</small>
+      </section>
+
+      <section id="start-overlay" class="overlay overlay--start" aria-labelledby="game-title" hidden>
+        <div class="start-layout">
+          <div class="brand-panel">
+            <p class="brand-panel__pretitle"><span></span>NEON RIFT RUNNER<span></span></p>
+            <h1 id="game-title"><span>霓渊</span><em>逐光</em></h1>
+            <p class="brand-panel__tagline">跃过云海边界，坠入霓虹深渊，再从星辉宝库满载而归。</p>
+            <div class="menu-records" aria-label="本地记录">
+              <span><small>本机最高表现</small><strong id="menu-best">0</strong></span>
+              <span><small>最远距离</small><strong id="menu-distance">0 m</strong></span>
+            </div>
+
+            <div class="realm-route" aria-label="关卡路线">
+              <div class="realm-route__item is-active">
+                <span>01</span>
+                <div><strong>云海天穹</strong><small>风轨 · 浮岛 · 晨曦</small></div>
+              </div>
+              <i aria-hidden="true"></i>
+              <div class="realm-route__item">
+                <span>02</span>
+                <div><strong>地下霓渊</strong><small>磁轨 · 熔流 · 暗域</small></div>
+              </div>
+              <i aria-hidden="true"></i>
+              <div class="realm-route__item realm-route__item--gold">
+                <span>03</span>
+                <div><strong>星辉宝库</strong><small>棱晶 · 奖励 · 超载</small></div>
+              </div>
+            </div>
+
+            <div class="start-actions">
+              <button id="start-btn" class="primary-button" type="button">
+                <span class="primary-button__glint" aria-hidden="true"></span>
+                <span>开始远征</span>
+                <b aria-hidden="true">→</b>
+              </button>
+              <button id="tour-btn" class="secondary-button" type="button">
+                <span aria-hidden="true">✦</span>
+                <span>奖励巡游</span>
+              </button>
+              <button id="how-to-button" class="ghost-button" type="button" aria-expanded="false" aria-controls="controls-card">
+                操作指南
+              </button>
+            </div>
+          </div>
+
+          <aside id="controls-card" class="controls-card" aria-label="操作指南">
+            <div class="controls-card__header">
+              <span>RUNNER LINK</span><i></i><small>ONLINE</small>
+            </div>
+            <h2>驾驭光轨</h2>
+            <div class="control-row">
+              <span class="key-group"><kbd>空格</kbd></span>
+              <div><strong>跳跃 / 二段跳</strong><small>连续按两次越过裂隙</small></div>
+            </div>
+            <div class="control-row">
+              <span class="key-group"><kbd>W</kbd><kbd>↑</kbd></span>
+              <div><strong>腾跃</strong><small>跨越裂隙与障碍</small></div>
+            </div>
+            <div class="control-row">
+              <span class="key-group"><kbd>S</kbd><kbd>↓</kbd></span>
+              <div><strong>滑铲</strong><small>穿过低空能量门</small></div>
+            </div>
+            <div class="control-row">
+              <span class="key-group key-group--wide"><kbd>SHIFT</kbd></span>
+              <div><strong>流星冲刺</strong><small>集满粉色能量后无敌冲刺</small></div>
+            </div>
+            <div class="control-row">
+              <span class="key-group"><kbd>E</kbd><kbd>F</kbd></span>
+              <div><strong>技能 / 超级奖励</strong><small>净空障碍；金色槽满后进入独立场景</small></div>
+            </div>
+            <p class="controls-card__tip"><span>TIP</span>宠物每收集 18 枚金币会施放护盾；奖励巡游可快速体验三类独立奖励关。</p>
+          </aside>
+        </div>
+        <div class="start-footer">
+          <span>GATEWAY 7A</span>
+          <span>最佳使用耳机体验</span>
+          <span>BUILD 01 · 天穹协议</span>
+        </div>
+      </section>
+
+      <section id="pause-overlay" class="overlay overlay--modal" aria-labelledby="pause-title" hidden>
+        <div class="modal-card modal-card--pause">
+          <span class="modal-card__symbol" aria-hidden="true">Ⅱ</span>
+          <p class="modal-card__kicker">跃迁链路已冻结</p>
+          <h2 id="pause-title">暂停</h2>
+          <p>你的光轨位置已经锁定。</p>
+          <div class="modal-card__stats">
+            <span><small>当前得分</small><strong id="pause-score">0</strong></span>
+            <span><small>跃迁距离</small><strong><b id="pause-distance">0</b> m</strong></span>
+          </div>
+          <button id="resume-button" class="primary-button primary-button--compact" type="button"><span>继续奔跑</span><b>→</b></button>
+          <button id="restart-from-pause-button" class="text-button" type="button">重新开始</button>
+        </div>
+      </section>
+
+      <section id="revive-overlay" class="overlay overlay--modal overlay--danger" aria-labelledby="revive-title" hidden>
+        <div class="modal-card modal-card--revive">
+          <div class="countdown-ring" aria-hidden="true">
+            <svg viewBox="0 0 100 100">
+              <circle cx="50" cy="50" r="44"></circle>
+              <circle id="revive-ring" class="countdown-ring__progress" cx="50" cy="50" r="44"></circle>
+            </svg>
+            <strong id="revive-countdown">30</strong>
+          </div>
+          <p class="modal-card__kicker">光核连接中断</p>
+          <h2 id="revive-title">重返光轨？</h2>
+          <p>消耗一枚复苏棱晶，从当前界域继续。</p>
+          <p id="revive-note" class="revive-note">本局可复活一次</p>
+          <div class="revive-cost"><span aria-hidden="true">◇</span><strong id="revive-cost">1</strong><small>当前持有 <b id="revive-stock">1</b></small></div>
+          <button id="revive-button" class="primary-button primary-button--compact" type="button"><span>立即复苏</span><b>↯</b></button>
+          <button id="give-up-button" class="text-button" type="button">结束本次跃迁</button>
+        </div>
+      </section>
+
+      <section id="result-overlay" class="overlay overlay--result" aria-labelledby="result-title" hidden>
+        <div class="result-card">
+          <div class="result-card__crown" aria-hidden="true"><i></i><span>◇</span><i></i></div>
+          <p id="result-kicker" class="modal-card__kicker">跃迁记录已封存</p>
+          <h2 id="result-title">追光完成</h2>
+          <p id="result-copy" class="result-card__copy">你将破碎的霓虹重新带回了天穹。</p>
+
+          <div class="result-score">
+            <span>本次积分</span>
+            <strong id="final-score">000000</strong>
+            <em id="new-best-badge" hidden>NEW BEST</em>
+          </div>
+
+          <div class="result-grid">
+            <div><small>跃迁距离</small><strong><span id="final-distance">0</span> m</strong></div>
+            <div><small>最高连击</small><strong><span id="final-combo">0</span> COMBO</strong></div>
+            <div><small>收集光晶</small><strong id="final-crystals">0</strong></div>
+            <div><small>历史最佳</small><strong id="best-score">000000</strong></div>
+          </div>
+
+          <div id="collected-rewards" class="reward-strip" aria-label="本局奖励">
+            <span class="reward-token"><i>◇</i><b id="reward-crystals">0</b><small>棱晶</small></span>
+            <span class="reward-token reward-token--gold"><i>✦</i><b id="reward-starlight">0</b><small>星辉</small></span>
+          </div>
+
+          <button id="restart-button" class="primary-button" type="button"><span class="primary-button__glint"></span><span>再次逐光</span><b>↻</b></button>
+          <button id="back-to-title-button" class="text-button" type="button">返回主界面</button>
+        </div>
+      </section>
+
+      <div id="orientation-notice" class="orientation-notice" hidden>
+        <span aria-hidden="true">▱</span>
+        <strong>旋转设备以获得更开阔的视野</strong>
+      </div>
+
+      <div id="screen-flash" class="screen-flash" aria-hidden="true"></div>
+      <div id="damage-vignette" class="damage-vignette" aria-hidden="true"></div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
