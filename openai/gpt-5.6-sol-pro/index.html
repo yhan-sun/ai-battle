@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#071923" />
+    <meta name="description" content="光潮跃迁 LUMEN TIDE — 程序化 Three.js 2.5D 跑酷游戏" />
+    <title>光潮跃迁 · LUMEN TIDE</title>
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="app" aria-label="光潮跃迁游戏">
+      <canvas id="game-canvas" aria-label="Three.js 游戏画面"></canvas>
+      <div id="vignette"></div>
+      <div id="flash"></div>
+
+      <header id="hud" class="hidden" aria-live="polite">
+        <div class="hud-left">
+          <div class="brand-mini">LUMEN<br /><b>TIDE</b></div>
+          <div class="metric"><span>距离</span><strong id="distance">0 m</strong></div>
+          <div class="metric"><span>表现分</span><strong id="score">0</strong></div>
+          <div class="metric"><span>光币</span><strong id="coins">0</strong></div>
+        </div>
+        <div class="hud-center">
+          <div id="mode-pill">潮面航道</div>
+          <div class="combo"><span id="combo-label">COMBO ×1</span><div class="combo-track"><i id="combo-fill"></i></div></div>
+        </div>
+        <div class="hud-right">
+          <div class="power"><span>共鸣技能</span><div class="power-track"><i id="skill-fill"></i></div><small id="skill-text">READY</small></div>
+          <div class="buffs" id="buffs"></div>
+          <button id="pause-button" class="icon-button" aria-label="暂停">Ⅱ</button>
+        </div>
+      </header>
+
+      <section id="start-screen" class="screen active">
+        <div class="eyebrow">A PROCEDURAL 2.5D RUNNER</div>
+        <h1><span>光潮跃迁</span><small>LUMEN TIDE</small></h1>
+        <p class="lead">乘上折光鳐，穿越潮面、云穹与深海遗迹。每一次跃迁，世界都会重新编织。</p>
+        <div class="feature-row">
+          <span>∞ 程序化航道</span><span>×3 超级奖励</span><span>⚡ 穿越奖励</span>
+        </div>
+        <button id="start-button" class="primary-button"><span>开始跃迁</span><kbd>ENTER</kbd></button>
+        <div class="controls-card">
+          <div><kbd>SPACE</kbd><span>跳跃 / 二段跳</span></div>
+          <div><kbd>S</kbd><span>下蹲滑行</span></div>
+          <div><kbd>SHIFT</kbd><span>共鸣技能</span></div>
+          <div><kbd>P</kbd><span>暂停</span></div>
+        </div>
+        <div class="start-footer"><span>最高分 <b id="best-score">0</b></span><span id="audio-note">首次操作后启用程序化音频</span></div>
+      </section>
+
+      <section id="pause-screen" class="screen compact">
+        <div class="eyebrow">TIDE SUSPENDED</div>
+        <h2>潮汐静止</h2>
+        <p>航道已经冻结，你的连击与奖励计时也会暂停。</p>
+        <button id="resume-button" class="primary-button"><span>继续奔跑</span><kbd>P</kbd></button>
+        <button id="quit-button" class="ghost-button">结束本局</button>
+      </section>
+
+      <section id="revive-screen" class="screen compact danger">
+        <div class="eyebrow">SIGNAL LOST</div>
+        <h2>光核正在熄灭</h2>
+        <p>消耗本局唯一一次「回潮火种」，在安全航道重新凝聚。</p>
+        <div class="countdown"><i id="revive-ring"></i><strong id="revive-countdown">8</strong></div>
+        <button id="revive-button" class="primary-button"><span>立即复活</span><kbd>R</kbd></button>
+        <button id="give-up-button" class="ghost-button">结束本局</button>
+      </section>
+
+      <section id="result-screen" class="screen compact">
+        <div class="eyebrow">RELAY COMPLETE</div>
+        <h2>本次跃迁结束</h2>
+        <div class="result-grid">
+          <div><span>最终表现分</span><strong id="result-score">0</strong></div>
+          <div><span>航行距离</span><strong id="result-distance">0 m</strong></div>
+          <div><span>收集光币</span><strong id="result-coins">0</strong></div>
+          <div><span>最高连击</span><strong id="result-combo">×1</strong></div>
+        </div>
+        <div id="new-record" class="new-record hidden">NEW CURRENT RECORD</div>
+        <button id="restart-button" class="primary-button"><span>再次跃迁</span><kbd>ENTER</kbd></button>
+      </section>
+
+      <div id="announcement" aria-live="assertive"><small></small><strong></strong><p></p></div>
+      <div id="toast" aria-live="polite"></div>
+
+      <div id="mobile-controls" aria-label="触控操作">
+        <button data-action="crouch" aria-label="下蹲">↧<small>下蹲</small></button>
+        <button data-action="jump" class="jump" aria-label="跳跃">↥<small>跳跃</small></button>
+        <button data-action="skill" class="skill" aria-label="技能">✦<small>技能</small></button>
+      </div>
+
+      <pre id="smoke-result" hidden>pending</pre>
+      <noscript>需要启用 JavaScript 才能运行 LUMEN TIDE。</noscript>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>
