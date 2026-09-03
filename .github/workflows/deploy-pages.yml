@@ -28,15 +28,7 @@ jobs:
           node-version: 20
 
       - name: Install project dependencies
-        run: |
-          set -euo pipefail
-          for package_json in */package.json */*/package.json; do
-            if [ ! -f "$package_json" ]; then
-              continue
-            fi
-            project_dir="${package_json%/package.json}"
-            npm --prefix "$project_dir" ci
-          done
+        run: npm run install:projects
 
       - name: Build and assemble Pages site
         env:

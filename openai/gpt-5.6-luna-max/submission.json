@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 0,
+  "provider": {
+    "slug": "openai",
+    "name": "OpenAI",
+    "accent": "#6fe7ff",
+    "order": 10
+  },
+  "model": {
+    "slug": "gpt-5.6-luna-max",
+    "name": "GPT-5.6 Luna Max",
+    "order": 10
+  },
+  "demo": {
+    "title": "星轨冲刺 · NEON SPRINT",
+    "tag": "NEON"
+  }
+}

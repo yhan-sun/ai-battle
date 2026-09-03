@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "protocolVersion": 1,
+  "protocolVersion": 0,
   "provider": {
     "slug": "teleagent",
     "name": "TeleAgent",
     "accent": "#4ee3c0",
-    "order": 40
+    "order": 50
   },
   "model": {
     "slug": "pro",

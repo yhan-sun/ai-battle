@@ -1,3 +1,14 @@
+---
+AIGC:
+  ContentProducer: '001191110102MAD55U9H0F10002'
+  ContentPropagator: '001191110102MAD55U9H0F10002'
+  Label: '1'
+  ProduceID: '43ef73b5-728e-4248-bb1f-ef43c858d844'
+  PropagateID: '43ef73b5-728e-4248-bb1f-ef43c858d844'
+  ReservedCode1: '3969329e-f73c-4950-a70b-37967a7f5016'
+  ReservedCode2: '3969329e-f73c-4950-a70b-37967a7f5016'
+---
+
 # ⚔️ AI Battle:《天天酷跑》Web 3D/2.5D 极限编程竞技场
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
@@ -47,124 +58,34 @@
 
 ---
 
-## 🤖 AI Agent 参赛流程 (AI Submission Workflow)
+## 🤖 AI 隔离参赛指南 (AI Isolation Protocol)
 
-本节是一份可以直接交给 coding agent 执行的操作契约，覆盖从 clone 仓库、创建模型目录、使用统一提示词，到自检、补充文档和提交 PR 的完整流程。AI 不应只输出方案；应在工作区实际完成代码、文档和测试。
+AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公平，新参赛 AI 不得读取、搜索、运行、浏览或参考任何其他选手的源码、README、截图、Demo、提交记录或构建产物，也不得让子代理间接获取这些内容。
 
-### 给 AI 的任务指令（可直接复制）
+### 给参赛 AI 的唯一入口
 
-```text
-你是 AI Battle 的参赛项目实现代理。请在当前仓库中完成一个全新的、可运行的《天天酷跑》风格 3D/2.5D 横版跑酷项目。
+请把独立的 [`AI_SUBMISSION_GUIDE.md`](./AI_SUBMISSION_GUIDE.md) 作为参赛 AI 的唯一任务文件。该指南包含：
 
-执行前先读取根目录 README.md，必须完整、原样使用“统一考验提示词”章节中的提示词，不得删改、改写或替换为另一套需求。
+- 文件级 sparse checkout 隔离方法
+- 完整且不可修改的统一提示词
+- 允许与禁止访问的路径和命令
+- 项目、README 与 `submission.json` 格式
+- 不安装 Playwright、不要求截图的自检流程
+- 只提交自己目录的 Git 边界与失格处理规则
 
-请把以下信息替换成真实值：
-- PROVIDER：模型提供方的小写 slug，例如 openai、google、anthropic
-- MODEL_SLUG：模型名称的小写版本 slug，例如 gpt-5.6-luna-max、gemini-3.8-flash-high
-- MODEL_DISPLAY：模型的完整展示名
-- TARGET_DIR：PROVIDER/MODEL_SLUG
+不要要求参赛 AI 阅读本页剩余内容，因为下方包含其他选手信息。若其他参赛作品意外进入模型上下文，本轮结果应作废，并在全新的隔离工作区和上下文中重跑。
 
-请严格按以下顺序完成：
-1. 如果当前还不是本仓库，先 clone 并进入仓库；如果已经在仓库中，先检查 git status，不要覆盖已有未提交改动。
-2. 创建 TARGET_DIR；不得覆盖已有参赛目录，也不得直接修改其他选手的核心代码。
-3. 将“统一考验提示词”原文作为本次生成任务的唯一产品需求，在 TARGET_DIR 中生成完整项目。项目必须包含 package.json、index.html、源代码和可运行的 npm run dev / npm run build。
-4. 使用程序化 Three.js 几何体、CSS、Canvas 和 WebAudio 生成素材；不要引入外部商业美术、角色、模型或音效资源。
-5. 完成后补充 TARGET_DIR/README.md，记录模型全名、生成环境、提示词使用说明、玩法、操作、架构和测试结果。
-6. 更新根 README 的参赛矩阵、启动命令和截图展示；截图保存为 output/playwright/PROVIDER-MODEL_SLUG.png，并使用相对路径引用；同时把新项目加入 pages/index.html 的在线体验卡片。
-7. 在根 package.json 中加入 dev:<provider> 快捷命令，并把新项目加入 build:all 覆盖范围；Pages 构建脚本会自动发现两级模型目录。
-8. 执行 TARGET_DIR 的 npm install、npm run build，以及根目录的 npm test、npm run build:all、npm run build:pages、git diff --check。
-9. 启动 TARGET_DIR 的开发服务器并进行浏览器冒烟测试：打开首页、点击开始、确认画布/HUD/角色可见，测试跳跃、下蹲、技能、暂停/恢复和结算流程；确认没有致命的 JavaScript 或资源加载错误，然后截取实际运行画面。
-10. 任一检查失败都必须先修复并重新执行，不能在未通过时声称完成。
-11. 最后汇报修改文件、测试命令及结果、截图路径和 git commit；只有获得明确授权并具备远程权限时才执行 push。
-```
+### 自动收录机制
 
-### 目录命名约定
+每个新项目只需在 `<provider>/<model-slug>/` 中提供合规的 `submission.json`。合并后，GitHub Pages 构建会自动：
 
-新参赛项目必须使用「模型提供方 / 具体模型名」两级目录，模型名直接使用带版本的 slug，不使用泛化目录名：
+1. 发现并校验参赛项目；
+2. 安装和构建所有已标记项目；
+3. 生成 `submissions.json`；
+4. 按公司分组生成模型卡片、隔离协议标记和 Demo 链接；
+5. 有现成封面时使用封面，否则自动生成文字封面。
 
-```text
-<provider>/<model-slug>/
-├── package.json
-├── index.html
-├── README.md
-└── src/
-```
-
-例如：`openai/gpt-5.6-luna-max/`、`google/gemini-3.8-flash-high/`、`anthropic/claude-3-7-sonnet/`。这些只是目录格式示例，不代表当前项目的模型归属；当前第三个项目真实目录是 `meta/muse/`，提供方为 Meta，作品/模型标识为 Muse。目录名使用小写字母、数字、连字符和点号；如果目标目录已经存在，应停止覆盖并选择唯一的模型版本 slug。
-
-### 从 clone 到新分支
-
-```bash
-git clone https://github.com/yhan-sun/ai-battle.git
-cd ai-battle
-git checkout -b feat/add-<provider>-<model-slug>
-mkdir -p <provider>/<model-slug>
-```
-
-如果当前已经位于该仓库，跳过 `git clone`，先执行 `git status --short --branch`，保留已有用户改动。
-
-### 子项目 README 最低内容
-
-每个模型目录都必须有自己的 README，至少包含以下信息：
-
-```markdown
-# <Provider> · <Model Display> — <作品名称>
-
-> 参赛目录：`<provider>/<model-slug>`
-
-## 参赛信息
-- 模型：<Model Display>
-- 统一提示词：使用根目录 README 的原文，未修改
-- 生成环境：<IDE / CLI / Web>
-- 生成轮次与修复记录：<简述>
-
-## 运行
-`npm install && npm run dev`
-
-## 操作与玩法
-<键位、奖励关卡、道具、复活和存档说明>
-
-## 架构
-<核心模块说明>
-
-## 自检记录
-- `npm run build`：通过
-- 浏览器冒烟测试：通过
-- 截图：`../../output/playwright/<provider>-<model-slug>.png`
-```
-
-### 提交前的自检顺序
-
-从仓库根目录执行：
-
-```bash
-TARGET_DIR=<provider>/<model-slug>
-npm --prefix "$TARGET_DIR" install
-npm --prefix "$TARGET_DIR" run build
-npm test
-npm run build:all
-npm run build:pages
-git diff --check
-```
-
-浏览器冒烟测试使用独立端口启动：
-
-```bash
-npm --prefix "$TARGET_DIR" run dev -- --host 127.0.0.1 --port 5176
-```
-
-验收标准是：首页能打开；开始界面能进入游戏；角色、场景和 HUD 正常渲染；跳跃/下蹲/技能/暂停等输入有反馈；游戏能进入结算或复活流程；控制台没有阻断游戏的异常；截图展示的是实际运行画面而不是空白页面。
-
-### 提交和 PR
-
-```bash
-git status --short
-git add <provider>/<model-slug> README.md package.json output/playwright/<provider>-<model-slug>.png
-git commit -m "feat: add <provider> <model-slug> competitor"
-git push -u origin feat/add-<provider>-<model-slug>
-```
-
-不要提交 `node_modules`、构建缓存、调试日志、密钥或个人配置。没有远程写权限时，完成本地 commit 后提供 commit hash，由仓库维护者创建或合并 PR。
+参赛 AI 不需要、也不得修改 `pages/index.html`、根 `package.json`、根 README 或其他选手目录。
 
 ---
 
@@ -175,6 +96,7 @@ git push -u origin feat/add-<provider>-<model-slug>
 | [`openai/gpt-5.6-luna-max`](./openai/gpt-5.6-luna-max) | **OpenAI · GPT-5.6 Luna Max** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:openai` |
 | [`google/gemini-3.8-flash-high`](./google/gemini-3.8-flash-high) | **Google · Gemini 3.8 Flash High** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:google` |
 | [`meta/muse`](./meta/muse) | **Meta · Muse** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:meta` |
+| [`teleagent/pro`](./teleagent/pro) | **TeleAgent Pro** | 《以太冲刺 · Aether Dash》 | 状态机 / 分层解耦 (`main`, `level`, `bonusScene`, `player`, `audio`, `particles`, `ui`) | 悬浮滑板骑乘 / 绕飞小宠跟随 | 双奖励关真正切换（浮空金币平台 + 超光速太空隧道）；土狼时间与跳跃预输入；零 GC 粒子池；生命系统与最高分存档 | `npm run dev:teleagent` |
 
 ---
 
@@ -202,6 +124,12 @@ git push -u origin feat/add-<provider>-<model-slug>
       </a>
       <br /><sub><code>meta/muse</code> · Star Dash Runner</sub>
     </td>
+    <td align="center">
+      <a href="./output/playwright/teleagent-pro.png">
+        <img src="./output/playwright/teleagent-pro.png" alt="TeleAgent Pro gameplay screenshot" width="100%" />
+      </a>
+      <br /><sub><code>teleagent/pro</code> · Aether Dash</sub>
+    </td>
   </tr>
 </table>
 
@@ -224,6 +152,9 @@ npm run dev:google
 
 # 启动 Meta · Muse 作品
 npm run dev:meta
+
+# 启动 TeleAgent Pro 作品
+npm run dev:teleagent
 ```
 
 ### 方式二：进入各选手独立目录运行
@@ -243,6 +174,11 @@ npm run dev
 cd meta/muse
 npm install
 npm run dev
+
+# 4. 启动 TeleAgent Pro 作品
+cd teleagent/pro
+npm install
+npm run dev
 ```
 
 启动成功后，浏览器打开终端输出的本地地址（通常为 `http://localhost:5173`）即可试玩。
@@ -251,20 +187,31 @@ npm run dev
 
 ## ✅ 测试与自检 (Test & Self-check)
 
-仓库根目录提供 `npm test`，用于检查所有 `<provider>/<model>` 项目的标准文件、根 README 链接、根启动脚本、`build:all` 覆盖范围和对应实机截图。它不替代浏览器冒烟测试，但会在提交前尽早发现目录或文档遗漏。
+仓库根目录提供不依赖浏览器的结构测试。它只发现带 `submission.json` 的 `<provider>/<model-slug>` 目录，并校验元数据、标准文件、隔离协议、自动构建脚本和 Pages 清单生成链路。截图不是参赛或测试要求，也不需要安装 Playwright。
 
 ```bash
-# 检查目录、入口、README、脚本和截图
+# 校验元数据、目录、README、自动发现与 Pages 配置
 npm test
 
-# 构建全部参赛项目
+# 动态发现并构建全部已标记参赛项目
 npm run build:all
+
+# 生成可直接静态托管的 site/ 和 submissions.json
+npm run build:pages
 
 # 检查空白字符和常见补丁问题
 git diff --check
 ```
 
-新增选手必须同时通过 `npm test`、该子项目的 `npm run build`、根目录的 `npm run build:all` 和浏览器冒烟测试，才可以提交 PR。
+隔离工作区中的新参赛 AI 只运行自己的构建和定向校验：
+
+```bash
+npm --prefix <provider>/<model-slug> run build
+node scripts/verify-submission.mjs <provider>/<model-slug>
+git diff --check -- <provider>/<model-slug>
+```
+
+完整仓库测试和 Pages 构建由维护者或 CI 在合并前执行。校验器不会要求截图，也不会启动或安装 Playwright。
 
 ---
 
@@ -281,35 +228,23 @@ git diff --check
 
 ---
 
-## 🤝 怎么提交 PR / 参赛指南 (How to Contribute)
+## 🤝 人工提交与维护流程 (Human Contribution Flow)
 
-欢迎提交新的 AI 大模型参赛作品（如 Claude、DeepSeek、Qwen、Grok 等）！
+AI 参赛流程与普通人工贡献严格分开。要让新模型参赛，请把 [`AI_SUBMISSION_GUIDE.md`](./AI_SUBMISSION_GUIDE.md) 作为它的唯一入口，并由操作者先按指南创建 sparse checkout 隔离工作区；不要把根 README、线上展示页或其他选手目录交给参赛 AI。
 
-### 1. 参赛规范
+### 新 AI 作品
 
-1. **统一提示词**：必须完整复制上述 [统一考验提示词](#-统一考验提示词-the-challenge-prompt)，**不得修改、删减或人工追加定制提示**。
-2. **零外部美术依赖**：模型必须自行通过 Three.js 几何体、着色、材质、CSS 或程序化 Canvas 生成所有画面，不引用商业侵权或预置的外部模型文件。
-3. **开箱即用**：提交的工程必须包含完整的 `package.json`、`index.html` 和源代码，确保执行 `npm install && npm run dev` 能够无错误直接运行。
-4. **真实无魔改**：代码必须由该 AI 模型真实独立生成，允许由 AI 自行修复自身 Bug，但严禁人类工程师大量重写核心玩法。
+1. Fork 仓库，并确定真实的 `<provider>/<model-slug>` 两级小写目录，例如 `google/gemini-3.8-flash-high`。
+2. 按独立指南创建只包含协议文件和目标目录的 sparse checkout，再把任务交给参赛 AI。
+3. AI 只能提交自己的目录；其中必须包含 `submission.json`、`package.json`、`package-lock.json`、`index.html`、`README.md` 和完整源码。
+4. AI 完成自己的构建、HTTP 访问检查、核心交互自检和 `verify-submission`，并在项目 README 中如实记录结果。
+5. 操作者在完整仓库中运行 `npm test`、`npm run build:all` 与 `npm run build:pages`，确认后发起 Pull Request。
 
-### 2. 提交步骤
+无需为新选手修改根 `package.json`、根 README 的选手表格或 `pages/index.html`。合并到 `main` 后，GitHub Actions 会自动发现 `submission.json`、构建项目、生成公司/模型清单并发布页面；无现成封面时使用构建生成的文字封面。
 
-1. **Fork 本仓库** 到你的个人 GitHub 账号。
-2. 在本地拉取你的 Fork 仓库并创建新的工作分支：
-   ```bash
-   git checkout -b feat/add-<model-name>
-   ```
-3. 在根目录下按「模型提供方 / 模型名称」新建独立目录（例如 `deepseek/deepseek-v3/`、`anthropic/claude-3-7-sonnet/`、`xai/grok-3/` 等）。
-4. 将该 AI 生成的项目完整拷贝进该目录。
-5. 在该子目录下创建 `README.md`，记录：
-   - 参赛模型全称与版本号
-   - 系统提示词与温度参数（如有）
-   - 代码生成环境（IDE、CLI 或 Web 端）与生成轮次
-   - 作品的特色玩法与操作说明
-6. 在根目录 `package.json` 中追加该选手的快捷脚本（如 `"dev:<provider>": "npm --prefix <provider>/<model> run dev"`）。
-7. 在根目录 `README.md` 的【目前参赛选手矩阵】表格和 `pages/index.html` 在线体验入口中填入新增选手信息。
-8. 运行 `npm test`、`npm run build:all`、`npm run build:pages` 和浏览器冒烟测试。
-9. 提交 Commit 并向本仓库发起 **Pull Request**！
+### 普通人工贡献
+
+文档、自动化、展示页或基础设施改进可使用常规分支和 PR 流程，但不得把其他作品内容反馈给正在参赛的 AI，也不得通过公共代码加入针对某位选手的定向实现提示。
 
 ---
 
@@ -339,3 +274,5 @@ git diff --check
 
 本项目基于 [MIT License](LICENSE) 开源。
 各 AI 选手生成的代码著作权归属各自模型生成产物，仅供技术研究、横向横评与学术交流。
+
+> AI生成

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#090b12" />
-    <meta name="description" content="AI Battle：三个 AI 生成的可试玩 3D/2.5D 横版跑酷作品。" />
+    <meta name="description" content="AI Battle：自动收录 AI 独立生成的可试玩 3D/2.5D 横版跑酷作品。" />
     <title>AI Battle · Playable Benchmark</title>
     <style>
       :root {
@@ -233,6 +233,16 @@
       .panel-heading h3 { margin: 2px 0 0; font-size: 1.18rem; letter-spacing: -0.03em; }
 
       .company-list { display: grid; gap: 10px; margin-top: 18px; }
+      .company-loading,
+      .company-error {
+        padding: 18px 14px;
+        border: 1px dashed var(--line);
+        color: var(--muted);
+        font-size: 0.72rem;
+        line-height: 1.65;
+        text-align: center;
+      }
+      .company-error { border-color: rgba(255, 138, 84, 0.48); color: var(--orange); }
       .company-option {
         --company-accent: var(--cyan);
         position: relative;
@@ -357,7 +367,7 @@
           <div class="star"></div>
           <div class="orbit orbit-a"></div>
           <div class="orbit orbit-b"></div>
-          <div class="hero-meta"><span>ONE PROMPT / THREE SOURCES</span><strong>100% CODE-BUILT</strong></div>
+          <div class="hero-meta"><span>ONE PROMPT / AUTO DISCOVERY</span><strong id="roster-count">LOADING ROSTER</strong></div>
         </div>
       </section>
 
@@ -379,22 +389,8 @@
                 <h3 id="company-title">公司</h3>
               </div>
             </div>
-            <div class="company-list" id="company-list" role="listbox" aria-label="选择 AI 公司">
-              <button class="company-option" type="button" role="option" aria-selected="false" data-company="openai">
-                <span class="company-mark" aria-hidden="true">O</span>
-                <span class="company-copy"><strong>OpenAI</strong><small>1 个可试玩模型</small></span>
-                <span class="company-arrow" aria-hidden="true">↗</span>
-              </button>
-              <button class="company-option orange" type="button" role="option" aria-selected="false" data-company="google">
-                <span class="company-mark" aria-hidden="true">G</span>
-                <span class="company-copy"><strong>Google</strong><small>1 个可试玩模型</small></span>
-                <span class="company-arrow" aria-hidden="true">↗</span>
-              </button>
-              <button class="company-option violet" type="button" role="option" aria-selected="false" data-company="meta">
-                <span class="company-mark" aria-hidden="true">M</span>
-                <span class="company-copy"><strong>Meta</strong><small>1 个可试玩模型</small></span>
-                <span class="company-arrow" aria-hidden="true">↗</span>
-              </button>
+            <div class="company-list" id="company-list" role="listbox" aria-label="选择 AI 公司" aria-busy="true">
+              <div class="company-loading" role="status">正在读取参赛清单…</div>
             </div>
             <p class="panel-footnote">公司是第一层筛选。选择后，右侧只显示该公司的模型，不会把不同来源混在一起。</p>
           </aside>
@@ -412,7 +408,7 @@
               <div class="empty-content">
                 <span class="empty-kicker">AWAITING COMPANY INPUT</span>
                 <strong>先选公司</strong>
-                <p>从左侧选择 OpenAI、Google 或 Meta，解锁对应的模型入口。</p>
+                <p>从左侧选择任一已收录公司，解锁对应的模型入口。</p>
                 <span class="empty-signal">COMPANY / REQUIRED</span>
               </div>
             </div>
@@ -427,66 +423,81 @@
       </footer>
     </main>
     <script>
-      const companies = {
-        openai: {
-          name: "OpenAI",
-          code: "OPENAI",
-          accent: "#6fe7ff",
-          note: "OpenAI 的独立生成作品，沿着几何霓虹赛道开始试玩。",
-          models: [
-            {
-              name: "GPT-5.6 Luna Max",
-              slug: "gpt-5.6-luna-max",
-              path: "./openai/gpt-5.6-luna-max/",
-              image: "./output/playwright/openai-gpt-5.6-luna-max.png",
-              title: "星轨冲刺 · NEON SPRINT",
-              tag: "NEON"
-            }
-          ]
-        },
-        google: {
-          name: "Google",
-          code: "GOOGLE",
-          accent: "#ff8a54",
-          note: "Google 的独立生成作品，进入赛博虫洞与云端奖励场景。",
-          models: [
-            {
-              name: "Gemini 3.8 Flash High",
-              slug: "gemini-3.8-flash-high",
-              path: "./google/gemini-3.8-flash-high/",
-              image: "./output/playwright/google-gemini-3.8-flash-high.png",
-              title: "天天炫跑 · CYBER DASH 3D",
-              tag: "CYBER"
-            }
-          ]
-        },
-        meta: {
-          name: "Meta",
-          code: "META",
-          accent: "#a890ff",
-          note: "Meta · Muse 的独立生成作品，进入星尘酷跑的程序化奖励场景。",
-          models: [
-            {
-              name: "Muse",
-              slug: "muse",
-              path: "./meta/muse/",
-              image: "./output/playwright/meta-muse.png",
-              title: "星尘酷跑 · STAR DASH RUNNER",
-              tag: "STAR"
-            }
-          ]
-        }
-      };
-
-      const companyButtons = [...document.querySelectorAll(".company-option")];
+      const companies = new Map();
+      let companyButtons = [];
+      const companyList = document.querySelector("#company-list");
+      const rosterCount = document.querySelector("#roster-count");
       const modelEmpty = document.querySelector("#model-empty");
       const modelGrid = document.querySelector("#model-grid");
       const modelKicker = document.querySelector("#model-kicker");
       const modelTitle = document.querySelector("#model-title");
       const modelNote = document.querySelector("#model-note");
 
+      function element(tagName, className, text) {
+        const node = document.createElement(tagName);
+        if (className) node.className = className;
+        if (text !== undefined) node.textContent = text;
+        return node;
+      }
+
+      function createCompanyButton(company) {
+        const button = element("button", "company-option");
+        button.type = "button";
+        button.setAttribute("role", "option");
+        button.setAttribute("aria-selected", "false");
+        button.dataset.company = company.slug;
+        button.style.setProperty("--company-accent", company.accent);
+
+        const mark = element("span", "company-mark", company.mark);
+        mark.setAttribute("aria-hidden", "true");
+        const copy = element("span", "company-copy");
+        copy.append(
+          element("strong", "", company.name),
+          element("small", "", `${company.models.length} 个可试玩模型`),
+        );
+        const arrow = element("span", "company-arrow", "↗");
+        arrow.setAttribute("aria-hidden", "true");
+        button.append(mark, copy, arrow);
+        button.addEventListener("click", () => renderModels(company.slug));
+        return button;
+      }
+
+      function createModelCard(company, model, index) {
+        const article = element("article");
+        article.setAttribute("role", "listitem");
+
+        const link = element("a", "model-card");
+        link.href = model.path;
+        link.setAttribute("aria-label", `进入 ${company.name} ${model.name} 游戏`);
+        link.style.setProperty("--accent", company.accent);
+
+        const visual = element("div", "model-card-visual");
+        const image = element("img");
+        image.src = model.image;
+        image.alt = `${company.name} ${model.name} 游戏封面`;
+        image.loading = "lazy";
+        visual.append(
+          image,
+          element("span", "model-visual-tag", `${String(index + 1).padStart(2, "0")} / ${model.tag}`),
+        );
+
+        const body = element("div", "model-card-body");
+        const footer = element("div", "model-card-footer");
+        const protocolLabel = model.protocolVersion === 1 ? "Isolation v1" : "Historical entry";
+        footer.append(element("span", "", protocolLabel), element("span", "", "点击进入 ↗"));
+        body.append(
+          element("p", "model-provider", `${company.name} / ${model.slug}`),
+          element("h4", "", model.name),
+          element("p", "model-game", model.title),
+          footer,
+        );
+        link.append(visual, body);
+        article.append(link);
+        return article;
+      }
+
       function renderModels(companyKey) {
-        const company = companies[companyKey];
+        const company = companies.get(companyKey);
         if (!company) return;
 
         companyButtons.forEach((button) => {
@@ -500,27 +511,48 @@
         modelKicker.textContent = `02 / MODEL · ${company.code}`;
         modelTitle.textContent = `${company.name} 的模型`;
         modelNote.textContent = company.note;
-        modelGrid.innerHTML = company.models.map((model, index) => `
-          <article role="listitem">
-            <a class="model-card" href="${model.path}" aria-label="进入 ${company.name} ${model.name} 游戏" style="--accent: ${company.accent}">
-              <div class="model-card-visual">
-                <img src="${model.image}" alt="${company.name} ${model.name} 游戏画面" loading="lazy" />
-                <span class="model-visual-tag">${String(index + 1).padStart(2, "0")} / ${model.tag}</span>
-              </div>
-              <div class="model-card-body">
-                <p class="model-provider">${company.name} / ${model.slug}</p>
-                <h4>${model.name}</h4>
-                <p class="model-game">${model.title}</p>
-                <div class="model-card-footer"><span>Playable demo</span><span>点击进入 ↗</span></div>
-              </div>
-            </a>
-          </article>
-        `).join("");
+        modelGrid.replaceChildren(
+          ...company.models.map((model, index) => createModelCard(company, model, index)),
+        );
       }
 
-      companyButtons.forEach((button) => {
-        button.addEventListener("click", () => renderModels(button.dataset.company));
-      });
+      async function loadRoster() {
+        try {
+          const response = await fetch("./submissions.json", { cache: "no-cache" });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const manifest = await response.json();
+          if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.providers) || manifest.providers.length === 0) {
+            throw new Error("Invalid or empty submissions manifest");
+          }
+
+          for (const company of manifest.providers) {
+            if (!company?.slug || !company?.name || !company?.accent || !Array.isArray(company.models)) {
+              throw new Error("Invalid provider entry");
+            }
+            companies.set(company.slug, company);
+          }
+
+          const fragment = document.createDocumentFragment();
+          for (const company of companies.values()) fragment.append(createCompanyButton(company));
+          companyList.replaceChildren(fragment);
+          companyList.setAttribute("aria-busy", "false");
+          companyButtons = [...companyList.querySelectorAll(".company-option")];
+          const modelCount = [...companies.values()].reduce((sum, company) => sum + company.models.length, 0);
+          rosterCount.textContent = `${companies.size} COMPANIES / ${modelCount} DEMOS`;
+        } catch (error) {
+          const message = element("div", "company-error", "参赛清单加载失败，请刷新页面重试。");
+          message.setAttribute("role", "alert");
+          companyList.replaceChildren(message);
+          companyList.setAttribute("aria-busy", "false");
+          rosterCount.textContent = "ROSTER UNAVAILABLE";
+          modelKicker.textContent = "02 / MODEL · UNAVAILABLE";
+          modelTitle.textContent = "暂时无法读取模型。";
+          modelNote.textContent = "submissions.json 未成功加载。";
+          console.error("Unable to load submissions manifest", error);
+        }
+      }
+
+      loadRoster();
     </script>
   </body>
 </html>

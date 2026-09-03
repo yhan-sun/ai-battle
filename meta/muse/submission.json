@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 0,
+  "provider": {
+    "slug": "meta",
+    "name": "Meta",
+    "accent": "#a890ff",
+    "order": 30
+  },
+  "model": {
+    "slug": "muse",
+    "name": "Muse",
+    "order": 10
+  },
+  "demo": {
+    "title": "星尘酷跑 · STAR DASH RUNNER",
+    "tag": "STAR"
+  }
+}

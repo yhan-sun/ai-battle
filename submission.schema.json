@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Battle submission metadata",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "protocolVersion", "provider", "model", "demo"],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "protocolVersion": {
+      "type": "integer",
+      "enum": [0, 1],
+      "description": "0 仅保留给仓库中登记的隔离协议发布前历史作品；所有新提交必须使用 1。"
+    },
+    "provider": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "name", "accent"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "accent": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "order": { "type": "integer", "minimum": 0, "maximum": 9999 }
+      }
+    },
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slug", "name"],
+      "properties": {
+        "slug": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "order": { "type": "integer", "minimum": 0, "maximum": 9999 }
+      }
+    },
+    "demo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "tag"],
+      "properties": {
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "tag": { "type": "string", "minLength": 1, "maxLength": 16 }
+      }
+    }
+  }
+}

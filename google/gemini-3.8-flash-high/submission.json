@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 0,
+  "provider": {
+    "slug": "google",
+    "name": "Google",
+    "accent": "#ff8a54",
+    "order": 20
+  },
+  "model": {
+    "slug": "gemini-3.8-flash-high",
+    "name": "Gemini 3.8 Flash High",
+    "order": 10
+  },
+  "demo": {
+    "title": "天天炫跑 · CYBER DASH 3D",
+    "tag": "CYBER"
+  }
+}
