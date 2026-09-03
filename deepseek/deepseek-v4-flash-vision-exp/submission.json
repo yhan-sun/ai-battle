@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "deepseek",
+    "name": "DeepSeek",
+    "accent": "#4D6BFE",
+    "order": 1000
+  },
+  "model": {
+    "slug": "deepseek-v4-flash-vision-exp",
+    "name": "DeepSeek V4 Flash Vision Exp",
+    "order": 1000
+  },
+  "demo": {
+    "title": "霓虹疾驰 · NEON RUSH 3D",
+    "tag": "双奖励关·三段跳"
+  }
+}

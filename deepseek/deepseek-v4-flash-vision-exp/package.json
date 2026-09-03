@@ -1,0 +1,18 @@
+{
+  "name": "deepseek-v4-flash-vision-exp",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Neon Rush 3D - a 3D endless runner built with Three.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.161.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

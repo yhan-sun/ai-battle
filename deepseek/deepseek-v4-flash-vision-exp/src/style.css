@@ -1,0 +1,455 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  --accent: #4d6bfe;
+  --accent-2: #46e0ff;
+  --accent-3: #ff5ecf;
+  --panel-bg: rgba(8, 12, 30, 0.82);
+  --panel-border: rgba(93, 130, 255, 0.35);
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #070b1c;
+  font-family: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', system-ui, sans-serif;
+  color: #eef3ff;
+  user-select: none;
+}
+
+#app {
+  position: fixed;
+  inset: 0;
+}
+
+#game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- 通用面板 ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  background: radial-gradient(ellipse at center, rgba(10, 16, 40, 0.55), rgba(5, 8, 22, 0.92));
+  backdrop-filter: blur(4px);
+}
+
+.panel,
+.menu-card {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 18px;
+  padding: 34px 44px;
+  text-align: center;
+  box-shadow: 0 0 44px rgba(77, 107, 254, 0.35);
+  max-width: 92vw;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.panel h2 {
+  font-size: 30px;
+  letter-spacing: 8px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 14px rgba(77, 107, 254, 0.9);
+  color: #fff;
+}
+
+/* ---------- 开始界面 ---------- */
+.menu-logo {
+  margin-bottom: 10px;
+}
+
+.logo-neon {
+  font-size: clamp(46px, 9vw, 76px);
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #fff;
+  text-shadow:
+    0 0 12px var(--accent),
+    0 0 34px var(--accent),
+    0 0 60px var(--accent-2);
+}
+
+.logo-rush {
+  font-size: clamp(46px, 9vw, 76px);
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: var(--accent-3);
+  text-shadow:
+    0 0 12px var(--accent-3),
+    0 0 34px var(--accent-3);
+  margin-left: 14px;
+}
+
+.logo-sub {
+  font-size: 15px;
+  letter-spacing: 10px;
+  color: #9fb6ff;
+  margin: 8px 0 4px;
+}
+
+.menu-tagline {
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: #9aa8d8;
+  margin-bottom: 24px;
+}
+
+.menu-controls {
+  margin: 22px 0 14px;
+  font-size: 13.5px;
+  line-height: 2.1;
+  color: #c6d2f4;
+  text-align: left;
+  display: inline-block;
+  border-top: 1px dashed rgba(120, 140, 220, 0.25);
+  border-bottom: 1px dashed rgba(120, 140, 220, 0.25);
+  padding: 10px 18px;
+}
+
+.menu-controls b {
+  color: var(--accent-2);
+  font-weight: 600;
+}
+
+.menu-best {
+  margin-top: 12px;
+  color: #8fa0d8;
+  font-size: 14px;
+}
+
+.menu-best span {
+  color: #ffd76a;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-block;
+  min-width: 200px;
+  margin: 7px 5px 0;
+  padding: 13px 30px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: #eef3ff;
+  font-size: 17px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(77, 107, 254, 0.5);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent), #6d90ff);
+  border: none;
+  box-shadow: 0 4px 22px rgba(77, 107, 254, 0.55);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 30px rgba(70, 224, 255, 0.55);
+}
+
+.btn:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+.icon-btn {
+  position: absolute;
+  top: 14px;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(10, 16, 40, 0.6);
+  color: #dfe8ff;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 25;
+  pointer-events: auto;
+}
+
+.hud-pause {
+  right: 66px;
+}
+
+.hud-sound {
+  right: 14px;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.hud-top {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 20px;
+  pointer-events: none;
+}
+
+.hud-stats {
+  display: flex;
+  gap: 22px;
+  font-size: 19px;
+  font-weight: 700;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.stat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.stat-icon {
+  font-size: 18px;
+}
+
+.stat-icon.coin {
+  color: #ffd23e;
+}
+
+.stat-icon.star {
+  color: #ff5ecf;
+}
+
+.stat-icon.meter {
+  color: #46e0ff;
+}
+
+.hud-speed {
+  text-align: right;
+  font-size: 15px;
+  font-weight: 700;
+  color: #b8c8ff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.8);
+}
+
+.hud-speed #hud-speed {
+  color: #ff9f4d;
+}
+
+.hud-buffers {
+  position: absolute;
+  left: 18px;
+  bottom: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.buffer {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 14px;
+  background: rgba(12, 18, 44, 0.72);
+  border: 1px solid rgba(120, 150, 255, 0.4);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.buffer .buffer-fill {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background: linear-gradient(180deg, rgba(70, 224, 255, 0.75), rgba(77, 107, 254, 0.75));
+  transition: height 0.08s linear;
+}
+
+.buffer span {
+  position: relative;
+  z-index: 1;
+  font-weight: 800;
+}
+
+.buffer-item {
+  border-color: rgba(255, 210, 62, 0.55);
+}
+
+.buffer-item .buffer-fill {
+  background: linear-gradient(180deg, #ffd23e, #ff9f4d);
+}
+
+.buffer-item-mount {
+  font-size: 13px;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(255, 94, 207, 0.16);
+  border: 1px solid rgba(255, 94, 207, 0.5);
+  color: #ffb3e2;
+  margin-bottom: 4px;
+}
+
+.combo-toast {
+  position: absolute;
+  top: 20%;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(22px, 4vw, 36px);
+  font-weight: 900;
+  letter-spacing: 5px;
+  color: #ffd23e;
+  text-shadow: 0 0 18px rgba(255, 210, 62, 0.9), 0 2px 6px #000;
+  animation: comboPop 0.9s ease;
+  pointer-events: none;
+}
+
+@keyframes comboPop {
+  0% {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+  30% {
+    transform: scale(1.15);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.65;
+  }
+}
+
+/* ---------- 结算 ---------- */
+.go-stats {
+  margin: 6px auto 12px;
+  min-width: 300px;
+  max-width: 420px;
+}
+
+.go-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 9px 6px;
+  border-bottom: 1px dashed rgba(120, 140, 220, 0.25);
+  font-size: 17px;
+}
+
+.go-row b {
+  color: var(--accent-2);
+}
+
+.go-row.highlight-row b {
+  color: #ffd76a;
+}
+
+.new-record {
+  color: #ffd76a;
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  animation: comboPop 1s ease;
+  text-shadow: 0 0 16px rgba(255, 215, 106, 0.9);
+  margin-bottom: 8px;
+}
+
+/* ---------- 奖励横幅 ---------- */
+.bonus-banner {
+  position: absolute;
+  top: 34%;
+  width: 100%;
+  text-align: center;
+  font-size: clamp(30px, 6vw, 54px);
+  font-weight: 900;
+  letter-spacing: 10px;
+  color: #fff;
+  text-shadow: 0 0 24px var(--accent-2), 0 0 60px var(--accent);
+  animation: bonusBanner 1.8s ease forwards;
+  z-index: 15;
+  pointer-events: none;
+}
+
+@keyframes bonusBanner {
+  0% {
+    opacity: 0;
+    transform: scale(1.6);
+  }
+  25% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+/* ---------- 触屏 ---------- */
+.touch-ui {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.touch-btn {
+  position: absolute;
+  bottom: 26px;
+  width: 92px;
+  height: 92px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  background: rgba(20, 30, 70, 0.5);
+  color: #fff;
+  font-size: 26px;
+  font-weight: 800;
+  pointer-events: auto;
+  backdrop-filter: blur(2px);
+}
+
+#touch-jump {
+  right: 30px;
+}
+
+#touch-slide {
+  left: 30px;
+}
+
+@media (max-height: 640px) {
+  .menu-controls {
+    font-size: 11.5px;
+    line-height: 1.9;
+  }
+
+  .btn {
+    padding: 10px 22px;
+    font-size: 15px;
+  }
+}
