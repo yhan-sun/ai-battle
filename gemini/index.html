@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>天天炫跑 · CYBER DASH 3D</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+  <div id="game-container">
+    <!-- WebGL Canvas -->
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Floating Popups Layer -->
+    <div id="floating-text-container"></div>
+
+    <!-- HUD Overlay (In-Game) -->
+    <div id="hud-overlay" class="hidden">
+      <!-- Top Bar Stats -->
+      <div class="hud-top-bar">
+        <div class="hud-stat-box score-box">
+          <span class="hud-label">表现分</span>
+          <span id="hud-perf-score" class="hud-value neon-gold">0</span>
+        </div>
+        <div class="hud-stat-box dist-box">
+          <span class="hud-label">距离</span>
+          <span id="hud-distance" class="hud-value neon-blue">0 m</span>
+        </div>
+        <div class="hud-stat-box coin-box">
+          <span class="hud-label">金币</span>
+          <span id="hud-coins" class="hud-value neon-yellow">0</span>
+        </div>
+
+        <div class="hud-actions">
+          <button id="btn-sound" class="icon-btn" title="音效开关">🔊</button>
+          <button id="btn-pause" class="icon-btn" title="暂停游戏">⏸️</button>
+        </div>
+      </div>
+
+      <!-- Super Reward Fever Bar -->
+      <div class="fever-bar-container">
+        <div class="fever-bar-label">
+          <span class="fever-title">🌟 超级奖励能量</span>
+          <span id="fever-percent">0%</span>
+        </div>
+        <div class="fever-progress-track">
+          <div id="fever-progress-fill" class="fever-progress-fill"></div>
+        </div>
+      </div>
+
+      <!-- Reward Mode Banner (Super Reward / Dimension Rift) -->
+      <div id="reward-banner" class="reward-banner hidden">
+        <div id="reward-banner-title" class="reward-banner-title">云端金币乐园</div>
+        <div class="reward-timer-bar">
+          <div id="reward-timer-fill" class="reward-timer-fill"></div>
+        </div>
+        <div id="reward-banner-desc" class="reward-banner-desc">表现分 300% 狂欢加成！</div>
+      </div>
+
+      <!-- Active Buffs Indicator Bar -->
+      <div id="buff-bar" class="buff-bar">
+        <div id="buff-shield" class="buff-tag hidden"><span class="buff-icon">🛡️</span> 护盾保护</div>
+        <div id="buff-magnet" class="buff-tag hidden"><span class="buff-icon">🧲</span> 金币磁铁 <span id="time-magnet"></span></div>
+        <div id="buff-sprint" class="buff-tag hidden"><span class="buff-icon">⚡</span> 极速冲刺 <span id="time-sprint"></span></div>
+        <div id="buff-giant" class="buff-tag hidden"><span class="buff-icon">🍄</span> 狂暴变大 <span id="time-giant"></span></div>
+        <div id="buff-multiplier" class="buff-tag hidden"><span class="buff-icon">⭐</span> 双倍表现 <span id="time-multiplier"></span></div>
+      </div>
+
+      <!-- Touch / Click Action Controls (Mobile Friendly) -->
+      <div class="touch-controls">
+        <!-- Left Side: Slide Button -->
+        <div class="control-left">
+          <button id="btn-slide" class="control-btn slide-btn">
+            <span class="btn-icon">🔻</span>
+            <span class="btn-text">下滑</span>
+            <span class="btn-keyhint">[S / ↓]</span>
+          </button>
+        </div>
+
+        <!-- Center: Skill Button -->
+        <div class="control-center">
+          <button id="btn-skill" class="control-btn skill-btn">
+            <div id="skill-cd-mask" class="skill-cd-mask"></div>
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text">音速爆发</span>
+            <span class="btn-keyhint">[F / L]</span>
+          </button>
+        </div>
+
+        <!-- Right Side: Jump Button -->
+        <div class="control-right">
+          <button id="btn-jump" class="control-btn jump-btn">
+            <span class="btn-icon">🔺</span>
+            <span class="btn-text">跳跃</span>
+            <span class="btn-keyhint">[空格 / W / ↑]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Menu / Start Screen -->
+    <div id="menu-overlay" class="modal-overlay">
+      <div class="menu-card">
+        <div class="game-logo">
+          <h1 class="logo-title">天天炫跑</h1>
+          <h2 class="logo-sub">CYBER DASH 3D</h2>
+        </div>
+
+        <!-- Stats Overview -->
+        <div class="menu-stats">
+          <div class="stat-pill">
+            <span class="stat-name">历史最高分</span>
+            <span id="menu-high-score" class="stat-val neon-gold">0</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-name">最远距离</span>
+            <span id="menu-best-dist" class="stat-val neon-blue">0 m</span>
+          </div>
+          <div class="stat-pill">
+            <span class="stat-name">累计金币</span>
+            <span id="menu-total-coins" class="stat-val neon-yellow">0</span>
+          </div>
+        </div>
+
+        <!-- Garage / Selector Section -->
+        <div class="garage-container">
+          <!-- Mount Selection -->
+          <div class="selector-group">
+            <div class="selector-label">选择坐骑 (Mount)</div>
+            <div class="selector-options" id="mount-options">
+              <button class="select-chip active" data-mount="panther">
+                <span class="chip-name">机械炎豹</span>
+                <span class="chip-perk">三段跳 · 表现分+25%</span>
+              </button>
+              <button class="select-chip" data-mount="bike">
+                <span class="chip-name">极速战车</span>
+                <span class="chip-perk">滑行冲撞 · 冲刺时间+50%</span>
+              </button>
+              <button class="select-chip" data-mount="wyvern">
+                <span class="chip-name">糖果飞龙</span>
+                <span class="chip-perk">宝石转化 · 金币收益+30%</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pet Selection -->
+          <div class="selector-group">
+            <div class="selector-label">选择宠物 (Pet)</div>
+            <div class="selector-options" id="pet-options">
+              <button class="select-chip active" data-pet="drake">
+                <span class="chip-name">炽焰幼龙</span>
+                <span class="chip-perk">定期喷火炸碎前方障碍</span>
+              </button>
+              <button class="select-chip" data-pet="bubble">
+                <span class="chip-name">波波精灵</span>
+                <span class="chip-perk">定期生成护盾/磁铁水泡</span>
+              </button>
+              <button class="select-chip" data-pet="ufo">
+                <span class="chip-name">小飞碟</span>
+                <span class="chip-perk">被动金币磁力 · 超级能量+25%</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Controls Guide Prompt -->
+        <div class="controls-guide">
+          <span>⌨️ 键盘操作：</span>
+          <span class="key-badge">空格 / W / ↑</span> 跳跃（支持多段跳）
+          <span class="key-badge">S / ↓</span> 下滑钻过障碍 / 空中速降
+          <span class="key-badge">F / L</span> 音速爆发技能
+        </div>
+
+        <!-- Start Button -->
+        <button id="btn-start" class="btn-primary start-btn">
+          <span>开始奔跑 START</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Pause Screen Modal -->
+    <div id="pause-overlay" class="modal-overlay hidden">
+      <div class="modal-card">
+        <h2 class="modal-title">游戏暂停</h2>
+        <div class="modal-buttons">
+          <button id="btn-resume" class="btn-primary">继续游戏</button>
+          <button id="btn-restart" class="btn-secondary">重新开始</button>
+          <button id="btn-home" class="btn-secondary">返回主页</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Revive Screen Modal -->
+    <div id="revive-overlay" class="modal-overlay hidden">
+      <div class="modal-card revive-card">
+        <h2 class="modal-title revive-title">⚠️ 致命撞击！</h2>
+        <p class="modal-desc">激活紧急能量核心，立即无敌重生！</p>
+        
+        <div class="countdown-circle">
+          <span id="revive-countdown-num">5</span>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="btn-do-revive" class="btn-primary revive-btn">⚡ 免费复活 (1次机会)</button>
+          <button id="btn-skip-revive" class="btn-secondary">放弃结算</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over / Settlement Modal -->
+    <div id="gameover-overlay" class="modal-overlay hidden">
+      <div class="modal-card settlement-card">
+        <h2 class="modal-title">跑酷结算</h2>
+        <div id="new-record-badge" class="new-record-badge hidden">🏆 创下历史新纪录！</div>
+
+        <div class="settlement-grid">
+          <div class="settle-item">
+            <span class="settle-label">奔跑距离</span>
+            <span id="settle-distance" class="settle-val neon-blue">0 m</span>
+          </div>
+          <div class="settle-item">
+            <span class="settle-label">本局表现分</span>
+            <span id="settle-perf" class="settle-val neon-gold">0</span>
+          </div>
+          <div class="settle-item">
+            <span class="settle-label">本局金币</span>
+            <span id="settle-coins" class="settle-val neon-yellow">0</span>
+          </div>
+          <div class="settle-item total-item">
+            <span class="settle-label">最终结算总分</span>
+            <span id="settle-total" class="settle-val total-val">0</span>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button id="btn-play-again" class="btn-primary">再次挑战 PLAY AGAIN</button>
+          <button id="btn-settle-home" class="btn-secondary">返回主页 HOME</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

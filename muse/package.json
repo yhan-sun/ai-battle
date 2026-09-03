@@ -1,0 +1,18 @@
+{
+  "name": "star-dash-runner",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "星尘酷跑 - Three.js 3D/2.5D 横版跑酷 (天天酷跑风格,原创美术)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

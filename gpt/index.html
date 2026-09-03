@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#081226" />
+    <meta name="description" content="星轨冲刺：一款程序化生成的 3D 霓虹横版跑酷游戏。" />
+    <title>星轨冲刺 · NEON SPRINT</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main id="game-shell" aria-label="星轨冲刺游戏">
+      <div id="stage" aria-hidden="true">
+        <canvas id="game-canvas"></canvas>
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+      </div>
+
+      <section id="start-screen" class="screen-layer visible" aria-label="开始界面">
+        <div class="start-grid-glow"></div>
+        <div class="start-content">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>SEASON 01 · SKYLINE CIRCUIT</div>
+          <h1><span>星轨</span>冲刺</h1>
+          <p class="english-title">NEON SPRINT</p>
+          <p class="start-copy">沿着城市上空的光轨奔跑，收集能量，穿越奖励世界。<br />跑得越远，速度越快，节奏永不停。</p>
+
+          <div class="loadout-row" aria-label="出发配置">
+            <button class="loadout-card selected" data-loadout="mount" type="button">
+              <span class="loadout-icon mount-icon"><i></i></span>
+              <span><strong>脉冲滑板</strong><small>速度 +10% · 抗震</small></span>
+              <span class="loadout-check">✓</span>
+            </button>
+            <button class="loadout-card selected" data-loadout="pet" type="button">
+              <span class="loadout-icon pet-icon"><i></i></span>
+              <span><strong>露米伙伴</strong><small>金币价值 ×1.25 · 吸附</small></span>
+              <span class="loadout-check">✓</span>
+            </button>
+          </div>
+
+          <button id="start-button" class="primary-button" type="button">
+            <span class="button-orbit"></span>
+            <span>开始奔跑</span>
+            <span class="button-arrow">↗</span>
+          </button>
+          <div class="start-hints"><span>SPACE / ↑ 跳跃</span><span>↓ 下蹲</span><span>SHIFT 冲刺</span><span>P 暂停</span></div>
+        </div>
+        <div class="start-footer"><span>程序化赛道 · 每次都不同</span><span>记录 · <b id="start-best-score">0</b></span></div>
+      </section>
+
+      <section id="game-hud" class="hud-layer" aria-live="polite">
+        <header class="hud-topbar">
+          <div class="brand-mark"><span class="brand-symbol">✦</span><span>NEON<br /><b>SPRINT</b></span></div>
+          <div class="run-stats">
+            <div class="stat-block"><span class="stat-label">表现分</span><strong id="score-value">000000</strong></div>
+            <div class="stat-block"><span class="stat-label">距离</span><strong><span id="distance-value">0</span><em>m</em></strong></div>
+            <div class="stat-block coin-stat"><span class="stat-label">星币</span><strong><span class="coin-dot">◆</span><span id="coin-value">0</span></strong></div>
+          </div>
+          <div class="hud-actions">
+            <div class="speed-readout"><span>SPD</span><b id="speed-value">1.0</b><small>×</small></div>
+            <button id="sound-button" class="icon-button" type="button" aria-label="切换音效">◖</button>
+            <button id="pause-button" class="icon-button" type="button" aria-label="暂停">Ⅱ</button>
+          </div>
+        </header>
+
+        <div class="hud-world-row">
+          <div class="terrain-chip"><span class="terrain-pulse"></span><span id="terrain-value">NOVA CITY</span></div>
+          <div class="mode-status" id="mode-status"><span class="mode-icon">◈</span><span id="mode-label">主赛道</span><span id="mode-timer"></span></div>
+          <div class="combo-status"><span>连击</span><strong id="combo-value">×1</strong><div class="combo-bar"><i id="combo-bar-fill"></i></div></div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="equipment-pill"><span class="mini-mount"></span><span>脉冲滑板</span><i>+10%</i></div>
+          <div class="event-tip" id="event-tip"><span class="tip-line"></span><span id="event-tip-text">前方轨道已接入 · 保持节奏</span></div>
+          <div class="power-actions">
+            <button class="power-button dash" id="dash-button" type="button"><span class="power-glyph">➤</span><span class="power-name">冲刺</span><small id="dash-cooldown">就绪</small></button>
+            <button class="power-button magnet" id="magnet-button" type="button"><span class="power-glyph">⌁</span><span class="power-name">磁铁</span><small id="magnet-cooldown">就绪</small></button>
+            <button class="power-button shield" id="shield-button" type="button"><span class="power-glyph">⬡</span><span class="power-name">护盾</span><small id="shield-cooldown">拾取</small></button>
+          </div>
+        </div>
+
+        <div id="touch-controls" class="touch-controls" aria-label="触控操作">
+          <button id="touch-jump" type="button">↑<small>跳跃</small></button>
+          <button id="touch-slide" type="button">↓<small>下蹲</small></button>
+        </div>
+      </section>
+
+      <div id="mode-banner" class="mode-banner" aria-live="assertive">
+        <div class="mode-banner-line"></div><span class="mode-banner-kicker">BONUS TRANSFER</span><strong id="mode-banner-title">超级奖励</strong><small id="mode-banner-subtitle">金币倍率 ×3 · 限时 12 秒</small><div class="mode-banner-line"></div>
+      </div>
+
+      <section id="pause-modal" class="modal-layer" aria-label="游戏暂停">
+        <div class="modal-card pause-card"><span class="modal-kicker">RUN STATUS / 01</span><h2>节奏暂停</h2><p>轨道在等你。准备好后继续冲刺。</p><button id="resume-button" class="primary-button compact" type="button"><span>继续奔跑</span><span class="button-arrow">↗</span></button><button id="pause-menu-button" class="text-button" type="button">返回主菜单</button></div>
+      </section>
+
+      <section id="revive-modal" class="modal-layer" aria-label="复活选择">
+        <div class="modal-card revive-card"><div class="danger-orbit">✦</div><span class="modal-kicker">SIGNAL LOST</span><h2>轨道中断</h2><p>你的节奏还没有结束。使用一次星核，立刻回到赛道。</p><div class="revive-score-row"><span>当前表现分 <b id="revive-score">0</b></span><span>最佳 <b id="revive-best">0</b></span></div><button id="revive-button" class="primary-button compact" type="button"><span>消耗星核复活</span><span class="button-arrow">↗</span></button><button id="give-up-button" class="text-button" type="button">结束本局</button></div>
+      </section>
+
+      <section id="result-modal" class="modal-layer" aria-label="结算界面">
+        <div class="modal-card result-card"><span class="modal-kicker">RUN COMPLETE</span><h2 id="result-title">跑得漂亮。</h2><p id="result-subtitle">下一次，把你的纪录再推远一点。</p><div class="result-main-score"><small>表现分</small><strong id="result-score">0</strong><span id="new-record" class="record-badge">NEW RECORD</span></div><div class="result-grid"><div><span>距离</span><b id="result-distance">0m</b></div><div><span>收集星币</span><b id="result-coins">0</b></div><div><span>最长连击</span><b id="result-combo">×1</b></div></div><div class="result-buttons"><button id="restart-button" class="primary-button compact" type="button"><span>再跑一次</span><span class="button-arrow">↗</span></button><button id="result-menu-button" class="text-button" type="button">返回主菜单</button></div></div>
+      </section>
+
+      <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+      <div id="flash-layer" class="flash-layer"></div>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>星尘酷跑 Star Dash Runner</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="game-container"></div>
+
+      <!-- HUD -->
+      <div id="hud" class="hidden">
+        <div id="hud-top-left">
+          <div id="hud-score-wrap">
+            <div id="hud-score-label">表现分</div>
+            <div id="hud-score">0</div>
+            <div id="hud-mult" class="hidden">x4</div>
+          </div>
+          <div id="hud-sub">
+            <span id="hud-dist">0m</span>
+            <span class="dot">•</span>
+            <span id="hud-coins">🪙 0</span>
+            <span class="dot">•</span>
+            <span id="hud-speed">12.0</span>
+          </div>
+          <div id="energy-wrap">
+            <div id="energy-label">S 能量</div>
+            <div id="energy-bar"><div id="energy-fill"></div></div>
+          </div>
+          <div id="buffs"></div>
+        </div>
+        <div id="hud-top-right">
+          <button id="btn-pause" class="icon-btn" title="暂停(P)">⏸</button>
+          <button id="btn-mute" class="icon-btn" title="静音(M)">🔊</button>
+        </div>
+        <div id="mode-banner" class="hidden">
+          <div id="mode-title">SUPER REWARD</div>
+          <div id="mode-timer">8.0s</div>
+          <div id="mode-sub">金币狂欢!无敌!</div>
+        </div>
+        <div id="combo-popup" class="hidden"></div>
+        <div id="touch-controls">
+          <button id="tc-slide" class="tc-btn">⬇<small>下蹲</small></button>
+          <button id="tc-skill" class="tc-btn skill">⚡<small>技能</small></button>
+          <button id="tc-jump" class="tc-btn">⬆<small>跳跃</small></button>
+        </div>
+      </div>
+
+      <!-- 开始界面 -->
+      <div id="screen-start" class="screen">
+        <div class="panel">
+          <h1 class="game-title">星尘酷跑</h1>
+          <div class="subtitle">STAR DASH RUNNER • 2.5D 横版跑酷</div>
+          <div class="best-line">🏆 最高分 <span id="start-best">0</span> • 最远 <span id="start-best-dist">0m</span></div>
+          <div class="loadout">
+            <div class="loadout-row">
+              <span>坐骑</span>
+              <button id="opt-mount" class="toggle on">星角兽:开</button>
+            </div>
+            <div class="loadout-row">
+              <span>宠物</span>
+              <button id="opt-pet" class="toggle on">跟屁虫:开</button>
+            </div>
+            <div class="loadout-row">
+              <span>角色</span>
+              <button id="opt-char" class="toggle">疾风少年</button>
+            </div>
+          </div>
+          <button id="btn-start" class="big-btn">▶ 开始奔跑</button>
+          <div class="help">
+            <div><b>空格/↑/W/点击:</b> 跳跃(可二段跳) • <b>↓/S:</b> 下蹲/下滑 • <b>F:</b> 技能 • <b>P:</b> 暂停</div>
+            <div>踩怪物头顶可消灭+弹跳!撞到障碍会死(护盾/坐骑可保一次)。吃金币攒 S 能量进 <b>超级奖励</b>，钻光门进 <b>穿越奖励</b>!</div>
+            <div>道具: 🧲磁铁 🛡护盾 🚀冲刺 ⭐坐骑 💊宠物加成。S能量满=超级奖励金币阵列 x4。</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 暂停 -->
+      <div id="screen-pause" class="screen hidden">
+        <div class="panel">
+          <h2>⏸ 已暂停</h2>
+          <div class="stat-line">分数 <span id="pause-score">0</span> • 距离 <span id="pause-dist">0m</span></div>
+          <button id="btn-resume" class="big-btn">继续</button>
+          <button id="btn-restart1" class="ghost-btn">重新开始</button>
+          <button id="btn-quit1" class="ghost-btn">返回主页</button>
+        </div>
+      </div>
+
+      <!-- 结算 -->
+      <div id="screen-over" class="screen hidden">
+        <div class="panel">
+          <h2>🏁 本局结束</h2>
+          <div id="new-record" class="hidden">🎉 新纪录!! 🎉</div>
+          <div class="result-grid">
+            <div><label>表现分</label><b id="over-score">0</b></div>
+            <div><label>距离</label><b id="over-dist">0m</b></div>
+            <div><label>金币</label><b id="over-coins">0</b></div>
+            <div><label>踩怪</label><b id="over-stomp">0</b></div>
+          </div>
+          <div id="revive-wrap">
+            <button id="btn-revive" class="big-btn revive">💖 复活一次 (3s无敌冲刺)</button>
+            <div id="revive-hint">每局可复活 1 次</div>
+          </div>
+          <div class="row">
+            <button id="btn-restart2" class="big-btn">再来一局</button>
+            <button id="btn-quit2" class="ghost-btn">主页</button>
+          </div>
+          <div class="best-line">🏆 最高分 <span id="over-best">0</span></div>
+        </div>
+      </div>
+
+      <div id="flash"></div>
+      <div id="loading">正在加载星尘...</div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

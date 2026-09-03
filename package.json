@@ -1,0 +1,24 @@
+{
+  "name": "ai-battle",
+  "version": "1.0.0",
+  "private": true,
+  "description": "AI 大模型极限前端编程能力比拼 - 天天酷跑 3D/2.5D 横版跑酷游戏",
+  "scripts": {
+    "dev:gemini": "npm --prefix gemini run dev",
+    "dev:gpt": "npm --prefix gpt run dev",
+    "dev:muse": "npm --prefix muse run dev",
+    "build:all": "npm --prefix gemini run build && npm --prefix gpt run build && npm --prefix muse run build"
+  },
+  "keywords": [
+    "ai-battle",
+    "threejs",
+    "runner-game",
+    "game-dev",
+    "gemini",
+    "gpt",
+    "claude",
+    "benchmark"
+  ],
+  "author": "yhan-sun",
+  "license": "MIT"
+}
