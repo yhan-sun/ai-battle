@@ -1,0 +1,18 @@
+{
+  "name": "deepseek-runner",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "深海疾速 - DeepSeek V4 Flash 0731 生成的三维横版跑酷 (天天酷跑风格)",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "three": "^0.160.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.0"
+  }
+}

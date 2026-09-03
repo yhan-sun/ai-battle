@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>深海疾速 · DEEP DASH — DeepSeek V4 Flash 0731</title>
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <canvas id="game-canvas"></canvas>
+
+    <div id="hud" class="hud hidden">
+      <div class="hud-top">
+        <div class="hud-block score-block">
+          <span class="hud-label">表现分</span>
+          <strong id="hud-score">0</strong>
+        </div>
+        <div class="hud-block distance-block">
+          <span class="hud-label">距离</span>
+          <strong id="hud-distance">0 m</strong>
+        </div>
+        <div class="hud-block combo-block">
+          <span class="hud-label">连击</span>
+          <strong id="hud-combo">x0</strong>
+        </div>
+        <div class="hud-buttons">
+          <button id="btn-pause" class="hud-btn" title="暂停 (P)">⏸</button>
+          <button id="btn-mute" class="hud-btn" title="静音 (M)">🔊</button>
+        </div>
+      </div>
+      <div class="hud-bottom">
+        <div class="hud-powers">
+          <div class="power-slot" id="power-magnet">
+            <span class="power-icon">🧲</span>
+            <div class="power-bar"><i></i></div>
+          </div>
+          <div class="power-slot" id="power-shield">
+            <span class="power-icon">🛡</span>
+            <div class="power-bar"><i></i></div>
+          </div>
+        </div>
+        <div class="hud-timer hidden" id="hud-timer">
+          <span id="hud-timer-label">超级奖励</span>
+          <strong id="hud-timer-value">20</strong>
+          <em id="hud-timer-mult">x2</em>
+        </div>
+        <div class="hud-ability">
+          <button id="btn-ability" class="ability-btn" title="技能：冲刺 (F / Shift)">⚡ 冲刺</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="overlay-start" class="overlay">
+      <div class="panel">
+        <p class="kicker">DeepSeek V4 Flash 0731 · 参赛作品</p>
+        <h1>深海疾速<br /><span>DEEP DASH 3D</span></h1>
+        <p class="desc">无限程序化深海世界 · 三车道跑酷 · 超级奖励 / 穿越奖励 · 坐骑与宠物</p>
+        <div class="controls-hint">
+          <div><kbd>空格 / W / ↑</kbd><span>跳跃 · 二段跳</span></div>
+          <div><kbd>A / D · ← / →</kbd><span>切换车道</span></div>
+          <div><kbd>S / ↓</kbd><span>下蹲滑行 / 空中俯冲</span></div>
+          <div><kbd>F / Shift</kbd><span>冲刺技能</span></div>
+          <div><kbd>P / Esc</kbd><span>暂停</span></div>
+        </div>
+        <button id="btn-start" class="primary-btn">▶ 开始奔跑</button>
+        <p class="best" id="start-best">最高分：<strong>0</strong></p>
+      </div>
+    </div>
+
+    <div id="overlay-pause" class="overlay hidden">
+      <div class="panel small">
+        <h2>已暂停</h2>
+        <button id="btn-resume" class="primary-btn">继续奔跑</button>
+        <button id="btn-restart" class="ghost-btn">重新开始</button>
+      </div>
+    </div>
+
+    <div id="overlay-dead" class="overlay hidden">
+      <div class="panel">
+        <h2>跌入深海…</h2>
+        <div class="dead-stats">
+          <div><span>表现分</span><strong id="dead-score">0</strong></div>
+          <div><span>距离</span><strong id="dead-distance">0 m</strong></div>
+          <div><span>最高分</span><strong id="dead-best">0</strong></div>
+        </div>
+        <button id="btn-revive" class="primary-btn">复活（还剩 <em id="revive-count">3</em> 次）</button>
+        <button id="btn-retry" class="ghost-btn">重新开始</button>
+      </div>
+    </div>
+
+    <div id="toast" class="toast hidden"></div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

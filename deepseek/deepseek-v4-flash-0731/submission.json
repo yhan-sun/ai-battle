@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "deepseek",
+    "name": "DeepSeek",
+    "accent": "#37e6ff",
+    "order": 1000
+  },
+  "model": {
+    "slug": "deepseek-v4-flash-0731",
+    "name": "V4 Flash 0731",
+    "order": 1000
+  },
+  "demo": {
+    "title": "深海疾速 · DEEP DASH 3D",
+    "tag": "DEEP DASH"
+  }
+}
