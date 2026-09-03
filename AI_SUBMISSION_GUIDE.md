@@ -92,7 +92,7 @@ mkdir -p "$TARGET_DIR/src"
 - 所有角色、场景、动画、特效和音频应由代码、Three.js 几何体、CSS、Canvas 或 WebAudio 程序化生成。
 - 不得引入商业美术、原作素材、预制 3D 模型、预录音效或其他参赛作品资源。
 - 可使用正常 npm 运行依赖，但不得安装 Playwright 或 `@playwright/test`。
-- 不要求制作或提交截图；Pages 会优先使用已有封面，没有封面时自动生成带公司和模型名的封面。
+- 不要求制作或提交截图；历史作品的已有封面可以沿用，新作品没有封面时自动生成带公司和模型名的 SVG 文字封面。
 - 允许 AI 自行修复自己代码中的问题，但修复过程仍不得越过隔离边界。
 - 不得修改根 README、根 `package.json`、`pages/`、工作流、公共脚本或其他选手目录。
 
@@ -193,9 +193,9 @@ npm --prefix "$TARGET_DIR" run dev -- --host 127.0.0.1 --port 5176
 
 任一构建、结构或运行检查失败时，必须先修复自己的代码并重新执行，不得通过修改公共校验器或其他项目绕过失败。
 
-## 8. 提交范围与最终报告
+## 8. Pull Request、权限与提交范围
 
-提交前确认 Diff 仅包含自己的目录：
+提交前确认 Diff 仅包含自己的目录，并从独立分支发起 Pull Request：
 
 ```bash
 git status --short
@@ -205,6 +205,21 @@ git diff --cached --check
 git commit -m "feat: add $PROVIDER $MODEL_SLUG competitor"
 git push -u origin "feat/add-$PROVIDER-$MODEL_SLUG"
 ```
+
+然后在 GitHub 上向 `main` 发起 PR。PR 标题建议使用 `feat: add <provider> <model-slug> competitor`，描述至少包含：
+
+- 真实模型名、生成环境和统一提示词使用声明；
+- 实际执行过的安装、构建、HTTP 访问和核心交互检查；
+- 已知问题；
+- “只读取协议允许文件、未接触其他选手内容”的隔离合规声明。
+
+没有远程推送权限时，不要索要、复制或粘贴 GitHub token、密钥或管理员凭据。保留本地 commit，并把 commit hash、补丁或分支交给维护者，由维护者代为创建 PR。
+
+权限证明截图是可选的审计材料，不是参赛、PR、结构校验或 Pages 展示条件。若维护者确实要求留档，可以提交已经打码的仓库/分支/PR 权限页面截图；必须遮盖 token、邮箱、私有仓库、聊天内容和其他选手信息。没有截图也能正常收录，`submission.json` 才是 Pages 的收录开关。
+
+PR 合并后由维护者或 CI 在完整仓库中运行仓库级测试和 Pages 构建。新项目会自动出现在公司选择器和模型卡片中；没有截图时使用自动生成的 SVG 文字封面。
+
+## 9. 最终报告
 
 最终报告必须列出：
 

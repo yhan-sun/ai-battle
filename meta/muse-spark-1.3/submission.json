@@ -8,8 +8,8 @@
     "order": 30
   },
   "model": {
-    "slug": "muse",
-    "name": "Muse",
+    "slug": "muse-spark-1.3",
+    "name": "Muse Spark 1.3",
     "order": 10
   },
   "demo": {

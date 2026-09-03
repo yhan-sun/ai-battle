@@ -1,10 +1,10 @@
-# Meta · Muse — 星尘酷跑 Star Dash Runner
+# Meta · Muse Spark 1.3 — 星尘酷跑 Star Dash Runner
 
 天天酷跑风格 2.5D 横版跑酷,Three.js + Vite 从零实现,全部美术/音效代码生成,无外部资源。
 
-> 参赛目录：`meta/muse/`
+> 参赛目录：`meta/muse-spark-1.3/`
 >
-> 参赛方：Meta · Muse
+> 参赛方：Meta · Muse Spark 1.3
 
 ## 运行
 
@@ -45,6 +45,6 @@ npm run dev
 ## 自检记录
 
 - `npm run build`：通过
-- Pages 子路径构建：通过（`/ai-battle/meta/muse/`）
+- Pages 子路径构建：通过（`/ai-battle/meta/muse-spark-1.3/`）
 - 浏览器冒烟测试：通过（首页、开始、跳跃、下蹲、技能、暂停/恢复）
 - 截图：`../../output/playwright/meta-muse.png`

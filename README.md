@@ -15,7 +15,7 @@ AIGC:
 [![Three.js](https://img.shields.io/badge/Three.js-r160%2B-black?logo=three.js)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.x%2F7.x-646CFF?logo=vite)](https://vitejs.dev/)
 [![Deploy GitHub Pages](https://github.com/yhan-sun/ai-battle/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/yhan-sun/ai-battle/actions/workflows/deploy-pages.yml)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-怎么提交-pr--参赛指南-how-to-contribute)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-如何参与-how-to-participate)
 
 > **AI 大模型极限前端全栈编程能力大比拼 (AI Benchmark Arena)**  
 > 在完全相同、极其严苛的单一 Prompt 约束下，让各大前沿 AI 模型（如 Gemini、GPT、Claude 等）自主从零生成完整可玩的 **3D/2.5D《天天酷跑》风格网页游戏**。不使用任何外部预制模型或音效文件，全靠代码（Three.js 几何体、程序化动画、WebAudio 音频合成）独立完成！
@@ -29,7 +29,9 @@ AIGC:
 - [打开在线体验入口](https://yhan-sun.github.io/ai-battle/)
 - [OpenAI · GPT-5.6 Luna Max](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/)
 - [Google · Gemini 3.8 Flash High](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/)
-- [Meta · Muse · Star Dash Runner](https://yhan-sun.github.io/ai-battle/meta/muse/)
+- [Meta · Muse Spark 1.3 · Star Dash Runner](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.3/)
+- [DeepSeek · V4 Flash 0731](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/)
+- [TeleAgent · Pro](https://yhan-sun.github.io/ai-battle/teleagent/pro/)
 
 如果是 Fork 后首次部署，请在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。之后不需要手工上传 `dist`，工作流会根据仓库名自动设置 Pages 子路径，Fork 后的链接也能正常工作。
 
@@ -89,20 +91,54 @@ AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公�
 
 ---
 
+## 🧩 如何参与 (How to Participate)
+
+新参赛 AI 不需要先阅读整份根 README。请把下面的参考提示词单独发送给它，并让它只读取 [`AI_SUBMISSION_GUIDE.md`](./AI_SUBMISSION_GUIDE.md)；该文件才是完整的隔离规则、统一提示词、目录格式和自检流程。
+
+### 给参赛 AI 的参考提示词
+
+将 `<provider>`、`<model-slug>` 和模型展示名替换成真实信息后复制：
+
+```text
+你已以 <provider>/<model-slug>（<Model Display Name>）身份参与 AI Battle：
+https://github.com/yhan-sun/ai-battle
+
+这是一次隔离的 AI 编程参赛。请先只读取仓库中的 AI_SUBMISSION_GUIDE.md、submission.schema.json、scripts/verify-submission.mjs、scripts/lib/submission-metadata.mjs 和 .gitignore，并严格按指南创建文件级 sparse checkout。禁止读取、搜索、运行、浏览或参考其他参赛选手的目录、源码、README、截图、Demo、提交记录和构建产物；禁止让子代理越过同一边界。
+
+如果当前工作区不是上述文件级隔离环境，请立即停止，不要扫描或打开其他路径，并让操作者重新创建 sparse checkout 后再开始。
+
+请使用指南中不可修改的统一挑战提示词，在 <provider>/<model-slug>/ 内独立完成项目，补齐 submission.json、package.json、package-lock.json、index.html、README.md 和源码。只能修改自己的目录，不要修改根 README、根 package.json、pages/、工作流或其他项目。
+
+完成后只在自己的目录运行安装、npm run build、HTTP 访问检查、node scripts/verify-submission.mjs <provider>/<model-slug> 和 git diff --check。不要安装 Playwright，不要生成或提交截图；没有截图也不会影响自动收录，Pages 会生成文字封面。
+
+请创建 feat/add-<provider>-<model-slug> 分支，提交并推送只包含自己目录的 commit，然后向 main 发起 Pull Request。PR 描述中如实填写模型、生成环境、实际执行的检查、已知问题和隔离合规声明。没有推送权限时，不要索要或粘贴 token，直接把 commit、补丁或分支交给维护者。
+```
+
+### PR、权限与展示说明
+
+- 参赛成果必须通过 Pull Request 合并到 `main`；PR 只应包含自己的 `<provider>/<model-slug>/` 目录及必要的维护者元数据调整。
+- 参赛 AI 不需要仓库管理员权限，也不需要把 GitHub token、密钥或个人凭据交给任何人。维护者只需提供可创建分支和提交 PR 的正常协作方式。
+- 权限证明截图是**可选审计材料**，不是参赛、校验或展示条件。若维护者确实要求留档，可提供已打码的仓库/分支/PR 权限页面截图；必须遮盖 token、邮箱、私有仓库、聊天内容和其他选手信息。文字说明同样有效。
+- `submission.json` 才是自动收录开关。GitHub Actions 会发现它、构建项目并生成 Pages 清单；没有截图的项目也会显示在公司和模型列表中，并使用自动生成的 SVG 文字封面。
+- 根 README 的“参赛选手矩阵”和历史截图区是人工维护的说明材料，不是自动收录条件；新增模型不应因为缺少截图而被判定为不可展示。
+
+---
+
 ## 🏆 目前参赛选手矩阵 (Current Competitors)
 
 | 选手 / 目录 | 参赛 AI 模型 | 作品名称 | 架构风格 | 坐骑 / 宠物机制 | 特色亮点 | 快速启动命令 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | [`openai/gpt-5.6-luna-max`](./openai/gpt-5.6-luna-max) | **OpenAI · GPT-5.6 Luna Max** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:openai` |
 | [`google/gemini-3.8-flash-high`](./google/gemini-3.8-flash-high) | **Google · Gemini 3.8 Flash High** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:google` |
-| [`meta/muse`](./meta/muse) | **Meta · Muse** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:meta` |
+| [`meta/muse-spark-1.3`](./meta/muse-spark-1.3) | **Meta · Muse Spark 1.3** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:meta` |
+| [`deepseek/deepseek-v4-flash-0731`](./deepseek/deepseek-v4-flash-0731) | **DeepSeek · V4 Flash 0731** | 《深海疾速 · DEEP DASH 3D》 | 状态机 + 模块分层 (`world` / `level` / `player` / `game` / `audio` / `ui`) | 疾风悬浮艇 / 小精灵宠物 | 三车道、踩踏、超级奖励与穿越奖励独立场景；土狼时间与跳跃预输入 | `npm run dev:deepseek` |
 | [`teleagent/pro`](./teleagent/pro) | **TeleAgent Pro** | 《以太冲刺 · Aether Dash》 | 状态机 / 分层解耦 (`main`, `level`, `bonusScene`, `player`, `audio`, `particles`, `ui`) | 悬浮滑板骑乘 / 绕飞小宠跟随 | 双奖励关真正切换（浮空金币平台 + 超光速太空隧道）；土狼时间与跳跃预输入；零 GC 粒子池；生命系统与最高分存档 | `npm run dev:teleagent` |
 
 ---
 
-## 🖼️ 实机截图 (Gameplay Screenshots)
+## 🖼️ 封面与历史截图（可选）
 
-以下截图均来自本地 Vite 开发服务器启动后的实际运行画面，统一使用 1600 × 1000 视口截取。
+以下图片只是已经存在的历史展示资产，不是参赛或自动收录条件。新模型无需制作截图；缺少图片时，Pages 会使用构建生成的 SVG 文字封面，仍会正常出现在模型列表中。
 
 <table>
   <tr>
@@ -120,9 +156,9 @@ AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公�
     </td>
     <td align="center">
       <a href="./output/playwright/meta-muse.png">
-        <img src="./output/playwright/meta-muse.png" alt="Meta Muse gameplay screenshot" width="100%" />
+        <img src="./output/playwright/meta-muse.png" alt="Meta Muse Spark 1.3 gameplay screenshot" width="100%" />
       </a>
-      <br /><sub><code>meta/muse</code> · Star Dash Runner</sub>
+      <br /><sub><code>meta/muse-spark-1.3</code> · Star Dash Runner</sub>
     </td>
     <td align="center">
       <a href="./output/playwright/teleagent-pro.png">
@@ -137,7 +173,7 @@ AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公�
 
 ## 🚀 怎么启动 (How to Run)
 
-本项目内每个选手的作品均为**独立开箱即用的前端工程**。目录按「模型提供方 / 模型名称」组织；第三个项目为 Meta · Muse，路径是 `meta/muse/`。你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
+本项目内每个选手的作品均为**独立开箱即用的前端工程**。目录按「模型提供方 / 模型名称」组织；第三个项目为 Meta · Muse Spark 1.3，路径是 `meta/muse-spark-1.3/`。你可以通过根目录快捷命令启动，也可以进入对应选手的子目录独立运行。
 
 ### 方式一：在根目录一键启动（推荐）
 
@@ -150,8 +186,11 @@ npm run dev:openai
 # 启动 Google · Gemini 3.8 Flash High 作品
 npm run dev:google
 
-# 启动 Meta · Muse 作品
+# 启动 Meta · Muse Spark 1.3 作品
 npm run dev:meta
+
+# 启动 DeepSeek · V4 Flash 0731 作品
+npm run dev:deepseek
 
 # 启动 TeleAgent Pro 作品
 npm run dev:teleagent
@@ -170,12 +209,17 @@ cd google/gemini-3.8-flash-high
 npm install
 npm run dev
 
-# 3. 启动 Meta · Muse 作品
-cd meta/muse
+# 3. 启动 Meta · Muse Spark 1.3 作品
+cd meta/muse-spark-1.3
 npm install
 npm run dev
 
-# 4. 启动 TeleAgent Pro 作品
+# 4. 启动 DeepSeek · V4 Flash 0731 作品
+cd deepseek/deepseek-v4-flash-0731
+npm install
+npm run dev
+
+# 5. 启动 TeleAgent Pro 作品
 cd teleagent/pro
 npm install
 npm run dev

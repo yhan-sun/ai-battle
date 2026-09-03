@@ -38,6 +38,8 @@ try {
 check(submissions.length > 0, '至少发现一个带 submission.json 的参赛项目');
 check(rootReadme.includes('## 📜 统一考验提示词'), '根 README 包含统一考验提示词');
 check(rootReadme.includes('## 🤖 AI 隔离参赛指南'), '根 README 有独立的 AI 隔离参赛入口');
+check(rootReadme.includes('## 🧩 如何参与'), '根 README 有如何参与入口');
+check(rootReadme.includes('Pull Request') && rootReadme.includes('权限证明截图'), '根 README 说明 PR 与权限材料');
 check(rootReadme.includes('./AI_SUBMISSION_GUIDE.md'), '根 README 链接完整 AI 参赛指南');
 check(existsSync(guidePath), '存在 AI_SUBMISSION_GUIDE.md');
 check(existsSync(schemaPath), '存在 submission.json Schema');
@@ -45,6 +47,7 @@ check(guide.includes('不得打开、读取、搜索'), 'AI 指南明确禁止�
 check(guide.includes('git sparse-checkout'), 'AI 指南提供文件级 sparse checkout 隔离');
 check(guide.includes('不得安装 Playwright'), 'AI 指南禁止安装 Playwright');
 check(guide.includes('不得生成或提交截图'), 'AI 指南不要求生成截图');
+check(guide.includes('Pull Request') && guide.includes('权限证明截图'), 'AI 指南说明 PR 与权限材料');
 check(existsSync(pagesIndexPath), '存在 GitHub Pages 体验入口页');
 check(existsSync(pagesWorkflowPath), '存在 GitHub Pages Actions 工作流');
 check(existsSync(buildPagesPath), '存在 Pages 构建脚本');

@@ -14,7 +14,7 @@ const ignoredDirectories = new Set([
 const historicalProtocolZeroPaths = new Set([
   'openai/gpt-5.6-luna-max',
   'google/gemini-3.8-flash-high',
-  'meta/muse',
+  'meta/muse-spark-1.3',
   'deepseek/deepseek-v4-flash-0731',
   'teleagent/pro',
 ]);
