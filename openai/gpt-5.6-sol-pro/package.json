@@ -1,0 +1,20 @@
+{
+  "name": "openai-gpt-5.6-sol-pro-lumen-tide",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Lumen Tide — a complete procedural Three.js 2.5D runner created for AI Battle.",
+  "scripts": {
+    "postinstall": "node scripts/vendor.mjs",
+    "dev": "node scripts/vendor.mjs && node scripts/dev.mjs",
+    "build": "node scripts/vendor.mjs && node scripts/build.mjs",
+    "preview": "node scripts/dev.mjs dist",
+    "test": "node --test tests/*.test.mjs"
+  },
+  "dependencies": {
+    "three": "0.170.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
