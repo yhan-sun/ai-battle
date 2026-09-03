@@ -27,9 +27,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
       - name: Install project dependencies
         run: |
           set -euo pipefail
