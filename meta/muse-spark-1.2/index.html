@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>星跃狂奔 NOVA RUSH</title>
+</head>
+<body>
+  <div id="app">
+    <div id="game-container"></div>
+
+    <!-- HUD -->
+    <div id="hud" class="hidden">
+      <div class="hud-top">
+        <div class="hud-left">
+          <div class="score-box">
+            <div class="score-label">NOVA SCORE</div>
+            <div class="score-row">
+              <span id="hud-score">0</span>
+              <span id="hud-mult" class="mult hidden">x1</span>
+            </div>
+            <div class="sub-row">
+              <span id="hud-dist">0m</span>
+              <span class="dot">·</span>
+              <span id="hud-coins">0</span><span class="coin-icon">◈</span>
+              <span class="dot">·</span>
+              <span id="hud-speed">11.0</span><span class="unit"> m/s</span>
+            </div>
+            <div class="meter-wrap">
+              <div class="meter-label"><span>SUPER 能量</span><span id="meter-pct">0%</span></div>
+              <div class="meter-bar"><div id="meter-fill"></div><div id="meter-glow"></div></div>
+            </div>
+          </div>
+          <div id="buffs" class="buffs"></div>
+        </div>
+        <div class="hud-right">
+          <button id="btn-pause" class="icon-btn" aria-label="pause">Ⅱ</button>
+          <button id="btn-mute" class="icon-btn" aria-label="mute">♪</button>
+        </div>
+      </div>
+
+      <div id="mode-banner" class="mode-banner hidden">
+        <div id="mode-title" class="mode-title">SUPER REWARD</div>
+        <div class="mode-row"><span id="mode-timer">8.0s</span><span id="mode-sub">金币风暴 · 无敌</span></div>
+        <div class="mode-progress"><div id="mode-progress-fill"></div></div>
+      </div>
+
+      <div id="combo" class="combo hidden"></div>
+
+      <div class="touch-bar">
+        <button class="tbtn" id="t-slide"><span class="ticon">▼</span><small>下滑</small></button>
+        <button class="tbtn skill" id="t-skill"><span class="ticon">⚡</span><small>冲刺</small><i id="skill-cd"></i></button>
+        <button class="tbtn" id="t-jump"><span class="ticon">▲</span><small>跳跃</small></button>
+      </div>
+    </div>
+
+    <!-- Start -->
+    <div id="screen-start" class="screen">
+      <div class="panel start-panel">
+        <div class="eyebrow">META · MUSE SPARK 1.2</div>
+        <h1 class="title">星跃狂奔<span class="en">NOVA RUSH</span></h1>
+        <div class="subtitle">3D 横版跑酷 · 无限程序化 · 双重奖励关卡</div>
+        <div class="best-row">最高 <span id="start-best">0</span> · 最远 <span id="start-dist">0m</span> · 金币 <span id="start-coins">0</span></div>
+
+        <div class="opts">
+          <button class="opt on" id="opt-mount" data-on="坐骑: 开" data-off="坐骑: 关">坐骑: 开</button>
+          <button class="opt on" id="opt-pet" data-on="宠物: 开" data-off="宠物: 关">宠物: 开</button>
+          <button class="opt" id="opt-char">角色: 诺瓦</button>
+        </div>
+
+        <button id="btn-start" class="cta">▶ 开始跃动</button>
+
+        <div class="help">
+          <p><b>跳跃</b> 空格/↑/W/点右侧  <b>二段跳</b> 空中再按  <b>下蹲/滑铲</b> ↓/S/点左侧  <b>冲刺</b> F/⚡（无敌破障） <b>暂停</b> P/Esc</p>
+          <p>踩怪物头顶可消灭反弹！吃 <span class="c-coin">◈金币</span> 攒满 SUPER 条进 <b class="c-super">超级奖励</b>（金色天空·金币阵列·x3·9s）；穿 <span class="c-portal">◎光门</span> 进 <b class="c-cross">穿越奖励</b>（星际隧道·1.8x高速·8s）。</p>
+          <p>道具: <span class="tag mag">🧲磁铁</span> <span class="tag shd">🛡护盾</span> <span class="tag dash">🚀冲刺</span> <span class="tag mount">★星兽</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause -->
+    <div id="screen-pause" class="screen hidden">
+      <div class="panel">
+        <h2>已暂停</h2>
+        <p class="muted"><span id="pause-score">0</span> · <span id="pause-dist">0m</span></p>
+        <button id="btn-resume" class="cta small">继续</button>
+        <div class="row">
+          <button id="btn-restart1" class="ghost">重新开始</button>
+          <button id="btn-quit1" class="ghost">返回主页</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Over -->
+    <div id="screen-over" class="screen hidden">
+      <div class="panel">
+        <h2>跃动结束</h2>
+        <div id="new-record" class="new-record hidden">★ 新纪录 ★</div>
+        <div class="stats">
+          <div><label>表现分</label><b id="over-score">0</b></div>
+          <div><label>距离</label><b id="over-dist">0m</b></div>
+          <div><label>金币</label><b id="over-coins">0</b></div>
+          <div><label>踩怪</label><b id="over-stomp">0</b></div>
+        </div>
+        <div id="revive-wrap" class="revive-wrap">
+          <button id="btn-revive" class="cta revive">♡ 复活（3s无敌冲刺）</button>
+          <div class="hint">每局 1 次机会 · 倒计时 <span id="revive-count">5</span>s</div>
+        </div>
+        <div class="row">
+          <button id="btn-restart2" class="cta small">再来一局</button>
+          <button id="btn-quit2" class="ghost">主页</button>
+        </div>
+        <div class="best-row">最高 <span id="over-best">0</span></div>
+      </div>
+    </div>
+
+    <div id="flash"></div>
+    <div id="toast" class="toast hidden"></div>
+    <div id="loading">NOVA 正在点燃引擎…</div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
