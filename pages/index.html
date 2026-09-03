@@ -217,30 +217,85 @@
       .section-head h2 { margin: 0; letter-spacing: -0.04em; font-size: clamp(1.7rem, 3vw, 2.5rem); }
       .section-head p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.82rem; text-align: right; }
 
-      .roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+      .selection-stage { display: grid; grid-template-columns: minmax(230px, 0.34fr) minmax(0, 1fr); gap: 18px; }
 
-      .runner-card {
-        --accent: var(--cyan);
-        overflow: hidden;
+      .company-panel,
+      .model-panel {
         border: 1px solid var(--line);
         background: var(--panel);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-        transition: transform 220ms ease, border-color 220ms ease;
       }
 
-      .runner-card:hover { transform: translateY(-8px); border-color: color-mix(in srgb, var(--accent) 70%, white 0%); }
-      .runner-card.orange { --accent: var(--orange); }
-      .runner-card.violet { --accent: var(--violet); }
-      .runner-card .card-top { padding: 18px 18px 14px; color: var(--accent); }
-      .card-index { color: var(--accent); }
-      .shot { aspect-ratio: 16 / 10; overflow: hidden; border-block: 1px solid var(--line); background: #0b1020; }
-      .shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
-      .runner-card:hover .shot img { transform: scale(1.045); }
-      .card-body { padding: 18px; }
-      .card-body h3 { margin: 0 0 5px; font-size: 1.18rem; letter-spacing: -0.03em; }
-      .card-meta { color: var(--accent); }
-      .card-body p { min-height: 48px; margin: 16px 0 20px; color: var(--muted); font-size: 0.86rem; }
-      .card-link { width: 100%; color: var(--accent); }
+      .company-panel { padding: 20px; }
+      .panel-heading { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+      .panel-number { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--cyan); color: var(--cyan); font-size: 0.7rem; font-weight: 800; }
+      .panel-eyebrow { color: var(--muted); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; }
+      .panel-heading h3 { margin: 2px 0 0; font-size: 1.18rem; letter-spacing: -0.03em; }
+
+      .company-list { display: grid; gap: 10px; margin-top: 18px; }
+      .company-option {
+        --company-accent: var(--cyan);
+        position: relative;
+        display: grid;
+        grid-template-columns: 44px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid var(--line);
+        color: var(--paper);
+        background: rgba(255, 255, 255, 0.025);
+        font: inherit;
+        text-align: left;
+        cursor: pointer;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+      }
+
+      .company-option.orange { --company-accent: var(--orange); }
+      .company-option.violet { --company-accent: var(--violet); }
+      .company-option:hover,
+      .company-option[aria-selected="true"] { transform: translateX(4px); border-color: var(--company-accent); background: color-mix(in srgb, var(--company-accent) 10%, transparent); }
+      .company-option[aria-selected="true"]::before { position: absolute; inset: 8px auto 8px -1px; width: 3px; content: ""; background: var(--company-accent); box-shadow: 0 0 14px var(--company-accent); }
+      .company-mark { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid color-mix(in srgb, var(--company-accent) 65%, white 0%); color: var(--company-accent); font-size: 1.15rem; font-weight: 900; letter-spacing: -0.08em; }
+      .company-copy { min-width: 0; }
+      .company-copy strong { display: block; font-size: 0.98rem; }
+      .company-copy small { display: block; margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.05em; text-overflow: ellipsis; white-space: nowrap; }
+      .company-arrow { color: var(--company-accent); font-size: 1.1rem; transition: transform 180ms ease; }
+      .company-option:hover .company-arrow,
+      .company-option[aria-selected="true"] .company-arrow { transform: translateX(3px); }
+      .panel-footnote { margin: 18px 0 0; color: var(--muted); font-size: 0.72rem; line-height: 1.7; }
+
+      .model-panel { min-width: 0; padding: 24px; background: linear-gradient(145deg, rgba(20, 29, 49, 0.88), rgba(10, 14, 26, 0.78)); }
+      .model-panel-header { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+      .model-panel-kicker { color: var(--cyan); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
+      .model-panel-header h3 { margin: 5px 0 0; font-size: clamp(1.55rem, 3vw, 2.3rem); letter-spacing: -0.05em; }
+      .model-panel-note { max-width: 280px; margin: 0; color: var(--muted); font-size: 0.78rem; text-align: right; }
+      .model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 22px; }
+      .model-card { --accent: var(--cyan); overflow: hidden; border: 1px solid var(--line); border-top: 2px solid var(--accent); background: rgba(6, 10, 20, 0.7); transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
+      .model-card:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--accent) 65%, white 0%); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28); }
+      .model-card-visual { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b1020; }
+      .model-card-visual::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, transparent 50%, rgba(3, 6, 14, 0.72)); pointer-events: none; }
+      .model-card-visual img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
+      .model-card:hover .model-card-visual img { transform: scale(1.045); }
+      .model-visual-tag { position: absolute; right: 14px; bottom: 12px; z-index: 1; color: var(--accent); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+      .model-card-body { padding: 18px; }
+      .model-provider { margin: 0 0 7px; color: var(--accent); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+      .model-card-body h4 { margin: 0; font-size: 1.35rem; letter-spacing: -0.04em; }
+      .model-card-body p { min-height: 48px; margin: 12px 0 18px; color: var(--muted); font-size: 0.84rem; }
+      .model-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
+      .model-fact { padding: 9px 10px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); }
+      .model-fact span { display: block; color: var(--muted); font-size: 0.61rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      .model-fact strong { display: block; margin-top: 3px; font-size: 0.75rem; }
+      .model-launch { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 0 14px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; transition: background 180ms ease, color 180ms ease; }
+      .model-launch:hover { color: var(--ink); background: var(--accent); }
+      .model-empty { position: relative; display: grid; min-height: 320px; place-items: center; overflow: hidden; margin-top: 22px; padding: 40px 24px; border: 1px dashed rgba(164, 186, 211, 0.28); text-align: center; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 14px); }
+      .model-empty::before { position: absolute; width: 210px; height: 210px; border: 1px solid rgba(111, 231, 255, 0.15); border-radius: 50%; content: ""; box-shadow: 0 0 0 28px rgba(111, 231, 255, 0.025), 0 0 0 56px rgba(111, 231, 255, 0.018); }
+      .empty-content { position: relative; z-index: 1; }
+      .empty-kicker { color: var(--orange); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
+      .model-empty strong { display: block; margin-top: 10px; font-size: clamp(1.5rem, 3vw, 2.3rem); letter-spacing: -0.06em; }
+      .model-empty p { max-width: 340px; margin: 10px auto 16px; color: var(--muted); font-size: 0.84rem; }
+      .empty-signal { color: var(--cyan); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; }
+      [hidden] { display: none !important; }
 
       .footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); }
       .footer span:last-child { color: var(--paper); letter-spacing: 0.03em; text-transform: none; font-weight: 500; }
@@ -248,12 +303,10 @@
       @media (max-width: 900px) {
         .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 56px; }
         .hero-visual { min-height: 280px; transform: none; }
-        .roster { grid-template-columns: 1fr; }
-        .runner-card { display: grid; grid-template-columns: 0.92fr 1.08fr; }
-        .runner-card .card-top { grid-column: 1 / -1; }
-        .shot { height: 100%; border-inline: 0; border-block: 1px solid var(--line); }
-        .card-body { display: flex; flex-direction: column; justify-content: center; }
-        .card-body p { min-height: 0; }
+        .company-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .company-option { grid-template-columns: 40px minmax(0, 1fr); }
+        .company-arrow { display: none; }
+        .model-panel-note { max-width: 220px; }
       }
 
       @media (max-width: 580px) {
@@ -266,8 +319,13 @@
         .hero-meta { right: 32px; bottom: 28px; left: 32px; }
         .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
         .section-head p { text-align: left; }
-        .runner-card { display: block; }
-        .shot { aspect-ratio: 16 / 10; }
+        .company-list { grid-template-columns: 1fr; }
+        .company-option { grid-template-columns: 44px minmax(0, 1fr) auto; }
+        .company-arrow { display: block; }
+        .model-panel { padding: 18px; }
+        .model-panel-header { align-items: flex-start; flex-direction: column; gap: 10px; }
+        .model-panel-note { max-width: none; text-align: left; }
+        .model-grid { grid-template-columns: 1fr; }
         .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
       }
     </style>
@@ -281,76 +339,191 @@
 
       <section class="hero" aria-labelledby="hero-title">
         <div class="hero-copy">
-          <p class="eyebrow">Three builds / one challenge</p>
-          <h1 id="hero-title">Run the<br /><em>frontier.</em></h1>
-          <p>三个 AI 模型，使用同一份严格提示词，从零生成可玩的 3D / 2.5D 横版跑酷。现在就进入赛道，直接体验代码的手感。</p>
+          <p class="eyebrow">01 select / 02 launch</p>
+          <h1 id="hero-title">Choose the<br /><em>source.</em></h1>
+          <p>先选择 AI 公司，再从该公司的模型列表中选择一条赛道。所有作品都使用同一份严格提示词，从零生成可玩的 3D / 2.5D 横版跑酷。</p>
           <div class="hero-actions">
-            <a class="button primary" href="#lineup">选择你的赛道 ↘</a>
+            <a class="button primary" href="#lineup">选择公司 ↘</a>
             <a class="button secondary" href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noreferrer">查看仓库 ↗</a>
           </div>
         </div>
 
         <div class="hero-visual" aria-hidden="true">
-          <div class="signal"><small>RUN ID</small><strong>03</strong><span>GENERATIVE TRACKS / LIVE</span></div>
+          <div class="signal"><small>FLOW</small><strong>01</strong><span>COMPANY → MODEL → RUN</span></div>
           <div class="star"></div>
           <div class="orbit orbit-a"></div>
           <div class="orbit orbit-b"></div>
-          <div class="hero-meta"><span>NO PREBAKED ASSETS</span><strong>100% CODE-BUILT</strong></div>
+          <div class="hero-meta"><span>ONE PROMPT / THREE SOURCES</span><strong>100% CODE-BUILT</strong></div>
         </div>
       </section>
 
       <section id="lineup" aria-labelledby="lineup-title">
         <div class="section-head">
-          <h2 id="lineup-title">Choose your runner.</h2>
-          <p>每个入口都是独立 Vite 项目。点击卡片即可开始试玩。</p>
+          <div>
+            <p class="eyebrow">Company directory / step one</p>
+            <h2 id="lineup-title">先选一家公司。</h2>
+          </div>
+          <p>选定公司后，第二步会解锁它的模型列表；再点击模型进入对应的独立 Vite 游戏。</p>
         </div>
 
-        <div class="roster">
-          <article class="runner-card">
-            <div class="card-top"><span class="card-index">01 / OPENAI</span><span>NEON</span></div>
-            <a class="shot" href="./openai/gpt-5.6-luna-max/" aria-label="进入 OpenAI GPT-5.6 Luna Max 游戏">
-              <img src="./output/playwright/openai-gpt-5.6-luna-max.png" alt="OpenAI GPT-5.6 Luna Max 游戏画面" loading="lazy" />
-            </a>
-            <div class="card-body">
-              <div class="card-meta">GPT-5.6 LUNA MAX</div>
-              <h3>星轨冲刺 · NEON SPRINT</h3>
-              <p>几何霓虹赛道、悬浮滑板与独立奖励关卡。</p>
-              <a class="card-link" href="./openai/gpt-5.6-luna-max/">ENTER RUN ↗</a>
+        <div class="selection-stage">
+          <aside class="company-panel" aria-labelledby="company-title">
+            <div class="panel-heading">
+              <span class="panel-number">01</span>
+              <div>
+                <div class="panel-eyebrow">Provider</div>
+                <h3 id="company-title">公司</h3>
+              </div>
             </div>
-          </article>
+            <div class="company-list" id="company-list" role="listbox" aria-label="选择 AI 公司">
+              <button class="company-option" type="button" role="option" aria-selected="false" data-company="openai">
+                <span class="company-mark" aria-hidden="true">O</span>
+                <span class="company-copy"><strong>OpenAI</strong><small>1 个可试玩模型</small></span>
+                <span class="company-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="company-option orange" type="button" role="option" aria-selected="false" data-company="google">
+                <span class="company-mark" aria-hidden="true">G</span>
+                <span class="company-copy"><strong>Google</strong><small>1 个可试玩模型</small></span>
+                <span class="company-arrow" aria-hidden="true">↗</span>
+              </button>
+              <button class="company-option violet" type="button" role="option" aria-selected="false" data-company="meta">
+                <span class="company-mark" aria-hidden="true">M</span>
+                <span class="company-copy"><strong>Meta</strong><small>1 个可试玩模型</small></span>
+                <span class="company-arrow" aria-hidden="true">↗</span>
+              </button>
+            </div>
+            <p class="panel-footnote">公司是第一层筛选。选择后，右侧只显示该公司的模型，不会把不同来源混在一起。</p>
+          </aside>
 
-          <article class="runner-card orange">
-            <div class="card-top"><span class="card-index">02 / GOOGLE</span><span>CYBER</span></div>
-            <a class="shot" href="./google/gemini-3.8-flash-high/" aria-label="进入 Google Gemini 3.8 Flash High 游戏">
-              <img src="./output/playwright/google-gemini-3.8-flash-high.png" alt="Google Gemini 3.8 Flash High 游戏画面" loading="lazy" />
-            </a>
-            <div class="card-body">
-              <div class="card-meta">GEMINI 3.8 FLASH HIGH</div>
-              <h3>天天炫跑 · CYBER DASH 3D</h3>
-              <p>赛博虫洞、机械坐骑、宠物技能与玻璃拟态 HUD。</p>
-              <a class="card-link" href="./google/gemini-3.8-flash-high/">ENTER RUN ↗</a>
+          <section class="model-panel" id="model-panel" aria-labelledby="model-title" aria-live="polite">
+            <div class="model-panel-header">
+              <div>
+                <div class="model-panel-kicker" id="model-kicker">02 / MODEL · LOCKED</div>
+                <h3 id="model-title">再选择一个模型。</h3>
+              </div>
+              <p class="model-panel-note" id="model-note">模型列表将在你选择公司后出现。</p>
             </div>
-          </article>
 
-          <article class="runner-card violet">
-            <div class="card-top"><span class="card-index">03 / META</span><span>STAR</span></div>
-            <a class="shot" href="./meta/muse/" aria-label="进入 Meta Muse 游戏">
-              <img src="./output/playwright/meta-muse.png" alt="Meta Muse 游戏画面" loading="lazy" />
-            </a>
-            <div class="card-body">
-              <div class="card-meta">META / MUSE</div>
-              <h3>星尘酷跑 · STAR DASH RUNNER</h3>
-              <p>分层游戏引擎、星角兽骑乘与程序化奖励场景。</p>
-              <a class="card-link" href="./meta/muse/">ENTER RUN ↗</a>
+            <div class="model-empty" id="model-empty" role="status">
+              <div class="empty-content">
+                <span class="empty-kicker">AWAITING COMPANY INPUT</span>
+                <strong>先选公司</strong>
+                <p>从左侧选择 OpenAI、Google 或 Meta，解锁对应的模型入口。</p>
+                <span class="empty-signal">COMPANY / REQUIRED</span>
+              </div>
             </div>
-          </article>
+            <div class="model-grid" id="model-grid" role="list" hidden></div>
+          </section>
         </div>
       </section>
 
       <footer class="footer">
         <span>AI BATTLE / 2026</span>
-        <span>同一提示词 · 三条赛道 · 现在开跑</span>
+        <span>先选公司 · 再选模型 · 现在开跑</span>
       </footer>
     </main>
+    <script>
+      const companies = {
+        openai: {
+          name: "OpenAI",
+          code: "OPENAI",
+          accent: "#6fe7ff",
+          note: "OpenAI 的独立生成作品，沿着几何霓虹赛道开始试玩。",
+          models: [
+            {
+              name: "GPT-5.6 Luna Max",
+              slug: "gpt-5.6-luna-max",
+              path: "./openai/gpt-5.6-luna-max/",
+              image: "./output/playwright/openai-gpt-5.6-luna-max.png",
+              title: "星轨冲刺 · NEON SPRINT",
+              description: "几何霓虹赛道、悬浮滑板与独立奖励关卡。",
+              tag: "NEON",
+              facts: [["架构", "Single-file"], ["机制", "滑板 / 星核"]]
+            }
+          ]
+        },
+        google: {
+          name: "Google",
+          code: "GOOGLE",
+          accent: "#ff8a54",
+          note: "Google 的独立生成作品，进入赛博虫洞与云端奖励场景。",
+          models: [
+            {
+              name: "Gemini 3.8 Flash High",
+              slug: "gemini-3.8-flash-high",
+              path: "./google/gemini-3.8-flash-high/",
+              image: "./output/playwright/google-gemini-3.8-flash-high.png",
+              title: "天天炫跑 · CYBER DASH 3D",
+              description: "赛博虫洞、机械坐骑、宠物技能与玻璃拟态 HUD。",
+              tag: "CYBER",
+              facts: [["架构", "Multi-system"], ["机制", "三段跳 / 虫洞"]]
+            }
+          ]
+        },
+        meta: {
+          name: "Meta",
+          code: "META",
+          accent: "#a890ff",
+          note: "Meta · Muse 的独立生成作品，进入星尘酷跑的程序化奖励场景。",
+          models: [
+            {
+              name: "Muse",
+              slug: "muse",
+              path: "./meta/muse/",
+              image: "./output/playwright/meta-muse.png",
+              title: "星尘酷跑 · STAR DASH RUNNER",
+              description: "分层游戏引擎、星角兽骑乘与程序化奖励场景。",
+              tag: "STAR",
+              facts: [["架构", "Game engine"], ["机制", "坐骑 / 宠物"]]
+            }
+          ]
+        }
+      };
+
+      const companyButtons = [...document.querySelectorAll(".company-option")];
+      const modelEmpty = document.querySelector("#model-empty");
+      const modelGrid = document.querySelector("#model-grid");
+      const modelKicker = document.querySelector("#model-kicker");
+      const modelTitle = document.querySelector("#model-title");
+      const modelNote = document.querySelector("#model-note");
+
+      function renderModels(companyKey) {
+        const company = companies[companyKey];
+        if (!company) return;
+
+        companyButtons.forEach((button) => {
+          const selected = button.dataset.company === companyKey;
+          button.classList.toggle("selected", selected);
+          button.setAttribute("aria-selected", String(selected));
+        });
+
+        modelEmpty.hidden = true;
+        modelGrid.hidden = false;
+        modelKicker.textContent = `02 / MODEL · ${company.code}`;
+        modelTitle.textContent = `${company.name} 的模型`;
+        modelNote.textContent = company.note;
+        modelGrid.innerHTML = company.models.map((model, index) => `
+          <article class="model-card" role="listitem" style="--accent: ${company.accent}">
+            <div class="model-card-visual">
+              <img src="${model.image}" alt="${company.name} ${model.name} 游戏画面" loading="lazy" />
+              <span class="model-visual-tag">${String(index + 1).padStart(2, "0")} / ${model.tag}</span>
+            </div>
+            <div class="model-card-body">
+              <p class="model-provider">${company.name} / ${model.slug}</p>
+              <h4>${model.name}</h4>
+              <p>${model.description}</p>
+              <div class="model-facts">
+                ${model.facts.map(([label, value]) => `<div class="model-fact"><span>${label}</span><strong>${value}</strong></div>`).join("")}
+              </div>
+              <a class="model-launch" href="${model.path}"><span>选择并进入 ${model.title}</span><span aria-hidden="true">↗</span></a>
+            </div>
+          </article>
+        `).join("");
+      }
+
+      companyButtons.forEach((button) => {
+        button.addEventListener("click", () => renderModels(button.dataset.company));
+      });
+    </script>
   </body>
 </html>
