@@ -127,12 +127,13 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 
 <!-- BEGIN: AI_BATTLE_MODEL_INDEX -->
 > 本区块由 `npm run sync:readme` 根据各参赛目录的 `submission.json` 自动生成，请勿手工编辑。
-> 当前自动收录 **9** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
+> 当前自动收录 **10** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
 
 | 公司 | 模型 | 作品 | 项目目录 | 在线体验 | 隔离协议 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | OpenAI | **GPT-5.6 Luna Max** | 星轨冲刺 · NEON SPRINT | [openai/gpt-5.6-luna-max](./openai/gpt-5.6-luna-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/) | v0 |
 | OpenAI | **GPT-5.6 Pro** | 光潮跃迁 · LUMEN TIDE | [openai/gpt-5.6-sol-pro](./openai/gpt-5.6-sol-pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-sol-pro/) | v1 |
+| OpenAI | **GPT-5.6 Sol Ultra** | 霓渊逐光 | [openai/gpt-5.6-sol-ultra](./openai/gpt-5.6-sol-ultra) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-sol-ultra/) | v1 |
 | OpenAI | **OpenAI · GPT-5.6 Terra Max** | Nova Stride: Rift Runner | [openai/gpt-5.6-terra-max](./openai/gpt-5.6-terra-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-terra-max/) | v1 |
 | Google | **Gemini 3.8 Flash High** | 天天炫跑 · CYBER DASH 3D | [google/gemini-3.8-flash-high](./google/gemini-3.8-flash-high) | [进入 Demo](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/) | v0 |
 | Meta | **Muse Spark 1.2** | 星跃狂奔 · NOVA RUSH | [meta/muse-spark-1.2](./meta/muse-spark-1.2) | [进入 Demo](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.2/) | v1 |
