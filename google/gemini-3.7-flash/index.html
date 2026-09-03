@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>星穹极速：光年酷跑 (Cyber Dash 3D) - Google Gemini 3.7 Flash</title>
+  <link rel="stylesheet" href="/src/styles.css" />
+</head>
+<body>
+  <div id="game-container">
+    <canvas id="game-canvas"></canvas>
+
+    <!-- Stage Mode Banner Announcement -->
+    <div id="stage-banner" class="stage-banner banner-super">SUPER REWARD!</div>
+
+    <!-- In-Game HUD -->
+    <div id="hud" class="ui-layer">
+      <div class="hud-top">
+        <div class="hud-left">
+          <div class="score-box">
+            <div class="score-label">表现得分</div>
+            <div id="hud-score" class="score-value">0</div>
+            <div id="hud-distance" class="distance-value">0 m</div>
+          </div>
+          <div class="coins-box">
+            <div class="coin-icon"></div>
+            <span id="hud-coins" class="coins-count">0</span>
+          </div>
+        </div>
+
+        <div class="hud-center">
+          <!-- Super Reward Energy Gauge -->
+          <div class="energy-bar-container">
+            <div class="energy-bar-header">
+              <span>🌟 超级奖励能量</span>
+              <span id="super-energy-text">FULL IN 100%</span>
+            </div>
+            <div class="energy-bar-track">
+              <div id="super-energy-fill" class="energy-bar-fill super-reward-fill"></div>
+            </div>
+          </div>
+
+          <!-- Warp Speed Energy Gauge -->
+          <div class="energy-bar-container">
+            <div class="energy-bar-header">
+              <span>⚡ 穿越异次元</span>
+              <span id="warp-energy-text">WARP SPEED</span>
+            </div>
+            <div class="energy-bar-track">
+              <div id="warp-energy-fill" class="energy-bar-fill warp-reward-fill"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hud-right">
+          <button id="btn-audio" class="btn-icon" title="静音切换">🔊</button>
+          <button id="btn-pause" class="btn-icon" title="暂停游戏">⏸️</button>
+        </div>
+      </div>
+
+      <!-- Active Buff Badges -->
+      <div id="hud-buffs" class="hud-buffs"></div>
+
+      <!-- Bottom Controls & Skill -->
+      <div class="hud-bottom">
+        <div class="touch-controls">
+          <button id="btn-slide" class="btn-action btn-slide">
+            <span>下蹲</span>
+            <span style="font-size: 10px; opacity: 0.7;">[S/↓]</span>
+          </button>
+        </div>
+
+        <div class="skill-box">
+          <button id="btn-skill" class="btn-skill">
+            <span>⚡ 脉冲</span>
+            <span style="font-size: 10px; opacity: 0.8;">[E/F]</span>
+            <div id="skill-cooldown-overlay" class="skill-cooldown-overlay"></div>
+          </button>
+        </div>
+
+        <div class="touch-controls">
+          <button id="btn-jump" class="btn-action btn-jump">
+            <span>跳跃</span>
+            <span style="font-size: 10px; opacity: 0.7;">[W/↑]</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start / Menu Screen -->
+    <div id="menu-screen" class="modal-screen">
+      <div class="glass-panel">
+        <h1 class="game-title">星穹极速：光年酷跑</h1>
+        <div class="game-subtitle">CYBER DASH 3D · 经典酷跑全新视界</div>
+
+        <div class="panel-row">
+          <div class="stat-card">
+            <div class="stat-card-label">历史最高记录</div>
+            <div id="menu-high-score" class="stat-card-value">0</div>
+          </div>
+        </div>
+
+        <!-- Mount & Pet Picker -->
+        <div style="font-size: 12px; font-weight: 700; color: #94A3B8; text-align: left; margin-bottom: 6px;">选择坐骑:</div>
+        <div class="selection-grid">
+          <div class="select-card select-mount active" data-mount="cyber_raptor">
+            <div class="select-card-icon">🦖</div>
+            <div class="select-card-title">光刃迅猛龙</div>
+            <div class="select-card-desc">抵挡1次致命伤 / 光子跃迁</div>
+          </div>
+          <div class="select-card select-mount" data-mount="none">
+            <div class="select-card-icon">🏃</div>
+            <div class="select-card-title">徒步极速</div>
+            <div class="select-card-desc">轻盈身手 / 敏捷二段跳</div>
+          </div>
+        </div>
+
+        <div style="font-size: 12px; font-weight: 700; color: #94A3B8; text-align: left; margin-bottom: 6px;">选择伴侣宠物:</div>
+        <div class="selection-grid">
+          <div class="select-card select-pet active" data-pet="cyber_drone">
+            <div class="select-card-icon">🛸</div>
+            <div class="select-card-title">量子浮游机</div>
+            <div class="select-card-desc">自动拾取金币 / 护盾共鸣</div>
+          </div>
+          <div class="select-card select-pet" data-pet="none">
+            <div class="select-card-icon">❌</div>
+            <div class="select-card-title">无宠物</div>
+            <div class="select-card-desc">纯粹技巧挑战</div>
+          </div>
+        </div>
+
+        <button id="btn-start" class="btn-glow-primary">开始奔跑 (SPACE / 点击)</button>
+
+        <div class="guide-box">
+          🎮 <b>操作指引:</b> [W / 空格 / ↑] 跳跃与空中二段跳 · [S / ↓] 下蹲滑行穿梭 · [E / F] 星穹脉冲技能 · [踩踏] 怪物头顶可借力反弹起跳并获额外表现分！
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="pause-modal" class="modal-screen" style="display: none;">
+      <div class="glass-panel">
+        <h2 style="font-size: 28px; margin-bottom: 20px;">游戏暂停</h2>
+        <button id="btn-resume" class="btn-glow-primary">继续奔跑</button>
+        <button id="btn-restart" class="btn-glow-secondary">重新开始</button>
+      </div>
+    </div>
+
+    <!-- Revive Modal -->
+    <div id="revive-modal" class="modal-screen" style="display: none;">
+      <div class="glass-panel">
+        <h2 style="font-size: 26px; color: #F43F5E;">意外失足！</h2>
+        <div style="color: #94A3B8; font-size: 14px; margin-top: 6px;">量子护盾充能就绪，可获得1次免费紧急复活机会！</div>
+        <div id="revive-countdown-num" class="revive-timer">3</div>
+        <div>
+          <button id="btn-revive-now" class="btn-glow-primary">⚡ 立即复活 (获得无敌护盾)</button>
+        </div>
+        <div>
+          <button id="btn-skip-revive" class="btn-glow-secondary">放弃复活</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Game Over Settlement Modal -->
+    <div id="gameover-modal" class="modal-screen" style="display: none;">
+      <div class="glass-panel">
+        <h2 class="game-title" style="font-size: 32px;">奔跑结算</h2>
+        <div class="panel-row">
+          <div class="stat-card">
+            <div class="stat-card-label">最终表现得分</div>
+            <div id="go-final-score" class="stat-card-value" style="color: #FBBF24;">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">奔跑距离</div>
+            <div id="go-final-distance" class="stat-card-value">0 m</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-label">收集金币</div>
+            <div id="go-final-coins" class="stat-card-value" style="color: #FDE047;">0</div>
+          </div>
+        </div>
+
+        <button id="btn-play-again" class="btn-glow-primary">再来一局 (SPACE)</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

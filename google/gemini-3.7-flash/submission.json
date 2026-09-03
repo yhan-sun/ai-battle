@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "google",
+    "name": "Google",
+    "accent": "#4285F4",
+    "order": 1000
+  },
+  "model": {
+    "slug": "gemini-3.7-flash",
+    "name": "Gemini 3.7 Flash",
+    "order": 1000
+  },
+  "demo": {
+    "title": "星穹极速：光年酷跑",
+    "tag": "3D双奖励酷跑"
+  }
+}
