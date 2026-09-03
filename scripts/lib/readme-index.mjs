@@ -1,3 +1,5 @@
+import { groupSubmissionsByProvider } from './submissions.mjs';
+
 const MODEL_INDEX_START = '<!-- BEGIN: AI_BATTLE_MODEL_INDEX -->';
 const MODEL_INDEX_END = '<!-- END: AI_BATTLE_MODEL_INDEX -->';
 
@@ -21,9 +23,11 @@ function demoLink(submission) {
 }
 
 export function createReadmeModelIndex(submissions) {
-  const rows = submissions.map(
-    (submission) =>
-      `| ${escapeMarkdown(submission.providerName)} | **${escapeMarkdown(submission.modelName)}** | ${escapeMarkdown(submission.title)} | ${sourceLink(submission)} | ${demoLink(submission)} | v${submission.protocolVersion} |`,
+  const rows = groupSubmissionsByProvider(submissions).flatMap(({ canonical, submissions: group }) =>
+    group.map(
+      (submission) =>
+        `| ${escapeMarkdown(canonical.providerName)} | **${escapeMarkdown(submission.modelName)}** | ${escapeMarkdown(submission.title)} | ${sourceLink(submission)} | ${demoLink(submission)} | v${submission.protocolVersion} |`,
+    ),
   );
 
   return [

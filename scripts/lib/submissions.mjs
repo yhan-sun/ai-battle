@@ -81,51 +81,87 @@ export function discoverSubmissions(root) {
   );
 }
 
-export function createPublicManifest(submissions) {
-  const providersBySlug = new Map();
+function compareProviderCandidates(a, b) {
+  const aIsHistorical = a.protocolVersion === 0 ? 0 : 1;
+  const bIsHistorical = b.protocolVersion === 0 ? 0 : 1;
+  return (
+    aIsHistorical - bIsHistorical ||
+    a.providerOrder - b.providerOrder ||
+    a.providerName.localeCompare(b.providerName) ||
+    a.path.localeCompare(b.path)
+  );
+}
+
+function compareModels(a, b) {
+  return (
+    a.modelOrder - b.modelOrder ||
+    a.modelName.localeCompare(b.modelName) ||
+    a.path.localeCompare(b.path)
+  );
+}
+
+export function groupSubmissionsByProvider(submissions) {
+  const submissionsByProvider = new Map();
 
   for (const submission of submissions) {
-    let provider = providersBySlug.get(submission.provider);
-    if (!provider) {
-      provider = {
-        slug: submission.provider,
-        name: submission.providerName,
-        code: submission.provider.toUpperCase(),
-        accent: submission.providerAccent,
-        order: submission.providerOrder,
-        models: [],
-      };
-      providersBySlug.set(submission.provider, provider);
-    } else if (
-      provider.name !== submission.providerName ||
-      provider.accent !== submission.providerAccent ||
-      provider.order !== submission.providerOrder
-    ) {
-      throw new Error(`Provider metadata is inconsistent for ${submission.provider}`);
-    }
-
-    provider.models.push({
-      slug: submission.model,
-      name: submission.modelName,
-      title: submission.title,
-      tag: submission.tag,
-      order: submission.modelOrder,
-      protocolVersion: submission.protocolVersion,
-      path: `./${submission.path}/`,
-      image: submission.publicImage ?? `./output/covers/${submission.screenshotSlug}.svg`,
-    });
+    const group = submissionsByProvider.get(submission.provider) ?? [];
+    group.push(submission);
+    submissionsByProvider.set(submission.provider, group);
   }
 
-  const providers = [...providersBySlug.values()]
-    .sort((a, b) => a.order - b.order || a.name.localeCompare(b.name))
-    .map((provider) => {
-      provider.models.sort((a, b) => a.order - b.order || a.name.localeCompare(b.name));
+  return [...submissionsByProvider.values()]
+    .map((group) => {
+      const canonical = [...group].sort(compareProviderCandidates)[0];
       return {
-        ...provider,
-        mark: [...provider.name][0]?.toUpperCase() ?? '?',
-        note: `${provider.name} 当前收录 ${provider.models.length} 个可试玩模型。点击任一封面直接进入。`,
+        canonical,
+        submissions: group.sort(compareModels),
       };
-    });
+    })
+    .sort(
+      (a, b) =>
+        a.canonical.providerOrder - b.canonical.providerOrder ||
+        a.canonical.providerName.localeCompare(b.canonical.providerName) ||
+        a.canonical.provider.localeCompare(b.canonical.provider),
+    );
+}
+
+export function createPublicManifest(submissions) {
+  const providers = groupSubmissionsByProvider(submissions).map(({ canonical, submissions: group }) => {
+    const provider = {
+      slug: canonical.provider,
+      name: canonical.providerName,
+      code: canonical.provider.toUpperCase(),
+      accent: canonical.providerAccent,
+      order: canonical.providerOrder,
+      models: group.map((submission) => ({
+        slug: submission.model,
+        name: submission.modelName,
+        title: submission.title,
+        tag: submission.tag,
+        order: submission.modelOrder,
+        protocolVersion: submission.protocolVersion,
+        path: `./${submission.path}/`,
+        image: submission.publicImage ?? `./output/covers/${submission.screenshotSlug}.svg`,
+      })),
+    };
+
+    const metadataVariants = new Set(
+      group.map((submission) =>
+        [submission.providerName, submission.providerAccent, submission.providerOrder].join('|'),
+      ),
+    );
+    if (metadataVariants.size > 1) {
+      console.warn(
+        `Provider metadata differs for ${canonical.provider}; using the established provider metadata from ${canonical.path}`,
+      );
+    }
+
+    return {
+      ...provider,
+      mark: [...provider.name][0]?.toUpperCase() ?? '?',
+      note: `${provider.name} 当前收录 ${provider.models.length} 个可试玩模型。点击任一封面直接进入。`,
+    };
+  });
 
   return { schemaVersion: 1, providers };
 }

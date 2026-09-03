@@ -140,7 +140,9 @@ if (submissions.length > 0) {
   try {
     const manifest = createPublicManifest(submissions);
     const modelCount = manifest.providers.reduce((sum, provider) => sum + provider.models.length, 0);
+    const providerCount = new Set(submissions.map((submission) => submission.provider)).size;
     check(modelCount === submissions.length, '公开清单包含全部已标记模型');
+    check(manifest.providers.length === providerCount, '公开清单合并同公司多个模型');
     check(manifest.providers.every((provider) => provider.models.length > 0), '公开清单按公司分组模型');
     check(
       manifest.providers.every((provider) =>

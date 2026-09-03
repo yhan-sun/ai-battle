@@ -136,7 +136,8 @@ mkdir -p "$TARGET_DIR/src"
 
 - `provider.slug` 和 `model.slug` 必须与目录名完全一致。
 - slug 只能使用小写字母、数字、连字符和点号。
-- 同一公司的 `provider.name`、`provider.accent`、`provider.order` 必须一致。
+- `provider.slug` 相同的项目会被 Pages 合并为同一家公司，并在 README 和网页中分别展示每个模型；参赛 AI 不需要读取其他选手来猜测公司的颜色或排序。
+- `provider.name`、`provider.accent`、`provider.order` 是公司级展示提示；如果同一公司已有历史条目，Pages 会使用已建立的公司元数据，并保留所有模型。
 - 新公司或新模型默认使用 `order: 1000`；维护者可在合并时统一排序。
 - `accent` 必须是六位十六进制颜色。
 

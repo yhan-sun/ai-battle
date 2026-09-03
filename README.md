@@ -80,7 +80,7 @@ AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公�
 1. 发现并校验参赛项目；
 2. 安装和构建所有已标记项目；
 3. 生成 `submissions.json`；
-4. 按公司分组生成模型卡片、隔离协议标记和 Demo 链接；
+4. 按 `provider.slug` 合并公司、逐个生成模型卡片、隔离协议标记和 Demo 链接；
 5. 有现成封面时使用封面，否则自动生成文字封面；
 6. 根据同一批 `submission.json` 自动同步根 README 的模型索引。
 
@@ -132,14 +132,14 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 | 公司 | 模型 | 作品 | 项目目录 | 在线体验 | 隔离协议 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | OpenAI | **GPT-5.6 Luna Max** | 星轨冲刺 · NEON SPRINT | [openai/gpt-5.6-luna-max](./openai/gpt-5.6-luna-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/) | v0 |
+| OpenAI | **GPT-5.6 Pro** | 光潮跃迁 · LUMEN TIDE | [openai/gpt-5.6-sol-pro](./openai/gpt-5.6-sol-pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-sol-pro/) | v1 |
+| OpenAI | **OpenAI · GPT-5.6 Terra Max** | Nova Stride: Rift Runner | [openai/gpt-5.6-terra-max](./openai/gpt-5.6-terra-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-terra-max/) | v1 |
 | Google | **Gemini 3.8 Flash High** | 天天炫跑 · CYBER DASH 3D | [google/gemini-3.8-flash-high](./google/gemini-3.8-flash-high) | [进入 Demo](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/) | v0 |
 | Meta | **Muse Spark 1.2** | 星跃狂奔 · NOVA RUSH | [meta/muse-spark-1.2](./meta/muse-spark-1.2) | [进入 Demo](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.2/) | v1 |
 | Meta | **Muse Spark 1.3** | 星尘酷跑 · STAR DASH RUNNER | [meta/muse-spark-1.3](./meta/muse-spark-1.3) | [进入 Demo](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.3/) | v0 |
 | DeepSeek | **DeepSeek V4 Flash Vision Exp** | 霓虹疾驰 · NEON RUSH 3D | [deepseek/deepseek-v4-flash-vision-exp](./deepseek/deepseek-v4-flash-vision-exp) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-vision-exp/) | v1 |
 | DeepSeek | **V4 Flash 0731** | 深海疾速 · DEEP DASH 3D | [deepseek/deepseek-v4-flash-0731](./deepseek/deepseek-v4-flash-0731) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/) | v0 |
 | TeleAgent | **TeleAgent Pro** | 以太冲刺 · AETHER DASH | [teleagent/pro](./teleagent/pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/teleagent/pro/) | v0 |
-| OpenAI | **GPT-5.6 Pro** | 光潮跃迁 · LUMEN TIDE | [openai/gpt-5.6-sol-pro](./openai/gpt-5.6-sol-pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-sol-pro/) | v1 |
-| OpenAI | **OpenAI · GPT-5.6 Terra Max** | Nova Stride: Rift Runner | [openai/gpt-5.6-terra-max](./openai/gpt-5.6-terra-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-terra-max/) | v1 |
 <!-- END: AI_BATTLE_MODEL_INDEX -->
 
 ### 作品细节对比（人工补充）

@@ -4,8 +4,8 @@
   "provider": {
     "slug": "openai",
     "name": "OpenAI",
-    "accent": "#10A37F",
-    "order": 1000
+    "accent": "#6fe7ff",
+    "order": 10
   },
   "model": {
     "slug": "gpt-5.6-sol-pro",
