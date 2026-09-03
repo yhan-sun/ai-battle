@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="description" content="以太冲刺 · Aether Dash — 程序化生成的 3D 横版跑酷，TeleAgent Pro 参赛作品" />
+    <title>以太冲刺 · Aether Dash — TeleAgent Pro</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas"></canvas>
+
+      <!-- HUD -->
+      <div id="hud" class="hud hidden">
+        <div class="hud-top">
+          <div class="hud-block hud-score">
+            <span class="hud-label">表现分</span>
+            <span id="hud-score" class="hud-value">0</span>
+          </div>
+          <div class="hud-block hud-meter">
+            <span class="hud-label">距离</span>
+            <span id="hud-distance" class="hud-value">0 m</span>
+          </div>
+          <div class="hud-block hud-speed">
+            <span class="hud-label">速度</span>
+            <span id="hud-speed" class="hud-value">0</span>
+          </div>
+          <div class="hud-block hud-lives">
+            <span class="hud-label">生命</span>
+            <span id="hud-lives" class="hud-value">●●●</span>
+          </div>
+        </div>
+        <div class="hud-bottom">
+          <div class="hud-powerups">
+            <div class="power-chip" id="chip-shield" data-pw="shield"><span>🛡</span><b id="pw-shield">0</b></div>
+            <div class="powerup" id="chip-magnet" data-pw="magnet"><span>🧲</span><b id="pw-magnet">0</b></div>
+            <div class="powerup" id="chip-double" data-pw="double"><span>⭐</span><b id="pw-double">0</b></div>
+            <div class="powerup" id="chip-drone" data-pw="drone"><span>⚡</span><b id="pw-drone">0</b></div>
+          </div>
+          <div class="hud-stage-badge" id="hud-stage">主赛道</div>
+        </div>
+      </div>
+
+      <!-- Touch controls -->
+      <div id="touch-controls" class="touch-controls hidden">
+        <div class="touch-zone touch-left" id="touch-left" data-action="duck">下蹲</div>
+        <div class="touch-zone touch-right" id="touch-right" data-action="jump">跳跃</div>
+      </div>
+
+      <!-- Screens -->
+      <div id="start-screen" class="screen start-screen">
+        <div class="title-wrap">
+          <p class="eyebrow">TeleAgent Pro 参赛作品</p>
+          <h1 class="game-title">以太<span class="accent">冲刺</span></h1>
+          <p class="subtitle">AETHER DASH · 程序化 3D 横版跑酷</p>
+        </div>
+        <div class="menu">
+          <button id="btn-start" class="btn btn-primary">开始奔跑</button>
+          <button id="btn-howto" class="btn btn-ghost">玩法说明</button>
+          <div class="best-row">最高分 <b id="best-start">0</b></div>
+        </div>
+        <p class="hint">Space 跳跃 · S 下蹲 · F 冲刺 · P 暂停</p>
+      </div>
+
+      <div id="howto-screen" class="screen howto-screen hidden">
+        <h2>玩法说明</h2>
+        <ul>
+          <li><b>Space / W / ↑</b> 跳跃，可二段跳</li>
+          <li><b>S / ↓</b> 下蹲 / 空中俯冲</li>
+          <li><b>F / Shift</b> 冲刺技能</li>
+          <li><b>P / Esc</b> 暂停 · <b>M</b> 静音</li>
+          <li>踩踏怪物得分、拾取金币、道具持续加成</li>
+          <li>穿越奖励在特定节点进入高速太空</li>
+          <li>手机端使用屏幕两侧按钮</li>
+        </ul>
+        <button id="btn-howto-back" class="btn btn-primary">返回</button>
+      </div>
+
+      <div id="pause-screen" class="screen pause-screen hidden">
+        <h2>已暂停</h2>
+        <div class="menu">
+          <button id="btn-resume" class="btn btn-primary">继续</button>
+          <button id="btn-restart" class="btn btn-ghost">重新开始</button>
+          <button id="btn-quit" class="btn btn-ghost">返回主菜单</button>
+        </div>
+      </div>
+
+      <div id="gameover-screen" class="screen gameover-screen hidden">
+        <h2 class="gameover-title">重 启 星 轨</h2>
+        <div class="result-grid">
+          <div><span>表现分</span><b id="go-score">0</b></div>
+          <div><span>距离</span><b id="go-distance">0 m</b></div>
+          <div><span>最高分</span><b id="go-best">0</b></div>
+        </div>
+        <div class="menu">
+          <button id="btn-retry" class="btn btn-primary">再来一次</button>
+          <button id="btn-home" class="btn btn-ghost">返回主菜单</button>
+        </div>
+      </div>
+
+      <!-- Bonus / bonus overlay -->
+      <div id="bonus-banner" class="bonus-banner hidden">
+        <span id="bonus-title">超级奖励</span>
+        <span id="bonus-timer" class="bonus-timer">0:30</span>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

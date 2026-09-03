@@ -1,0 +1,359 @@
+:root {
+  --ink: #0b1020;
+  --accent: #4ee3c0;
+  --accent-2: #7aa5ff;
+  --danger: #ff5d73;
+  --gold: #ffcf4d;
+  --panel: rgba(10, 16, 32, 0.72);
+  --text: #eaf2ff;
+  --muted: #93a4c4;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  background: var(--ink);
+  color: var(--text);
+  font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  user-select: none;
+}
+
+#app {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+#game-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ---------- HUD ---------- */
+.hud {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  z-index: 5;
+}
+
+.hud-top {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+
+.hud-block {
+  background: var(--panel);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 16px;
+  min-width: 96px;
+}
+
+.hud-label {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+.hud-value {
+  display: block;
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+
+.hud-speed .hud-value {
+  color: var(--accent);
+}
+
+.hud-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.hud-powerups {
+  display: flex;
+  gap: 10px;
+}
+
+.power-chip {
+  background: var(--panel);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  opacity: 0.45;
+  transition: opacity 0.2s;
+}
+
+.power-chip.active {
+  opacity: 1;
+  border-color: rgba(78, 227, 192, 0.5);
+  box-shadow: 0 0 12px rgba(78, 227, 192, 0.25);
+}
+
+.power-chip b {
+  font-size: 13px;
+  min-width: 16px;
+  text-align: center;
+}
+
+.hud-stage-badge {
+  background: var(--accent);
+  color: #06221c;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 1px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  box-shadow: 0 4px 20px rgba(78, 227, 192, 0.4);
+}
+
+.hud-stage-badge.warp {
+  background: var(--accent-2);
+  color: #0a1530;
+  box-shadow: 0 4px 20px rgba(122, 165, 255, 0.5);
+}
+
+/* ---------- Screens ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at 50% 40%, rgba(20, 34, 66, 0.55), rgba(5, 8, 18, 0.85));
+  backdrop-filter: blur(3px);
+}
+
+.title-wrap {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  letter-spacing: 4px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 12px;
+}
+
+.game-title {
+  font-size: 64px;
+  font-weight: 800;
+  letter-spacing: 6px;
+  line-height: 1.1;
+}
+
+.game-title .accent {
+  color: var(--accent);
+}
+
+.subtitle {
+  margin-top: 10px;
+  color: var(--muted);
+  letter-spacing: 3px;
+  font-size: 14px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 260px;
+}
+
+.btn {
+  font-size: 17px;
+  padding: 14px 0;
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform 0.1s, filter 0.15s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #06221c;
+  box-shadow: 0 6px 24px rgba(78, 227, 192, 0.4);
+}
+
+.btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.best-row {
+  text-align: center;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.best-row b {
+  color: var(--accent);
+  font-size: 18px;
+}
+
+.hint {
+  margin-top: 26px;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+
+.howto-screen ul {
+  list-style: none;
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 22px 28px;
+  margin: 0 0 26px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.howto-screen li {
+  padding: 7px 0;
+  color: var(--text);
+  font-size: 15px;
+}
+
+.howto-screen li b {
+  color: var(--accent);
+  margin-right: 6px;
+}
+
+.gameover-title {
+  font-size: 40px;
+  letter-spacing: 8px;
+  margin-bottom: 28px;
+  color: var(--danger);
+}
+
+.result-grid {
+  display: flex;
+  gap: 26px;
+  margin-bottom: 32px;
+}
+
+.result-grid > div {
+  text-align: center;
+  background: var(--panel);
+  border-radius: 12px;
+  padding: 16px 22px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.result-grid span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  margin-bottom: 6px;
+}
+
+.result-grid b {
+  font-size: 26px;
+}
+
+/* ---------- Bonus banner ---------- */
+.bonus-banner {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 8;
+  background: rgba(122, 165, 255, 0.25);
+  border: 1px solid rgba(122, 165, 255, 0.5);
+  border-radius: 14px;
+  padding: 10px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  backdrop-filter: blur(6px);
+}
+
+.bonus-timer {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  padding: 3px 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Touch controls ---------- */
+.touch-controls {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: flex;
+  pointer-events: none;
+}
+
+.touch-zone {
+  flex: 1;
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 28px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+@media (pointer: coarse) {
+  .touch-controls:not(.hidden) .touch-zone {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 900px) {
+  .game-title {
+    font-size: 42px;
+  }
+}

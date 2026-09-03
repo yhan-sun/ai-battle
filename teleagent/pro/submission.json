@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "teleagent",
+    "name": "TeleAgent",
+    "accent": "#4ee3c0",
+    "order": 40
+  },
+  "model": {
+    "slug": "pro",
+    "name": "TeleAgent Pro",
+    "order": 1
+  },
+  "demo": {
+    "title": "以太冲刺 · AETHER DASH",
+    "tag": "AETHER"
+  }
+}
