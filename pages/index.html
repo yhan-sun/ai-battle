@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#090b12" />
+    <meta name="description" content="AI Battle：三个 AI 生成的可试玩 3D/2.5D 横版跑酷作品。" />
+    <title>AI Battle · Playable Benchmark</title>
+    <style>
+      :root {
+        --ink: #090b12;
+        --panel: rgba(15, 19, 31, 0.84);
+        --panel-solid: #111625;
+        --line: rgba(164, 186, 211, 0.18);
+        --muted: #91a0b7;
+        --paper: #f0f5ff;
+        --cyan: #6fe7ff;
+        --orange: #ff8a54;
+        --violet: #a890ff;
+        --lime: #c9f36b;
+      }
+
+      * { box-sizing: border-box; }
+
+      html { scroll-behavior: smooth; }
+
+      body {
+        min-width: 320px;
+        margin: 0;
+        color: var(--paper);
+        background:
+          radial-gradient(circle at 78% 12%, rgba(95, 120, 255, 0.16), transparent 30rem),
+          radial-gradient(circle at 12% 26%, rgba(0, 209, 224, 0.1), transparent 26rem),
+          var(--ink);
+        font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
+        line-height: 1.5;
+      }
+
+      body::before {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        content: "";
+        opacity: 0.42;
+        background-image:
+          linear-gradient(rgba(164, 186, 211, 0.055) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(164, 186, 211, 0.055) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: linear-gradient(to bottom, black, transparent 82%);
+      }
+
+      a { color: inherit; text-decoration: none; }
+
+      .shell {
+        width: min(1240px, calc(100% - 48px));
+        margin: 0 auto;
+        padding: 28px 0 72px;
+      }
+
+      .topbar,
+      .hero-meta,
+      .section-head,
+      .card-top,
+      .footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .topbar { border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+
+      .wordmark {
+        display: inline-flex;
+        align-items: baseline;
+        gap: 12px;
+        letter-spacing: 0.12em;
+        font-size: 0.84rem;
+        font-weight: 800;
+      }
+
+      .wordmark span,
+      .eyebrow,
+      .card-index,
+      .status,
+      .card-meta,
+      .footer {
+        color: var(--muted);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-size: 0.68rem;
+        font-weight: 700;
+      }
+
+      .status { display: inline-flex; align-items: center; gap: 8px; }
+
+      .pulse {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--lime);
+        box-shadow: 0 0 0 5px rgba(201, 243, 107, 0.12), 0 0 18px var(--lime);
+      }
+
+      .hero {
+        position: relative;
+        display: grid;
+        grid-template-columns: minmax(0, 1.03fr) minmax(300px, 0.97fr);
+        align-items: center;
+        gap: 64px;
+        min-height: 510px;
+        padding: 72px 0 64px;
+      }
+
+      .hero::after {
+        position: absolute;
+        right: 6%;
+        bottom: 6%;
+        width: 42%;
+        height: 1px;
+        content: "";
+        background: linear-gradient(90deg, transparent, var(--cyan));
+        opacity: 0.8;
+      }
+
+      .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--cyan); }
+      .eyebrow::before { width: 28px; height: 1px; content: ""; background: currentColor; }
+
+      h1 {
+        max-width: 760px;
+        margin: 18px 0 20px;
+        letter-spacing: -0.075em;
+        font-size: clamp(3.8rem, 8.2vw, 7.8rem);
+        line-height: 0.88;
+      }
+
+      h1 em { color: var(--cyan); font-style: normal; text-shadow: 0 0 30px rgba(111, 231, 255, 0.28); }
+
+      .hero-copy > p:not(.eyebrow) {
+        max-width: 540px;
+        margin: 0;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.7vw, 1.18rem);
+      }
+
+      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+
+      .button,
+      .card-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        padding: 0 18px;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
+        font-size: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .button:hover,
+      .card-link:hover { transform: translateY(-3px); }
+      .button.primary { border-color: var(--cyan); color: var(--ink); background: var(--cyan); box-shadow: 0 10px 30px rgba(111, 231, 255, 0.18); }
+      .button.secondary { background: rgba(255, 255, 255, 0.035); }
+      .button.secondary:hover, .card-link:hover { border-color: currentColor; background: rgba(255, 255, 255, 0.07); }
+
+      .hero-visual {
+        position: relative;
+        min-height: 330px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: linear-gradient(145deg, rgba(26, 36, 63, 0.86), rgba(8, 12, 23, 0.68));
+        box-shadow: 22px 28px 0 rgba(255, 138, 84, 0.12), 0 28px 80px rgba(0, 0, 0, 0.32);
+        transform: rotate(2.2deg);
+      }
+
+      .hero-visual::before {
+        position: absolute;
+        inset: 20px;
+        border: 1px solid rgba(111, 231, 255, 0.23);
+        content: "";
+      }
+
+      .hero-visual::after {
+        position: absolute;
+        inset: 0;
+        content: "";
+        background: repeating-linear-gradient(0deg, transparent 0 11px, rgba(255, 255, 255, 0.028) 12px);
+        pointer-events: none;
+      }
+
+      .signal {
+        position: absolute;
+        top: 52px;
+        left: 48px;
+        z-index: 1;
+      }
+
+      .signal small { display: block; color: var(--orange); letter-spacing: 0.14em; font-weight: 800; }
+      .signal strong { display: block; margin-top: 4px; color: var(--paper); font-size: clamp(5rem, 12vw, 9rem); line-height: 0.8; letter-spacing: -0.12em; }
+      .signal span { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.16em; }
+
+      .orbit { position: absolute; border: 1px solid rgba(111, 231, 255, 0.42); border-radius: 50%; transform: rotate(-28deg); }
+      .orbit-a { right: -18%; bottom: 10%; width: 95%; height: 42%; }
+      .orbit-b { right: -10%; bottom: 25%; width: 75%; height: 30%; border-color: rgba(255, 138, 84, 0.7); }
+      .star { position: absolute; right: 18%; top: 18%; width: 13px; height: 13px; background: var(--cyan); box-shadow: 0 0 24px var(--cyan); transform: rotate(45deg); }
+      .star::after { position: absolute; inset: -11px; border: 1px solid var(--cyan); content: ""; opacity: 0.38; }
+
+      .hero-meta { position: absolute; right: 48px; bottom: 40px; left: 48px; z-index: 1; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
+      .hero-meta strong { color: var(--paper); font-size: 1.1rem; }
+
+      .section-head { align-items: end; padding: 18px 0; border-top: 1px solid var(--line); }
+      .section-head h2 { margin: 0; letter-spacing: -0.04em; font-size: clamp(1.7rem, 3vw, 2.5rem); }
+      .section-head p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.82rem; text-align: right; }
+
+      .roster { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
+
+      .runner-card {
+        --accent: var(--cyan);
+        overflow: hidden;
+        border: 1px solid var(--line);
+        background: var(--panel);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+        transition: transform 220ms ease, border-color 220ms ease;
+      }
+
+      .runner-card:hover { transform: translateY(-8px); border-color: color-mix(in srgb, var(--accent) 70%, white 0%); }
+      .runner-card.orange { --accent: var(--orange); }
+      .runner-card.violet { --accent: var(--violet); }
+      .runner-card .card-top { padding: 18px 18px 14px; color: var(--accent); }
+      .card-index { color: var(--accent); }
+      .shot { aspect-ratio: 16 / 10; overflow: hidden; border-block: 1px solid var(--line); background: #0b1020; }
+      .shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
+      .runner-card:hover .shot img { transform: scale(1.045); }
+      .card-body { padding: 18px; }
+      .card-body h3 { margin: 0 0 5px; font-size: 1.18rem; letter-spacing: -0.03em; }
+      .card-meta { color: var(--accent); }
+      .card-body p { min-height: 48px; margin: 16px 0 20px; color: var(--muted); font-size: 0.86rem; }
+      .card-link { width: 100%; color: var(--accent); }
+
+      .footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); }
+      .footer span:last-child { color: var(--paper); letter-spacing: 0.03em; text-transform: none; font-weight: 500; }
+
+      @media (max-width: 900px) {
+        .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 56px; }
+        .hero-visual { min-height: 280px; transform: none; }
+        .roster { grid-template-columns: 1fr; }
+        .runner-card { display: grid; grid-template-columns: 0.92fr 1.08fr; }
+        .runner-card .card-top { grid-column: 1 / -1; }
+        .shot { height: 100%; border-inline: 0; border-block: 1px solid var(--line); }
+        .card-body { display: flex; flex-direction: column; justify-content: center; }
+        .card-body p { min-height: 0; }
+      }
+
+      @media (max-width: 580px) {
+        .shell { width: min(100% - 28px, 1240px); padding-top: 18px; }
+        .topbar { align-items: flex-start; flex-direction: column; gap: 10px; }
+        .hero { min-height: auto; padding: 64px 0 54px; }
+        h1 { font-size: clamp(3.25rem, 17vw, 5.4rem); }
+        .hero-visual { min-height: 240px; }
+        .signal { top: 40px; left: 32px; }
+        .hero-meta { right: 32px; bottom: 28px; left: 32px; }
+        .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
+        .section-head p { text-align: left; }
+        .runner-card { display: block; }
+        .shot { aspect-ratio: 16 / 10; }
+        .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="wordmark" href="./">AI//BATTLE <span>PLAYABLE BENCHMARK</span></a>
+        <div class="status"><span class="pulse"></span>GITHUB PAGES · ONLINE</div>
+      </header>
+
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow">Three builds / one challenge</p>
+          <h1 id="hero-title">Run the<br /><em>frontier.</em></h1>
+          <p>三个 AI 模型，使用同一份严格提示词，从零生成可玩的 3D / 2.5D 横版跑酷。现在就进入赛道，直接体验代码的手感。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#lineup">选择你的赛道 ↘</a>
+            <a class="button secondary" href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noreferrer">查看仓库 ↗</a>
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="signal"><small>RUN ID</small><strong>03</strong><span>GENERATIVE TRACKS / LIVE</span></div>
+          <div class="star"></div>
+          <div class="orbit orbit-a"></div>
+          <div class="orbit orbit-b"></div>
+          <div class="hero-meta"><span>NO PREBAKED ASSETS</span><strong>100% CODE-BUILT</strong></div>
+        </div>
+      </section>
+
+      <section id="lineup" aria-labelledby="lineup-title">
+        <div class="section-head">
+          <h2 id="lineup-title">Choose your runner.</h2>
+          <p>每个入口都是独立 Vite 项目。点击卡片即可开始试玩。</p>
+        </div>
+
+        <div class="roster">
+          <article class="runner-card">
+            <div class="card-top"><span class="card-index">01 / OPENAI</span><span>NEON</span></div>
+            <a class="shot" href="./openai/gpt-5.6-luna-max/" aria-label="进入 OpenAI GPT-5.6 Luna Max 游戏">
+              <img src="./output/playwright/openai-gpt-5.6-luna-max.png" alt="OpenAI GPT-5.6 Luna Max 游戏画面" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <div class="card-meta">GPT-5.6 LUNA MAX</div>
+              <h3>星轨冲刺 · NEON SPRINT</h3>
+              <p>几何霓虹赛道、悬浮滑板与独立奖励关卡。</p>
+              <a class="card-link" href="./openai/gpt-5.6-luna-max/">ENTER RUN ↗</a>
+            </div>
+          </article>
+
+          <article class="runner-card orange">
+            <div class="card-top"><span class="card-index">02 / GOOGLE</span><span>CYBER</span></div>
+            <a class="shot" href="./google/gemini-3.8-flash-high/" aria-label="进入 Google Gemini 3.8 Flash High 游戏">
+              <img src="./output/playwright/google-gemini-3.8-flash-high.png" alt="Google Gemini 3.8 Flash High 游戏画面" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <div class="card-meta">GEMINI 3.8 FLASH HIGH</div>
+              <h3>天天炫跑 · CYBER DASH 3D</h3>
+              <p>赛博虫洞、机械坐骑、宠物技能与玻璃拟态 HUD。</p>
+              <a class="card-link" href="./google/gemini-3.8-flash-high/">ENTER RUN ↗</a>
+            </div>
+          </article>
+
+          <article class="runner-card violet">
+            <div class="card-top"><span class="card-index">03 / ANTHROPIC</span><span>STAR</span></div>
+            <a class="shot" href="./anthropic/cluade-fable-5/" aria-label="进入 Anthropic Claude Fable 5 游戏">
+              <img src="./output/playwright/anthropic-cluade-fable-5.png" alt="Anthropic Claude Fable 5 游戏画面" loading="lazy" />
+            </a>
+            <div class="card-body">
+              <div class="card-meta">CLAUDE FABLE 5</div>
+              <h3>星尘酷跑 · STAR DASH RUNNER</h3>
+              <p>分层游戏引擎、星角兽骑乘与程序化奖励场景。</p>
+              <a class="card-link" href="./anthropic/cluade-fable-5/">ENTER RUN ↗</a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>AI BATTLE / 2026</span>
+        <span>同一提示词 · 三条赛道 · 现在开跑</span>
+      </footer>
+    </main>
+  </body>
+</html>

@@ -3,10 +3,24 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Three.js](https://img.shields.io/badge/Three.js-r160%2B-black?logo=three.js)](https://threejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.x%2F7.x-646CFF?logo=vite)](https://vitejs.dev/)
+[![Deploy GitHub Pages](https://github.com/yhan-sun/ai-battle/actions/workflows/deploy-pages.yml/badge.svg)](https://github.com/yhan-sun/ai-battle/actions/workflows/deploy-pages.yml)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](#-怎么提交-pr--参赛指南-how-to-contribute)
 
 > **AI 大模型极限前端全栈编程能力大比拼 (AI Benchmark Arena)**  
 > 在完全相同、极其严苛的单一 Prompt 约束下，让各大前沿 AI 模型（如 Gemini、GPT、Claude 等）自主从零生成完整可玩的 **3D/2.5D《天天酷跑》风格网页游戏**。不使用任何外部预制模型或音效文件，全靠代码（Three.js 几何体、程序化动画、WebAudio 音频合成）独立完成！
+
+---
+
+## 🌐 在线体验 (GitHub Pages)
+
+仓库已配置 GitHub Actions：每次 `main` 分支更新后，自动构建所有模型项目和体验入口页，并发布到 GitHub Pages。
+
+- [打开在线体验入口](https://yhan-sun.github.io/ai-battle/)
+- [OpenAI · GPT-5.6 Luna Max](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/)
+- [Google · Gemini 3.8 Flash High](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/)
+- [Anthropic · Claude Fable 5](https://yhan-sun.github.io/ai-battle/anthropic/cluade-fable-5/)
+
+如果是 Fork 后首次部署，请在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。之后不需要手工上传 `dist`，工作流会根据仓库名自动设置 Pages 子路径，Fork 后的链接也能正常工作。
 
 ---
 
@@ -30,6 +44,127 @@
 
 不要只做 Demo。直接生成完整项目代码，要求 npm install && npm run dev 即可运行，并自行检查和修复明显 Bug。
 ```
+
+---
+
+## 🤖 AI Agent 参赛流程 (AI Submission Workflow)
+
+本节是一份可以直接交给 coding agent 执行的操作契约，覆盖从 clone 仓库、创建模型目录、使用统一提示词，到自检、补充文档和提交 PR 的完整流程。AI 不应只输出方案；应在工作区实际完成代码、文档和测试。
+
+### 给 AI 的任务指令（可直接复制）
+
+```text
+你是 AI Battle 的参赛项目实现代理。请在当前仓库中完成一个全新的、可运行的《天天酷跑》风格 3D/2.5D 横版跑酷项目。
+
+执行前先读取根目录 README.md，必须完整、原样使用“统一考验提示词”章节中的提示词，不得删改、改写或替换为另一套需求。
+
+请把以下信息替换成真实值：
+- PROVIDER：模型提供方的小写 slug，例如 openai、google、anthropic
+- MODEL_SLUG：模型名称的小写版本 slug，例如 gpt-5.6-luna-max、gemini-3.8-flash-high
+- MODEL_DISPLAY：模型的完整展示名
+- TARGET_DIR：PROVIDER/MODEL_SLUG
+
+请严格按以下顺序完成：
+1. 如果当前还不是本仓库，先 clone 并进入仓库；如果已经在仓库中，先检查 git status，不要覆盖已有未提交改动。
+2. 创建 TARGET_DIR；不得覆盖已有参赛目录，也不得直接修改其他选手的核心代码。
+3. 将“统一考验提示词”原文作为本次生成任务的唯一产品需求，在 TARGET_DIR 中生成完整项目。项目必须包含 package.json、index.html、源代码和可运行的 npm run dev / npm run build。
+4. 使用程序化 Three.js 几何体、CSS、Canvas 和 WebAudio 生成素材；不要引入外部商业美术、角色、模型或音效资源。
+5. 完成后补充 TARGET_DIR/README.md，记录模型全名、生成环境、提示词使用说明、玩法、操作、架构和测试结果。
+6. 更新根 README 的参赛矩阵、启动命令和截图展示；截图保存为 output/playwright/PROVIDER-MODEL_SLUG.png，并使用相对路径引用；同时把新项目加入 pages/index.html 的在线体验卡片。
+7. 在根 package.json 中加入 dev:<provider> 快捷命令，并把新项目加入 build:all 覆盖范围；Pages 构建脚本会自动发现两级模型目录。
+8. 执行 TARGET_DIR 的 npm install、npm run build，以及根目录的 npm test、npm run build:all、npm run build:pages、git diff --check。
+9. 启动 TARGET_DIR 的开发服务器并进行浏览器冒烟测试：打开首页、点击开始、确认画布/HUD/角色可见，测试跳跃、下蹲、技能、暂停/恢复和结算流程；确认没有致命的 JavaScript 或资源加载错误，然后截取实际运行画面。
+10. 任一检查失败都必须先修复并重新执行，不能在未通过时声称完成。
+11. 最后汇报修改文件、测试命令及结果、截图路径和 git commit；只有获得明确授权并具备远程权限时才执行 push。
+```
+
+### 目录命名约定
+
+每个参赛项目必须使用「模型提供方 / 具体模型名」两级目录，模型名直接使用带版本的 slug，不使用泛化目录名：
+
+```text
+<provider>/<model-slug>/
+├── package.json
+├── index.html
+├── README.md
+└── src/
+```
+
+例如：`openai/gpt-5.6-luna-max/`、`google/gemini-3.8-flash-high/`、`anthropic/cluade-fable-5/`。目录名使用小写字母、数字、连字符和点号；如果目标目录已经存在，应停止覆盖并选择唯一的模型版本 slug。
+
+### 从 clone 到新分支
+
+```bash
+git clone https://github.com/yhan-sun/ai-battle.git
+cd ai-battle
+git checkout -b feat/add-<provider>-<model-slug>
+mkdir -p <provider>/<model-slug>
+```
+
+如果当前已经位于该仓库，跳过 `git clone`，先执行 `git status --short --branch`，保留已有用户改动。
+
+### 子项目 README 最低内容
+
+每个模型目录都必须有自己的 README，至少包含以下信息：
+
+```markdown
+# <Provider> · <Model Display> — <作品名称>
+
+> 参赛目录：`<provider>/<model-slug>`
+
+## 参赛信息
+- 模型：<Model Display>
+- 统一提示词：使用根目录 README 的原文，未修改
+- 生成环境：<IDE / CLI / Web>
+- 生成轮次与修复记录：<简述>
+
+## 运行
+`npm install && npm run dev`
+
+## 操作与玩法
+<键位、奖励关卡、道具、复活和存档说明>
+
+## 架构
+<核心模块说明>
+
+## 自检记录
+- `npm run build`：通过
+- 浏览器冒烟测试：通过
+- 截图：`../../output/playwright/<provider>-<model-slug>.png`
+```
+
+### 提交前的自检顺序
+
+从仓库根目录执行：
+
+```bash
+TARGET_DIR=<provider>/<model-slug>
+npm --prefix "$TARGET_DIR" install
+npm --prefix "$TARGET_DIR" run build
+npm test
+npm run build:all
+npm run build:pages
+git diff --check
+```
+
+浏览器冒烟测试使用独立端口启动：
+
+```bash
+npm --prefix "$TARGET_DIR" run dev -- --host 127.0.0.1 --port 5176
+```
+
+验收标准是：首页能打开；开始界面能进入游戏；角色、场景和 HUD 正常渲染；跳跃/下蹲/技能/暂停等输入有反馈；游戏能进入结算或复活流程；控制台没有阻断游戏的异常；截图展示的是实际运行画面而不是空白页面。
+
+### 提交和 PR
+
+```bash
+git status --short
+git add <provider>/<model-slug> README.md package.json output/playwright/<provider>-<model-slug>.png
+git commit -m "feat: add <provider> <model-slug> competitor"
+git push -u origin feat/add-<provider>-<model-slug>
+```
+
+不要提交 `node_modules`、构建缓存、调试日志、密钥或个人配置。没有远程写权限时，完成本地 commit 后提供 commit hash，由仓库维护者创建或合并 PR。
 
 ---
 
@@ -114,6 +249,25 @@ npm run dev
 
 ---
 
+## ✅ 测试与自检 (Test & Self-check)
+
+仓库根目录提供 `npm test`，用于检查所有 `<provider>/<model>` 项目的标准文件、根 README 链接、根启动脚本、`build:all` 覆盖范围和对应实机截图。它不替代浏览器冒烟测试，但会在提交前尽早发现目录或文档遗漏。
+
+```bash
+# 检查目录、入口、README、脚本和截图
+npm test
+
+# 构建全部参赛项目
+npm run build:all
+
+# 检查空白字符和常见补丁问题
+git diff --check
+```
+
+新增选手必须同时通过 `npm test`、该子项目的 `npm run build`、根目录的 `npm run build:all` 和浏览器冒烟测试，才可以提交 PR。
+
+---
+
 ## 🎮 通用操作方式
 
 大部分选手的键位设计均贴合经典横版操作，并支持移动端触屏：
@@ -153,8 +307,9 @@ npm run dev
    - 代码生成环境（IDE、CLI 或 Web 端）与生成轮次
    - 作品的特色玩法与操作说明
 6. 在根目录 `package.json` 中追加该选手的快捷脚本（如 `"dev:<provider>": "npm --prefix <provider>/<model> run dev"`）。
-7. 在根目录 `README.md` 的【目前参赛选手矩阵】表格中填入新增选手信息。
-8. 提交 Commit 并向本仓库发起 **Pull Request**！
+7. 在根目录 `README.md` 的【目前参赛选手矩阵】表格和 `pages/index.html` 在线体验入口中填入新增选手信息。
+8. 运行 `npm test`、`npm run build:all`、`npm run build:pages` 和浏览器冒烟测试。
+9. 提交 Commit 并向本仓库发起 **Pull Request**！
 
 ---
 
