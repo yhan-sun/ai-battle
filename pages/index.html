@@ -270,24 +270,23 @@
       .model-panel-kicker { color: var(--cyan); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
       .model-panel-header h3 { margin: 5px 0 0; font-size: clamp(1.55rem, 3vw, 2.3rem); letter-spacing: -0.05em; }
       .model-panel-note { max-width: 280px; margin: 0; color: var(--muted); font-size: 0.78rem; text-align: right; }
-      .model-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-top: 22px; }
-      .model-card { --accent: var(--cyan); overflow: hidden; border: 1px solid var(--line); border-top: 2px solid var(--accent); background: rgba(6, 10, 20, 0.7); transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease; }
-      .model-card:hover { transform: translateY(-6px); border-color: color-mix(in srgb, var(--accent) 65%, white 0%); box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28); }
-      .model-card-visual { position: relative; aspect-ratio: 16 / 10; overflow: hidden; background: #0b1020; }
+      .model-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+      .model-grid > article { min-width: 0; }
+      .model-card { --accent: var(--cyan); display: block; overflow: hidden; border: 1px solid var(--line); border-top: 2px solid var(--accent); color: var(--paper); background: rgba(6, 10, 20, 0.7); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+      .model-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 65%, white 0%); box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26); }
+      .model-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+      .model-card-visual { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1020; }
       .model-card-visual::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, transparent 50%, rgba(3, 6, 14, 0.72)); pointer-events: none; }
       .model-card-visual img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
       .model-card:hover .model-card-visual img { transform: scale(1.045); }
-      .model-visual-tag { position: absolute; right: 14px; bottom: 12px; z-index: 1; color: var(--accent); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-      .model-card-body { padding: 18px; }
-      .model-provider { margin: 0 0 7px; color: var(--accent); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-      .model-card-body h4 { margin: 0; font-size: 1.35rem; letter-spacing: -0.04em; }
-      .model-card-body p { min-height: 48px; margin: 12px 0 18px; color: var(--muted); font-size: 0.84rem; }
-      .model-facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 18px; }
-      .model-fact { padding: 9px 10px; border: 1px solid var(--line); background: rgba(255, 255, 255, 0.025); }
-      .model-fact span { display: block; color: var(--muted); font-size: 0.61rem; letter-spacing: 0.08em; text-transform: uppercase; }
-      .model-fact strong { display: block; margin-top: 3px; font-size: 0.75rem; }
-      .model-launch { display: flex; align-items: center; justify-content: space-between; width: 100%; min-height: 44px; padding: 0 14px; border: 1px solid var(--accent); color: var(--accent); font-size: 0.72rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; transition: background 180ms ease, color 180ms ease; }
-      .model-launch:hover { color: var(--ink); background: var(--accent); }
+      .model-visual-tag { position: absolute; right: 10px; bottom: 8px; z-index: 1; color: var(--accent); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+      .model-card-body { padding: 12px; }
+      .model-provider { margin: 0 0 5px; overflow: hidden; color: var(--accent); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.1em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
+      .model-card-body h4 { margin: 0; overflow: hidden; font-size: 1rem; letter-spacing: -0.025em; text-overflow: ellipsis; white-space: nowrap; }
+      .model-game { min-height: 0; margin: 6px 0 12px; overflow: hidden; color: var(--muted); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
+      .model-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 9px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
+      .model-card-footer span:last-child { color: var(--accent); transition: transform 180ms ease; }
+      .model-card:hover .model-card-footer span:last-child { transform: translateX(3px); }
       .model-empty { position: relative; display: grid; min-height: 320px; place-items: center; overflow: hidden; margin-top: 22px; padding: 40px 24px; border: 1px dashed rgba(164, 186, 211, 0.28); text-align: center; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 14px); }
       .model-empty::before { position: absolute; width: 210px; height: 210px; border: 1px solid rgba(111, 231, 255, 0.15); border-radius: 50%; content: ""; box-shadow: 0 0 0 28px rgba(111, 231, 255, 0.025), 0 0 0 56px rgba(111, 231, 255, 0.018); }
       .empty-content { position: relative; z-index: 1; }
@@ -303,10 +302,15 @@
       @media (max-width: 900px) {
         .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 56px; }
         .hero-visual { min-height: 280px; transform: none; }
+        .selection-stage { grid-template-columns: 1fr; }
         .company-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         .company-option { grid-template-columns: 40px minmax(0, 1fr); }
         .company-arrow { display: none; }
         .model-panel-note { max-width: 220px; }
+      }
+
+      @media (max-width: 720px) {
+        .model-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       }
 
       @media (max-width: 580px) {
@@ -436,9 +440,7 @@
               path: "./openai/gpt-5.6-luna-max/",
               image: "./output/playwright/openai-gpt-5.6-luna-max.png",
               title: "星轨冲刺 · NEON SPRINT",
-              description: "几何霓虹赛道、悬浮滑板与独立奖励关卡。",
-              tag: "NEON",
-              facts: [["架构", "Single-file"], ["机制", "滑板 / 星核"]]
+              tag: "NEON"
             }
           ]
         },
@@ -454,9 +456,7 @@
               path: "./google/gemini-3.8-flash-high/",
               image: "./output/playwright/google-gemini-3.8-flash-high.png",
               title: "天天炫跑 · CYBER DASH 3D",
-              description: "赛博虫洞、机械坐骑、宠物技能与玻璃拟态 HUD。",
-              tag: "CYBER",
-              facts: [["架构", "Multi-system"], ["机制", "三段跳 / 虫洞"]]
+              tag: "CYBER"
             }
           ]
         },
@@ -472,9 +472,7 @@
               path: "./meta/muse/",
               image: "./output/playwright/meta-muse.png",
               title: "星尘酷跑 · STAR DASH RUNNER",
-              description: "分层游戏引擎、星角兽骑乘与程序化奖励场景。",
-              tag: "STAR",
-              facts: [["架构", "Game engine"], ["机制", "坐骑 / 宠物"]]
+              tag: "STAR"
             }
           ]
         }
@@ -503,20 +501,19 @@
         modelTitle.textContent = `${company.name} 的模型`;
         modelNote.textContent = company.note;
         modelGrid.innerHTML = company.models.map((model, index) => `
-          <article class="model-card" role="listitem" style="--accent: ${company.accent}">
-            <div class="model-card-visual">
-              <img src="${model.image}" alt="${company.name} ${model.name} 游戏画面" loading="lazy" />
-              <span class="model-visual-tag">${String(index + 1).padStart(2, "0")} / ${model.tag}</span>
-            </div>
-            <div class="model-card-body">
-              <p class="model-provider">${company.name} / ${model.slug}</p>
-              <h4>${model.name}</h4>
-              <p>${model.description}</p>
-              <div class="model-facts">
-                ${model.facts.map(([label, value]) => `<div class="model-fact"><span>${label}</span><strong>${value}</strong></div>`).join("")}
+          <article role="listitem">
+            <a class="model-card" href="${model.path}" aria-label="进入 ${company.name} ${model.name} 游戏" style="--accent: ${company.accent}">
+              <div class="model-card-visual">
+                <img src="${model.image}" alt="${company.name} ${model.name} 游戏画面" loading="lazy" />
+                <span class="model-visual-tag">${String(index + 1).padStart(2, "0")} / ${model.tag}</span>
               </div>
-              <a class="model-launch" href="${model.path}"><span>选择并进入 ${model.title}</span><span aria-hidden="true">↗</span></a>
-            </div>
+              <div class="model-card-body">
+                <p class="model-provider">${company.name} / ${model.slug}</p>
+                <h4>${model.name}</h4>
+                <p class="model-game">${model.title}</p>
+                <div class="model-card-footer"><span>Playable demo</span><span>点击进入 ↗</span></div>
+              </div>
+            </a>
           </article>
         `).join("");
       }
