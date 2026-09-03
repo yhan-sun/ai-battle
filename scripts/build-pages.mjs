@@ -9,24 +9,36 @@ const ignoredDirectories = new Set(['.git', '.github', 'node_modules', 'output',
 const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 
 const projects = readdirSync(root, { withFileTypes: true })
-  .filter((provider) => provider.isDirectory() && !ignoredDirectories.has(provider.name))
-  .flatMap((provider) =>
-    readdirSync(join(root, provider.name), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && !ignoredDirectories.has(entry.name))
+  .flatMap((entry) => {
+    if (existsSync(join(root, entry.name, 'package.json'))) {
+      return [
+        {
+          path: entry.name,
+          provider: entry.name,
+          model: null,
+          screenshotSlug: entry.name,
+        },
+      ];
+    }
+
+    return readdirSync(join(root, entry.name), { withFileTypes: true })
       .filter(
         (model) =>
           model.isDirectory() &&
-          existsSync(join(root, provider.name, model.name, 'package.json')),
+          existsSync(join(root, entry.name, model.name, 'package.json')),
       )
       .map((model) => ({
-        path: `${provider.name}/${model.name}`,
-        provider: provider.name,
+        path: `${entry.name}/${model.name}`,
+        provider: entry.name,
         model: model.name,
-      })),
-  )
+        screenshotSlug: `${entry.name}-${model.name}`,
+      }));
+  })
   .sort((a, b) => a.path.localeCompare(b.path));
 
 if (projects.length === 0) {
-  throw new Error('No <provider>/<model> projects found.');
+  throw new Error('No participant projects found.');
 }
 
 const rawBase = process.env.PAGES_BASE_PATH ?? `/${process.env.PAGES_REPO_NAME ?? 'ai-battle'}`;
@@ -58,7 +70,13 @@ for (const project of projects) {
 const screenshots = join(root, 'output', 'playwright');
 if (existsSync(screenshots)) {
   mkdirSync(join(site, 'output'), { recursive: true });
-  cpSync(screenshots, join(site, 'output', 'playwright'), { recursive: true });
+  mkdirSync(join(site, 'output', 'playwright'), { recursive: true });
+  for (const project of projects) {
+    const screenshot = join(screenshots, `${project.screenshotSlug}.png`);
+    if (existsSync(screenshot)) {
+      cpSync(screenshot, join(site, 'output', 'playwright', `${project.screenshotSlug}.png`));
+    }
+  }
 }
 
 const landingPage = readFileSync(join(root, 'pages', 'index.html'), 'utf8');

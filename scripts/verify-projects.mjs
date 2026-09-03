@@ -12,6 +12,7 @@ const rootReadme = readFileSync(rootReadmePath, 'utf8');
 const pagesIndex = existsSync(pagesIndexPath) ? readFileSync(pagesIndexPath, 'utf8') : '';
 const pagesWorkflow = existsSync(pagesWorkflowPath) ? readFileSync(pagesWorkflowPath, 'utf8') : '';
 const failures = [];
+const ignoredDirectories = new Set(['.git', '.github', 'node_modules', 'output', 'pages', 'scripts', 'site']);
 
 function check(condition, message) {
   if (condition) {
@@ -23,18 +24,36 @@ function check(condition, message) {
 }
 
 const projects = readdirSync(root, { withFileTypes: true })
-  .filter((provider) => provider.isDirectory())
-  .flatMap((provider) =>
-    readdirSync(join(root, provider.name), { withFileTypes: true })
+  .filter((entry) => entry.isDirectory() && !ignoredDirectories.has(entry.name))
+  .flatMap((entry) => {
+    if (existsSync(join(root, entry.name, 'package.json'))) {
+      return [
+        {
+          path: entry.name,
+          provider: entry.name,
+          model: null,
+          screenshotSlug: entry.name,
+          legacy: true,
+        },
+      ];
+    }
+
+    return readdirSync(join(root, entry.name), { withFileTypes: true })
       .filter(
         (model) =>
           model.isDirectory() &&
-          existsSync(join(root, provider.name, model.name, 'package.json')),
+          existsSync(join(root, entry.name, model.name, 'package.json')),
       )
-      .map((model) => ({ provider: provider.name, model: model.name })),
-  );
+      .map((model) => ({
+        path: `${entry.name}/${model.name}`,
+        provider: entry.name,
+        model: model.name,
+        screenshotSlug: `${entry.name}-${model.name}`,
+        legacy: false,
+      }));
+  });
 
-check(projects.length > 0, '至少发现一个 <provider>/<model> 参赛项目');
+check(projects.length > 0, '至少发现一个参赛项目');
 check(rootReadme.includes('## 📜 统一考验提示词'), '根 README 包含统一考验提示词');
 check(rootReadme.includes('## 🤖 AI Agent 参赛流程'), '根 README 包含 AI Agent 参赛流程');
 check(rootReadme.includes('npm test'), '根 README 包含仓库级自检命令');
@@ -46,13 +65,15 @@ check(
   pagesWorkflow.includes('actions/upload-pages-artifact') && pagesWorkflow.includes('actions/deploy-pages'),
   'Pages 工作流包含构建产物上传和部署步骤',
 );
+check(!rootReadme.includes('anthropic/cluade-fable-5'), '根 README 不再把 Muse 归类为 Anthropic 模型');
+check(!pagesIndex.includes('anthropic/cluade-fable-5'), 'Pages 入口不再把 Muse 归类为 Anthropic 模型');
 
-for (const { provider, model } of projects) {
-  const relativePath = `${provider}/${model}`;
+for (const project of projects) {
+  const { path: relativePath, provider, screenshotSlug, legacy } = project;
   const projectRoot = join(root, relativePath);
   const projectPackagePath = join(projectRoot, 'package.json');
   const projectPackage = JSON.parse(readFileSync(projectPackagePath, 'utf8'));
-  const screenshotPath = join(root, 'output', 'playwright', `${provider}-${model}.png`);
+  const screenshotPath = join(root, 'output', 'playwright', `${screenshotSlug}.png`);
   const devScript = rootPackage.scripts?.[`dev:${provider}`] ?? '';
   const buildScript = rootPackage.scripts?.['build:all'] ?? '';
 
@@ -64,7 +85,7 @@ for (const { provider, model } of projects) {
   check(buildScript.includes(relativePath), `build:all 包含 ${relativePath}`);
   check(rootReadme.includes(`./${relativePath}`), `根 README 链接到 ${relativePath}`);
   check(
-    rootReadme.includes(`./output/playwright/${provider}-${model}.png`),
+    rootReadme.includes(`./output/playwright/${screenshotSlug}.png`),
     `根 README 引用了 ${relativePath} 的截图`,
   );
   check(
@@ -73,9 +94,12 @@ for (const { provider, model } of projects) {
   );
   check(pagesIndex.includes(`./${relativePath}/`), `Pages 入口链接到 ${relativePath}`);
   check(
-    pagesIndex.includes(`./output/playwright/${provider}-${model}.png`),
+    pagesIndex.includes(`./output/playwright/${screenshotSlug}.png`),
     `Pages 入口引用 ${relativePath} 的截图`,
   );
+  if (legacy) {
+    check(relativePath === 'muse', '历史 Muse 项目保留在 muse/，不虚构模型归属');
+  }
 }
 
 if (failures.length > 0) {

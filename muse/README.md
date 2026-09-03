@@ -1,8 +1,10 @@
-# Anthropic · Claude Fable 5 — 星尘酷跑 Star Dash Runner
-
-> 参赛模型：Anthropic Claude Fable 5
+# Muse — 星尘酷跑 Star Dash Runner
 
 天天酷跑风格 2.5D 横版跑酷,Three.js + Vite 从零实现,全部美术/音效代码生成,无外部资源。
+
+> 参赛目录：`muse/`
+>
+> 这是仓库保留的历史作品目录；当前资料没有记录它对应的提供方或具体模型，因此不将它归类为 Anthropic、Claude 或其他模型。
 
 ## 运行
 
@@ -39,3 +41,10 @@ npm run dev
 - `src/level.js` 无限分块程序化生成(平原/天空浮岛/洞窟)+对象池+主题换肤+奖励金币阵,最小间距/最大坑宽保证可通过
 - `src/player.js` 程序化角色/坐骑/宠物+物理(土狼时间/跳跃预输入/空中速降)+动画
 - `src/particles.js` 零GC点粒子池 • `src/audio.js` WebAudio合成 • `src/ui.js` HUD/界面 • `src/config.js` 数值+存档
+
+## 自检记录
+
+- `npm run build`：通过
+- Pages 子路径构建：通过（`/ai-battle/muse/`）
+- 浏览器冒烟测试：通过（首页、开始、跳跃、下蹲、技能、暂停/恢复）
+- 截图：`../output/playwright/muse.png`
