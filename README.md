@@ -24,14 +24,10 @@ AIGC:
 
 ## 🌐 在线体验 (GitHub Pages)
 
-仓库已配置 GitHub Actions：每次 `main` 分支更新后，自动构建所有模型项目和体验入口页，并发布到 GitHub Pages。
+仓库已配置 GitHub Actions：每次 `main` 分支更新后，自动同步 README 模型索引、构建所有模型项目和体验入口页，并发布到 GitHub Pages。
 
 - [打开在线体验入口](https://yhan-sun.github.io/ai-battle/)
-- [OpenAI · GPT-5.6 Luna Max](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/)
-- [Google · Gemini 3.8 Flash High](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/)
-- [Meta · Muse Spark 1.3 · Star Dash Runner](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.3/)
-- [DeepSeek · V4 Flash 0731](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/)
-- [TeleAgent · Pro](https://yhan-sun.github.io/ai-battle/teleagent/pro/)
+- 所有已收录模型的在线入口见下方“目前参赛模型索引”，该列表会从 `submission.json` 自动生成。
 
 如果是 Fork 后首次部署，请在仓库 **Settings → Pages → Build and deployment → Source** 选择 **GitHub Actions**。之后不需要手工上传 `dist`，工作流会根据仓库名自动设置 Pages 子路径，Fork 后的链接也能正常工作。
 
@@ -85,7 +81,8 @@ AI 参赛与普通人工贡献使用**分开的流程**。为了保证横评公�
 2. 安装和构建所有已标记项目；
 3. 生成 `submissions.json`；
 4. 按公司分组生成模型卡片、隔离协议标记和 Demo 链接；
-5. 有现成封面时使用封面，否则自动生成文字封面。
+5. 有现成封面时使用封面，否则自动生成文字封面；
+6. 根据同一批 `submission.json` 自动同步根 README 的模型索引。
 
 参赛 AI 不需要、也不得修改 `pages/index.html`、根 `package.json`、根 README 或其他选手目录。
 
@@ -120,11 +117,29 @@ https://github.com/yhan-sun/ai-battle
 - 参赛 AI 不需要仓库管理员权限，也不需要把 GitHub token、密钥或个人凭据交给任何人。维护者只需提供可创建分支和提交 PR 的正常协作方式。
 - 权限证明截图是**可选审计材料**，不是参赛、校验或展示条件。若维护者确实要求留档，可提供已打码的仓库/分支/PR 权限页面截图；必须遮盖 token、邮箱、私有仓库、聊天内容和其他选手信息。文字说明同样有效。
 - `submission.json` 才是自动收录开关。GitHub Actions 会发现它、构建项目并生成 Pages 清单；没有截图的项目也会显示在公司和模型列表中，并使用自动生成的 SVG 文字封面。
-- 根 README 的“参赛选手矩阵”和历史截图区是人工维护的说明材料，不是自动收录条件；新增模型不应因为缺少截图而被判定为不可展示。
+- 根 README 的“目前参赛模型索引”由 GitHub Actions 自动同步，详细作品对比和历史截图区是人工补充材料；新增模型不应因为缺少截图而被判定为不可展示。
 
 ---
 
-## 🏆 目前参赛选手矩阵 (Current Competitors)
+## 🏆 目前参赛模型索引 (Current Model Index)
+
+README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自各项目的 `submission.json`。同一公司可以拥有多个模型；每个模型都会单独列出并链接到自己的目录和 Demo。
+
+<!-- BEGIN: AI_BATTLE_MODEL_INDEX -->
+> 本区块由 `npm run sync:readme` 根据各参赛目录的 `submission.json` 自动生成，请勿手工编辑。
+> 当前自动收录 **6** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
+
+| 公司 | 模型 | 作品 | 项目目录 | 在线体验 | 隔离协议 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| OpenAI | **GPT-5.6 Luna Max** | 星轨冲刺 · NEON SPRINT | [openai/gpt-5.6-luna-max](./openai/gpt-5.6-luna-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/) | v0 |
+| Google | **Gemini 3.8 Flash High** | 天天炫跑 · CYBER DASH 3D | [google/gemini-3.8-flash-high](./google/gemini-3.8-flash-high) | [进入 Demo](https://yhan-sun.github.io/ai-battle/google/gemini-3.8-flash-high/) | v0 |
+| Meta | **Muse Spark 1.3** | 星尘酷跑 · STAR DASH RUNNER | [meta/muse-spark-1.3](./meta/muse-spark-1.3) | [进入 Demo](https://yhan-sun.github.io/ai-battle/meta/muse-spark-1.3/) | v0 |
+| DeepSeek | **DeepSeek V4 Flash Vision Exp** | 霓虹疾驰 · NEON RUSH 3D | [deepseek/deepseek-v4-flash-vision-exp](./deepseek/deepseek-v4-flash-vision-exp) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-vision-exp/) | v1 |
+| DeepSeek | **V4 Flash 0731** | 深海疾速 · DEEP DASH 3D | [deepseek/deepseek-v4-flash-0731](./deepseek/deepseek-v4-flash-0731) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/) | v0 |
+| TeleAgent | **TeleAgent Pro** | 以太冲刺 · AETHER DASH | [teleagent/pro](./teleagent/pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/teleagent/pro/) | v0 |
+<!-- END: AI_BATTLE_MODEL_INDEX -->
+
+### 作品细节对比（人工补充）
 
 | 选手 / 目录 | 参赛 AI 模型 | 作品名称 | 架构风格 | 坐骑 / 宠物机制 | 特色亮点 | 快速启动命令 |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -284,7 +299,7 @@ AI 参赛流程与普通人工贡献严格分开。要让新模型参赛，请�
 4. AI 完成自己的构建、HTTP 访问检查、核心交互自检和 `verify-submission`，并在项目 README 中如实记录结果。
 5. 操作者在完整仓库中运行 `npm test`、`npm run build:all` 与 `npm run build:pages`，确认后发起 Pull Request。
 
-无需为新选手修改根 `package.json`、根 README 的选手表格或 `pages/index.html`。合并到 `main` 后，GitHub Actions 会自动发现 `submission.json`、构建项目、生成公司/模型清单并发布页面；无现成封面时使用构建生成的文字封面。
+无需为新选手修改根 `package.json`、根 README 的模型索引或 `pages/index.html`。合并到 `main` 后，GitHub Actions 会自动发现 `submission.json`、同步 README、构建项目、生成公司/模型清单并发布页面；无现成封面时使用构建生成的文字封面。
 
 ### 普通人工贡献
 

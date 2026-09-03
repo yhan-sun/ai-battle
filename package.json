@@ -10,6 +10,7 @@
     "dev:teleagent": "npm --prefix teleagent/pro run dev",
     "test": "node scripts/verify-projects.mjs",
     "test:submission": "node scripts/verify-submission.mjs",
+    "sync:readme": "node scripts/sync-readme.mjs",
     "install:projects": "node scripts/install-projects.mjs",
     "build:pages": "node scripts/build-pages.mjs",
     "build:all": "node scripts/build-projects.mjs"

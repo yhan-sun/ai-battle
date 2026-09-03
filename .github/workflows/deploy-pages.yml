@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -26,6 +26,24 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Sync README model index
+        run: npm run sync:readme
+
+      - name: Commit generated README model index
+        run: |
+          if git diff --quiet -- README.md; then
+            echo "README model index is already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "docs: sync README model index"
+          git push origin HEAD:main
+
+      - name: Verify repository
+        run: npm test
 
       - name: Install project dependencies
         run: npm run install:projects
