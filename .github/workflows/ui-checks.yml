@@ -5,6 +5,8 @@ on:
     paths:
       - 'pages/**'
       - 'scripts/verify-ui.mjs'
+      - 'scripts/lib/submission-times.mjs'
+      - '.github/workflows/deploy-pages.yml'
       - 'scripts/test-ui-browser.py'
       - 'scripts/build-pages.mjs'
       - 'package.json'
@@ -20,11 +22,29 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 20
       - name: Platform logic and integration contracts
         run: npm run test:ui
+      - name: Verify current repository timeline
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { discoverSubmissions, createPublicManifest } from './scripts/lib/submissions.mjs';
+          import { withSubmissionTimes } from './scripts/lib/submission-times.mjs';
+          import { parseManifest, filterEntries, readState } from './pages/assets/catalog.mjs';
+          const root = process.cwd();
+          const manifest = withSubmissionTimes(root, createPublicManifest(discoverSubmissions(root)));
+          const { entries } = parseManifest(manifest);
+          assert.ok(entries.length > 0);
+          assert.ok(entries.every((entry) => entry.submittedAt));
+          for (const entry of filterEntries(entries, readState(''))) {
+            console.log(`${entry.testedAt ?? entry.submittedAt} | ${entry.id} | ${entry.testedAt ? 'tested' : 'first submission'}`);
+          }
+          NODE
       - name: Install maintainer-only browser test tooling
         run: |
           python -m pip install playwright==1.57.0

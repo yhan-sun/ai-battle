@@ -3,6 +3,7 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { execFileSync } from 'node:child_process';
 import { createPublicManifest, discoverSubmissions } from './lib/submissions.mjs';
+import { withSubmissionTimes } from './lib/submission-times.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const site = join(root, 'site');
@@ -92,7 +93,7 @@ writeFileSync(join(site, 'index.html'), landingPage);
 cpSync(join(root, 'pages', 'assets'), join(site, 'assets'), { recursive: true });
 writeFileSync(
   join(site, 'submissions.json'),
-  `${JSON.stringify(createPublicManifest(projects), null, 2)}\n`,
+  `${JSON.stringify(withSubmissionTimes(root, createPublicManifest(projects)), null, 2)}\n`,
 );
 writeFileSync(join(site, '.nojekyll'), '');
 console.log(`Assembled ${projects.length} projects into ${site}`);
