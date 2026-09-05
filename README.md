@@ -1,13 +1,4 @@
----
-AIGC:
-  ContentProducer: '001191110102MAD55U9H0F10002'
-  ContentPropagator: '001191110102MAD55U9H0F10002'
-  Label: '1'
-  ProduceID: '43ef73b5-728e-4248-bb1f-ef43c858d844'
-  PropagateID: '43ef73b5-728e-4248-bb1f-ef43c858d844'
-  ReservedCode1: '3969329e-f73c-4950-a70b-37967a7f5016'
-  ReservedCode2: '3969329e-f73c-4950-a70b-37967a7f5016'
----
+
 
 # ⚔️ AI Battle:《天天酷跑》Web 3D/2.5D 极限编程竞技场
 
@@ -144,16 +135,6 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 | DeepSeek | **V4 Flash 0731** | 深海疾速 · DEEP DASH 3D | [deepseek/deepseek-v4-flash-0731](./deepseek/deepseek-v4-flash-0731) | [进入 Demo](https://yhan-sun.github.io/ai-battle/deepseek/deepseek-v4-flash-0731/) | v0 |
 | TeleAgent | **TeleAgent Pro** | 以太冲刺 · AETHER DASH | [teleagent/pro](./teleagent/pro) | [进入 Demo](https://yhan-sun.github.io/ai-battle/teleagent/pro/) | v0 |
 <!-- END: AI_BATTLE_MODEL_INDEX -->
-
-### 作品细节对比（人工补充）
-
-| 选手 / 目录 | 参赛 AI 模型 | 作品名称 | 架构风格 | 坐骑 / 宠物机制 | 特色亮点 | 快速启动命令 |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| [`openai/gpt-5.6-luna-max`](./openai/gpt-5.6-luna-max) | **OpenAI · GPT-5.6 Luna Max** | 《星轨冲刺 · NEON SPRINT》 | 极简集成单文件架构 (`main.js`) | 悬浮滑板 / 伙伴浮游炮 | 几何霓虹美学；低空闸门/阶梯生成；星核复活与独立奖励关卡 | `npm run dev:openai` |
-| [`google/gemini-3.8-flash-high`](./google/gemini-3.8-flash-high) | **Google · Gemini 3.8 Flash High** | 《天天炫跑 · CYBER DASH 3D》 | 深度面向对象 / 多子系统解耦 (Entities / VFX / World / Audio) | 机械炎豹、极速战车、糖果飞龙 / 炽焰幼龙、波波精灵、小飞碟 | 独立云端乐园与赛博虫洞场景；三段跳与俯冲；玻璃拟态 UI 与主动技能爆发 | `npm run dev:google` |
-| [`meta/muse-spark-1.3`](./meta/muse-spark-1.3) | **Meta · Muse Spark 1.3** | 《星尘酷跑 · Star Dash Runner》 | 游戏引擎级分层架构 (`game`, `level`, `player`, `audio`, `ui`) | 星角兽骑乘 / 悬浮小宠跟随 | WebAudio 合成音效与 BGM；土狼时间与跳跃预输入；零 GC 粒子池；FOV 冲刺拉伸与视差远山 | `npm run dev:meta` |
-| [`deepseek/deepseek-v4-flash-0731`](./deepseek/deepseek-v4-flash-0731) | **DeepSeek · V4 Flash 0731** | 《深海疾速 · DEEP DASH 3D》 | 状态机 + 模块分层 (`world` / `level` / `player` / `game` / `audio` / `ui`) | 疾风悬浮艇 / 小精灵宠物 | 三车道、踩踏、超级奖励与穿越奖励独立场景；土狼时间与跳跃预输入 | `npm run dev:deepseek` |
-| [`teleagent/pro`](./teleagent/pro) | **TeleAgent Pro** | 《以太冲刺 · Aether Dash》 | 状态机 / 分层解耦 (`main`, `level`, `bonusScene`, `player`, `audio`, `particles`, `ui`) | 悬浮滑板骑乘 / 绕飞小宠跟随 | 双奖励关真正切换（浮空金币平台 + 超光速太空隧道）；土狼时间与跳跃预输入；零 GC 粒子池；生命系统与最高分存档 | `npm run dev:teleagent` |
 
 ---
 
