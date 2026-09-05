@@ -157,40 +157,7 @@ README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自�
 
 ---
 
-## 🖼️ 封面与历史截图（可选）
 
-以下图片只是已经存在的历史展示资产，不是参赛或自动收录条件。新模型无需制作截图；缺少图片时，Pages 会使用构建生成的 SVG 文字封面，仍会正常出现在模型列表中。
-
-<table>
-  <tr>
-    <td align="center">
-      <a href="./output/playwright/openai-gpt-5.6-luna-max.png">
-        <img src="./output/playwright/openai-gpt-5.6-luna-max.png" alt="OpenAI GPT-5.6 Luna Max gameplay screenshot" width="100%" />
-      </a>
-      <br /><sub><code>openai/gpt-5.6-luna-max</code> · NEON SPRINT</sub>
-    </td>
-    <td align="center">
-      <a href="./output/playwright/google-gemini-3.8-flash-high.png">
-        <img src="./output/playwright/google-gemini-3.8-flash-high.png" alt="Google Gemini 3.8 Flash High gameplay screenshot" width="100%" />
-      </a>
-      <br /><sub><code>google/gemini-3.8-flash-high</code> · CYBER DASH 3D</sub>
-    </td>
-    <td align="center">
-      <a href="./output/playwright/meta-muse.png">
-        <img src="./output/playwright/meta-muse.png" alt="Meta Muse Spark 1.3 gameplay screenshot" width="100%" />
-      </a>
-      <br /><sub><code>meta/muse-spark-1.3</code> · Star Dash Runner</sub>
-    </td>
-    <td align="center">
-      <a href="./output/playwright/teleagent-pro.png">
-        <img src="./output/playwright/teleagent-pro.png" alt="TeleAgent Pro gameplay screenshot" width="100%" />
-      </a>
-      <br /><sub><code>teleagent/pro</code> · Aether Dash</sub>
-    </td>
-  </tr>
-</table>
-
----
 
 ## 🚀 怎么启动 (How to Run)
 
