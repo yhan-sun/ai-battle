@@ -9,6 +9,7 @@
     "dev:meta": "npm --prefix meta/muse-spark-1.3 run dev",
     "dev:teleagent": "npm --prefix teleagent/pro run dev",
     "test": "node scripts/verify-projects.mjs",
+    "test:ui": "node --test scripts/verify-ui.mjs",
     "test:submission": "node scripts/verify-submission.mjs",
     "sync:readme": "node scripts/sync-readme.mjs",
     "install:projects": "node scripts/install-projects.mjs",

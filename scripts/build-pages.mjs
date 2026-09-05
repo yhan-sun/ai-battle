@@ -89,6 +89,7 @@ for (const project of projects) {
 
 const landingPage = readFileSync(join(root, 'pages', 'index.html'), 'utf8');
 writeFileSync(join(site, 'index.html'), landingPage);
+cpSync(join(root, 'pages', 'assets'), join(site, 'assets'), { recursive: true });
 writeFileSync(
   join(site, 'submissions.json'),
   `${JSON.stringify(createPublicManifest(projects), null, 2)}\n`,
