@@ -22,13 +22,17 @@ def model(provider: str, slug: str, name: str, title: str, protocol: int = 1) ->
 
 
 def fixture() -> dict:
-    return {"schemaVersion": 1, "providers": [
+    data = {"schemaVersion": 1, "providers": [
         {"slug": "lab-a", "name": "Alpha", "accent": "#6fe7ff", "models": [
             model("lab-a", "model-10", "Model 10", "星空疾行"),
             model("lab-a", "model-2", "Model 2", "Ocean Runner", 0)]},
         {"slug": "lab-b", "name": "Beta", "accent": "#ff8a54", "models": [
             model("lab-b", "model-3", "Model 3", "星空漂流")]},
     ]}
+    data['providers'][0]['models'][0]['submittedAt'] = '2026-09-01T00:00:00Z'
+    data['providers'][0]['models'][1]['submittedAt'] = '2026-09-02T00:00:00Z'
+    data['providers'][1]['models'][0]['submittedAt'] = '2026-09-03T00:00:00Z'
+    return data
 
 
 def offline_html() -> str:
@@ -83,12 +87,17 @@ def main() -> None:
         expect(page.locator('#catalog-region')).to_have_attribute('data-state', 'ready')
         expect(page.locator('.model-card')).to_have_count(3)
         check("all models visible on first load")
+        check("default sorts by descending time across providers", page.locator('.model-card h3').all_text_contents() == ['Model 3', 'Model 2', 'Model 10'])
+        check("default sort label communicates newest first", page.locator('#sort option:checked').inner_text() == '时间：新 → 旧')
         check("dynamic model/provider totals", page.locator('#model-count').inner_text() == '03' and page.locator('#provider-count').inner_text() == '02')
 
         page.locator('[data-provider="lab-b"]').click()
         expect(page.locator('.model-card')).to_have_count(1)
         expect(page.locator('[data-provider="lab-b"]')).to_have_attribute('aria-pressed', 'true')
         check("provider selection and pressed state")
+        page.locator('[data-provider="lab-a"]').click()
+        check("provider filter preserves time order", page.locator('.model-card h3').all_text_contents() == ['Model 2', 'Model 10'])
+        page.locator('[data-provider="lab-b"]').click()
         page.locator('#protocol').select_option('0')
         expect(page.locator('#empty-state')).to_be_visible()
         expect(page.locator('#random-play')).to_have_attribute('aria-disabled', 'true')
@@ -97,6 +106,7 @@ def main() -> None:
         expect(page.locator('.model-card')).to_have_count(3)
         expect(page.locator('#search')).to_be_focused()
         check("empty-state reset restores catalog and focus")
+        check("reset restores default time order", page.locator('.model-card h3').all_text_contents() == ['Model 3', 'Model 2', 'Model 10'])
 
         page.locator('#search').fill('星空')
         expect(page.locator('.model-card')).to_have_count(2)
@@ -131,6 +141,7 @@ def main() -> None:
         page.keyboard.press('Tab')
         expect(page.locator('#close-detail')).to_be_focused()
         check("native modal initial focus and keyboard containment")
+        check("detail identifies submission-time fallback honestly", '首次提交（未记录测试时间）' in page.locator('#detail-time').inner_text())
         page.keyboard.press('Escape')
         expect(page.locator('#detail-dialog')).not_to_be_visible()
         expect(page.locator('.detail-button').first).to_be_focused()
@@ -166,6 +177,12 @@ def main() -> None:
         page.set_viewport_size({"width": 1440, "height": 1000})
         page.locator('#grid-view').click()
 
+        page.evaluate("async () => { window.__fixture.providers[0].models[0].testedAt = '2026-09-05T00:00:00Z'; await window.__arena.load(); }")
+        check("recorded retest moves older entry to front", page.locator('.model-card h3').first.inner_text() == 'Model 10')
+        page.locator('.detail-button').first.click()
+        check("detail distinguishes recorded test time", '测试记录' in page.locator('#detail-time').inner_text())
+        page.keyboard.press('Escape')
+
         for mode in ['error', 'json', 'timeout']:
             page.evaluate(f"async () => {{ window.__mode = '{mode}'; await window.__arena.load(); }}")
             expect(page.locator('#catalog-region')).to_have_attribute('data-state', 'error')
@@ -190,14 +207,15 @@ def main() -> None:
         page.evaluate("async data => { window.__fixture = data; await window.__arena.load(); }", data)
         expect(page.locator('#catalog-region')).to_have_attribute('data-state', 'ready')
         expect(page.locator('.model-card h3 img')).to_have_count(0)
-        image = page.locator('.model-card').first.locator('.card-cover img')
+        long_entry = page.locator('.model-card[data-entry="lab-a/model-10"]')
+        image = long_entry.locator('.card-cover img')
         if image.count():
             image.evaluate("image => image.dispatchEvent(new Event('error'))")
         expect(image).to_have_count(0)
         check("metadata is text-only and broken screenshots retain generated cover")
         page.set_viewport_size({"width": 320, "height": 800})
         check("long model names do not overflow mobile", page.evaluate("document.documentElement.scrollWidth <= innerWidth"))
-        page.locator('.detail-button').first.click()
+        long_entry.locator('.detail-button').click()
         check("long metadata wraps inside modal", page.locator('#detail-dialog').evaluate("d => d.scrollWidth <= d.clientWidth"))
         page.keyboard.press('Escape')
         check("no uncaught browser JavaScript exceptions", not errors)

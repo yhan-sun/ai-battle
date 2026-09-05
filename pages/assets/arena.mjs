@@ -110,6 +110,10 @@ export function createArena({ siteBase = new URL('.', document.baseURI).href, fe
     get('detail-title').textContent = entry.name;
     get('detail-game').textContent = entry.title;
     get('detail-protocol').textContent = entry.protocolVersion === 1 ? '隔离协议 v1 · 提交方声明' : '历史记录 v0 · 非 v1 隔离记录';
+    const sortTime = entry.testedAt ?? entry.submittedAt;
+    get('detail-time').textContent = sortTime
+      ? `${new Date(sortTime).toLocaleString('zh-CN', { timeZone: 'UTC', hour12: false })} UTC · ${entry.testedAt ? '测试记录' : '首次提交（未记录测试时间）'}`
+      : '未记录时间，排在有时间记录的作品之后';
     get('detail-path').textContent = `${entry.id}/`;
     get('detail-play').href = gameUrl(entry);
     get('detail-source').href = sourceUrl(entry);

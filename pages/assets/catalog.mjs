@@ -9,6 +9,22 @@ const collator = new Intl.Collator('en', { numeric: true, sensitivity: 'base' })
 const validText = (value) => typeof value === 'string' && value.trim().length > 0;
 const validSlug = (value) => typeof value === 'string' && SLUG.test(value) && !value.includes('..');
 
+/** Accept only calendar-valid ISO timestamps with an explicit timezone. */
+export function parseTimestamp(value) {
+  if (typeof value !== 'string') return null;
+  const match = /^(\d{4}-\d{2}-\d{2})T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/.exec(value);
+  if (!match) return null;
+  const time = Date.parse(value);
+  const day = new Date(`${match[1]}T00:00:00Z`);
+  if (!Number.isFinite(time) || !Number.isFinite(day.getTime()) || day.toISOString().slice(0, 10) !== match[1]) return null;
+  return time;
+}
+
+function normalizeTimestamp(value) {
+  const time = parseTimestamp(value);
+  return time === null ? null : new Date(time).toISOString();
+}
+
 export function parseManifest(manifest) {
   if (!manifest || manifest.schemaVersion !== 1 || !Array.isArray(manifest.providers)) {
     throw new TypeError('Unsupported submissions manifest');
@@ -40,6 +56,9 @@ export function parseManifest(manifest) {
         id, provider: company, slug: model.slug, name: model.name.trim(),
         title: model.title.trim(), protocolVersion: model.protocolVersion,
         path: model.path, image: model.image, index: entries.length,
+        // Optional to remain compatible with older deployed manifests.
+        testedAt: normalizeTimestamp(model.testedAt),
+        submittedAt: normalizeTimestamp(model.submittedAt),
       });
     }
     return company;
@@ -87,6 +106,14 @@ export function filterEntries(entries, state) {
     const searchable = normalizeSearch(`${entry.name} ${entry.title} ${entry.slug} ${entry.provider.name} ${entry.provider.slug}`);
     return terms.every((term) => searchable.includes(term));
   });
+  if (state.sort === 'default') {
+    filtered.sort((a, b) => {
+      const aTime = parseTimestamp(a.testedAt) ?? parseTimestamp(a.submittedAt) ?? -Infinity;
+      const bTime = parseTimestamp(b.testedAt) ?? parseTimestamp(b.submittedAt) ?? -Infinity;
+      // Sort across providers. Equal/unknown times retain a deterministic order.
+      return bTime - aTime || a.index - b.index;
+    });
+  }
   if (state.sort === 'name') filtered.sort((a, b) => collator.compare(a.name, b.name) || a.index - b.index);
   if (state.sort === 'provider') filtered.sort((a, b) => collator.compare(a.provider.name, b.provider.name) || collator.compare(a.name, b.name) || a.index - b.index);
   return filtered;

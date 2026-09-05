@@ -1,11 +1,13 @@
 // Platform-maintainer tests; these do not inspect or execute contestant projects.
 import test from 'node:test';
+import { execFileSync } from 'node:child_process';
+import { withSubmissionTimes } from './lib/submission-times.mjs';
 import assert from 'node:assert/strict';
-import { readFileSync, existsSync, cpSync, mkdtempSync, rmSync } from 'node:fs';
+import { readFileSync, existsSync, cpSync, mkdtempSync, rmSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { parseManifest, filterEntries, normalizeState, readState, stateUrl, sourceUrl, hasFilters } from '../pages/assets/catalog.mjs';
+import { parseManifest, parseTimestamp, filterEntries, normalizeState, readState, stateUrl, sourceUrl, hasFilters } from '../pages/assets/catalog.mjs';
 
 const root = fileURLToPath(new URL('..', import.meta.url));
 const model = (provider, slug, name, title, protocolVersion = 1) => ({ slug, name, title, protocolVersion, path: `./${provider}/${slug}/`, image: `./output/covers/${provider}-${slug}.svg` });
@@ -131,4 +133,151 @@ test('build: copies all first-party UI assets alongside index.html', () => {
       assert.equal(readFileSync(join(destination, 'assets', file), 'utf8'), readFileSync(join(root, 'pages/assets', file), 'utf8'));
     }
   } finally { rmSync(destination, { recursive: true, force: true }); }
+});
+
+// Newest-first regression tests. Synthetic dates are test fixtures, not claims
+// about actual contestants or their test history.
+function timedFixture() {
+  const f = fixture();
+  f.providers[0].models[0].submittedAt = '2026-09-01T00:00:00Z';
+  f.providers[0].models[1].submittedAt = '2026-09-02T00:00:00Z';
+  f.providers[1].models[0].submittedAt = '2026-09-03T00:00:00Z';
+  return f;
+}
+
+test('time: default and legacy default URL sort across providers newest first', () => {
+  const { entries } = parseManifest(timedFixture());
+  for (const state of [defaults(), readState('?sort=default')]) {
+    assert.deepEqual(filterEntries(entries, state).map((e) => e.name), ['Model 3', 'Model 2', 'Model 10']);
+  }
+  assert.deepEqual(entries.map((e) => e.name), ['Model 10', 'Model 2', 'Model 3']);
+});
+test('time: recorded retest takes precedence over first submission and moves entry to front', () => {
+  const f = timedFixture();
+  f.providers[0].models[0].testedAt = '2026-09-04T08:00:00+08:00';
+  const { entries } = parseManifest(f);
+  assert.equal(entries[0].testedAt, '2026-09-04T00:00:00.000Z');
+  assert.equal(filterEntries(entries, defaults())[0].name, 'Model 10');
+});
+test('time: company/search/protocol filtering retains descending chronology', () => {
+  const { entries } = parseManifest(timedFixture());
+  assert.deepEqual(filterEntries(entries, { ...defaults(), provider: 'lab-a' }).map((e) => e.name), ['Model 2', 'Model 10']);
+  assert.deepEqual(filterEntries(entries, { ...defaults(), q: '星空', protocol: '1' }).map((e) => e.name), ['Model 3', 'Model 10']);
+});
+test('time: equal instants preserve stable order and missing/invalid dates go last', () => {
+  const f = timedFixture();
+  f.providers[0].models[0].submittedAt = '2026-09-03T08:00:00+08:00';
+  f.providers[0].models[1].submittedAt = 'invalid';
+  const { entries } = parseManifest(f);
+  assert.deepEqual(filterEntries(entries, defaults()).map((e) => e.name), ['Model 10', 'Model 3', 'Model 2']);
+  assert.equal(entries[1].submittedAt, null);
+});
+test('time: malformed optional test timestamp falls back to known submission time', () => {
+  const f = timedFixture();
+  f.providers[0].models[1].testedAt = '9999';
+  const { entries } = parseManifest(f);
+  assert.deepEqual(filterEntries(entries, defaults()).map((e) => e.name), ['Model 3', 'Model 2', 'Model 10']);
+});
+test('time: timestamp parser rejects date-only, local time and impossible dates', () => {
+  for (const value of [undefined, null, 0, '', '2026-09-05', '2026-09-05T12:00:00', '2026-02-29T00:00:00Z', '2026-02-30T00:00:00Z', '2026-09-05T24:00:00Z', '2026-09-05T12:00:00+25:00', '2026-09-05T12:00:00Z trailing']) {
+    assert.equal(parseTimestamp(value), null, String(value));
+  }
+  assert.equal(parseTimestamp('2024-02-29T00:00:00.123Z'), Date.parse('2024-02-29T00:00:00.123Z'));
+  assert.equal(parseTimestamp('2026-09-05T08:30:00+08:00'), parseTimestamp('2026-09-05T00:30:00Z'));
+});
+test('time: resetting explicit name sort returns to newest-first, not source order', () => {
+  const { entries } = parseManifest(timedFixture());
+  assert.deepEqual(filterEntries(entries, readState('?sort=name')).map((e) => e.name), ['Model 2', 'Model 3', 'Model 10']);
+  assert.equal(filterEntries(entries, defaults())[0].name, 'Model 3');
+  assert.equal(hasFilters(defaults()), false);
+});
+
+function historyFixture(t) {
+  const dir = mkdtempSync(join(tmpdir(), 'arena-history-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const run = (args, date) => execFileSync('git', args, {
+    cwd: dir, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'],
+    env: { ...process.env, ...(date ? { GIT_AUTHOR_DATE: date, GIT_COMMITTER_DATE: date } : {}) },
+  }).trim();
+  run(['init', '-q']);
+  run(['config', 'user.name', 'UI Test Fixture']);
+  run(['config', 'user.email', 'fixture@example.invalid']);
+  const commit = (date) => { run(['add', '.']); run(['-c', 'commit.gpgsign=false', 'commit', '-qm', 'Synthetic fixture'], date); };
+  for (const [i, id] of ['lab-a/model-10', 'lab-a/model-2', 'lab-b/model-3'].entries()) {
+    mkdirSync(join(dir, id), { recursive: true });
+    writeFileSync(join(dir, id, 'index.html'), id);
+    commit(`2026-09-0${i + 1}T00:00:00Z`);
+  }
+  mkdirSync(join(dir, 'pages'), { recursive: true });
+  return { dir, run, commit };
+}
+
+test('timeline: Git history enriches real manifest shape and preserves original object', (t) => {
+  const { dir } = historyFixture(t);
+  const original = fixture();
+  const result = withSubmissionTimes(dir, original);
+  const { entries } = parseManifest(result);
+  assert.equal(entries[0].submittedAt, '2026-09-01T00:00:00.000Z');
+  assert.equal(entries[2].submittedAt, '2026-09-03T00:00:00.000Z');
+  assert.equal(entries[0].testedAt, null);
+  assert.equal(original.providers[0].models[0].submittedAt, undefined);
+  assert.deepEqual(filterEntries(entries, defaults()).map((e) => e.name), ['Model 3', 'Model 2', 'Model 10']);
+});
+test('timeline: later metadata/README changes cannot change first-submission time', (t) => {
+  const { dir, commit } = historyFixture(t);
+  writeFileSync(join(dir, 'lab-a/model-10/submission.json'), '{}');
+  writeFileSync(join(dir, 'lab-a/model-10/README.md'), 'Later metadata migration');
+  commit('2026-09-04T00:00:00Z');
+  writeFileSync(join(dir, 'README.md'), 'Later site deployment');
+  commit('2026-09-05T00:00:00Z');
+  const { entries } = parseManifest(withSubmissionTimes(dir, fixture()));
+  assert.equal(entries[0].submittedAt, '2026-09-01T00:00:00.000Z');
+  assert.equal(filterEntries(entries, defaults())[0].name, 'Model 3');
+});
+test('timeline: maintainer retest record flows through generation into default ordering', (t) => {
+  const { dir } = historyFixture(t);
+  writeFileSync(join(dir, 'pages/test-times.json'), JSON.stringify({ schemaVersion: 1, testedAt: { 'lab-a/model-10': '2026-09-05T08:30:00+08:00' } }));
+  const { entries } = parseManifest(withSubmissionTimes(dir, fixture()));
+  assert.equal(entries[0].testedAt, '2026-09-05T00:30:00.000Z');
+  assert.equal(filterEntries(entries, defaults())[0].name, 'Model 10');
+});
+test('timeline: invalid dates, unknown entries and malformed records fail visibly', (t) => {
+  const { dir } = historyFixture(t);
+  const invalid = [
+    { schemaVersion: 1, testedAt: { 'lab-a/model-10': '2026-02-30T00:00:00Z' } },
+    { schemaVersion: 1, testedAt: { 'unknown/model': '2026-09-05T00:00:00Z' } },
+    { schemaVersion: 1, testedAt: [] },
+    { schemaVersion: 9, testedAt: {} },
+    { schemaVersion: 1, testedAt: {}, extra: true },
+  ];
+  for (const record of invalid) {
+    writeFileSync(join(dir, 'pages/test-times.json'), JSON.stringify(record));
+    assert.throws(() => withSubmissionTimes(dir, fixture()), TypeError);
+  }
+});
+test('timeline: archives retain unknown dates instead of using current build time', (t) => {
+  const dir = mkdtempSync(join(tmpdir(), 'arena-no-history-'));
+  t.after(() => rmSync(dir, { recursive: true, force: true }));
+  const warnings = [];
+  const { entries } = parseManifest(withSubmissionTimes(dir, fixture(), { warn: (message) => warnings.push(message) }));
+  assert.equal(warnings.length, 1);
+  assert.ok(entries.every((e) => e.testedAt === null && e.submittedAt === null));
+});
+test('timeline: a shallow checkout is rejected rather than dating every model at HEAD', (t) => {
+  const { dir } = historyFixture(t);
+  const shallow = mkdtempSync(join(tmpdir(), 'arena-shallow-'));
+  t.after(() => rmSync(shallow, { recursive: true, force: true }));
+  execFileSync('git', ['clone', '-q', '--depth=1', `file://${dir}`, shallow], { stdio: 'pipe' });
+  assert.throws(() => withSubmissionTimes(shallow, fixture()), /complete Git history/);
+});
+test('integration: Pages includes times, default label is chronological and CI loads history', () => {
+  const html = readFileSync(join(root, 'pages/index.html'), 'utf8');
+  const build = readFileSync(join(root, 'scripts/build-pages.mjs'), 'utf8');
+  const workflow = readFileSync(join(root, '.github/workflows/deploy-pages.yml'), 'utf8');
+  const browser = readFileSync(join(root, 'scripts/test-ui-browser.py'), 'utf8');
+  assert.ok(html.includes('<option value="default">时间：新 → 旧</option>'));
+  assert.ok(html.includes('id="detail-time"'));
+  assert.ok(build.includes('withSubmissionTimes(root, createPublicManifest(projects))'));
+  assert.ok(/uses: actions\/checkout@v4\s+with:\s+fetch-depth: 0/.test(workflow));
+  assert.ok(browser.includes('submittedAt'));
 });
