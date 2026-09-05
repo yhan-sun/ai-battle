@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#edf5ed" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta name="description" content="星途邮差：一场穿越云海、地底与星门的原创 Three.js 无尽跑酷。" />
+    <title>星途邮差 · AEROMAIL</title>
+  </head>
+  <body>
+    <div id="app">
+      <div id="world" aria-label="三维跑酷场景"></div>
+      <div class="vignette" aria-hidden="true"></div>
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="星途邮差首页"><span class="brand-icon">↗</span><span>AERO<span class="brand-light">MAIL</span><small>星 途 邮 差 / 飞 行 局</small></span></a>
+        <div class="top-actions"><span class="edition">AIR ROUTE <b>007</b></span><button id="sound" class="icon-button" aria-label="切换声音" title="切换声音">♪</button><button id="pause" class="icon-button" aria-label="暂停游戏" title="暂停 (P / Esc)" hidden>Ⅱ</button></div>
+      </header>
+
+      <main id="menu" class="menu">
+        <div class="intro">
+          <div class="eyebrow"><span class="live-dot"></span> CLOUD COURIER PROGRAM</div>
+          <h1>下一站，<br /><span>云的那一边。</span></h1>
+          <p class="intro-copy">跃过浮岛，穿行星门。<br />带上你的搭档，把每一次奔跑送往更远的地方。</p>
+          <div class="route-chips"><span>01 云海</span><i>···</i><span>02 地心</span><i>···</i><span>03 星门</span></div>
+          <button id="start" class="primary-button">开始派送 <span>↗</span></button>
+          <div class="menu-record"><span>个人最远 <b id="best-distance">0 m</b></span><span>最高表现 <b id="best-score">000000</b></span></div>
+          <p class="start-hint">空格起跳 · 再按二段跳 · ↓ 下蹲 · X 冲刺</p>
+        </div>
+        <div class="character-label"><span class="label-line"></span><div><small>YOUR DELIVERY CREW</small><strong>阿邮 <span>&</span> 小信标</strong><p>双段跳跃 / 宠物拾取 / 滑翔坐骑</p></div><span class="label-number">07</span></div>
+        <div class="boarding-pass"><div class="stamp">AIR<br />POST</div><div><small>登机提示 / FLIGHT NOTES</small><p>收集星币积攒超级奖励，<br />遇见星门，进入 5 倍穿越航道。</p></div><span class="ticket-dots" aria-hidden="true">▥</span></div>
+      </main>
+
+      <section id="hud" class="hud" hidden aria-label="游戏状态">
+        <div class="stats-panel"><div class="route-label"><span class="live-dot"></span><span id="biome">云海航线</span><span id="speed">9.0 m/s</span></div><div class="score-row"><div><small>表现分 / SCORE</small><strong id="score">000000</strong></div><span id="multiplier" class="multiplier">×1</span></div><div class="stats-bottom"><span><i class="coin-icon"></i><b id="coins">0</b> 星币</span><span><b id="distance">0</b> m</span><span id="combo">COMBO 0</span></div></div>
+        <div id="bonus-banner" class="bonus-banner" hidden><small id="bonus-label">SUPER DELIVERY</small><strong id="bonus-title">超级奖励航线</strong><div class="bonus-time"><span id="bonus-timer">12.0</span><small>s 后返回主航线</small></div><div class="thin-meter"><i id="bonus-progress"></i></div></div>
+        <div id="effects" class="effects" aria-label="当前道具"></div>
+        <div class="bottom-hud"><div class="bonus-meter-card"><div><span>✦ 超级奖励</span><b id="bonus-charge-label">0 / 28</b></div><div class="meter"><i id="bonus-charge"></i></div><small id="mission">收集 28 枚星币，开启云顶奖励航线</small></div><button id="skill" class="skill-button"><span class="skill-symbol">↯</span><span><strong>邮光冲刺</strong><small id="skill-label">X · 已就绪</small></span><span id="skill-progress" class="skill-charge">100%</span></button></div>
+        <div class="desktop-controls"><span><kbd>空格</kbd> 跳跃 / 二段跳</span><span><kbd>↓</kbd> 下蹲</span><span><kbd>X</kbd> 技能</span><span><kbd>P</kbd> 暂停</span></div>
+        <div class="touch-controls"><button id="duck" aria-label="按住下蹲">↓<small>下蹲</small></button><button id="jump" aria-label="跳跃，再按二段跳">↑<small>跳跃 ×2</small></button></div>
+      </section>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+      <div id="transition" class="transition" aria-hidden="true"></div>
+      <section id="pause-screen" class="overlay" hidden><div class="dialog"><div class="eyebrow">DELIVERY ON HOLD</div><h2>在云端，歇一会。</h2><p>航线与奖励倒计时已暂停。</p><button id="resume" class="primary-button">继续派送 <span>→</span></button><button id="pause-restart" class="secondary-button">重新出发</button><button id="pause-menu" class="text-button">返回飞行局</button></div></section>
+      <section id="death-screen" class="overlay" hidden><div class="dialog"><div class="eyebrow">SIGNAL INTERRUPTED</div><h2>派送意外中断</h2><p id="death-reason"></p><div class="revive-mark">↺</div><p>小信标还留着一次救援机会。<br />返回安全地面，并获得短暂无敌。</p><button id="revive" class="primary-button">信标救援 · 本局一次 <span>↗</span></button><button id="finish" class="text-button">结束本次派送</button></div></section>
+      <section id="result-screen" class="overlay" hidden><div class="dialog result-dialog"><div class="eyebrow">DELIVERY REPORT</div><h2>每一步，都算数。</h2><span id="new-record" class="record-badge" hidden>NEW PERSONAL BEST</span><div class="result-score"><small>本次表现分</small><strong id="result-score">0</strong></div><div class="result-grid"><div><small>派送距离</small><b id="result-distance">0 m</b></div><div><small>收集星币</small><b id="result-coins">0</b></div><div><small>最高连击</small><b id="result-combo">0</b></div><div><small>奖励航线</small><b id="result-bonus">0</b></div></div><button id="restart" class="primary-button">再次出发 <span>↗</span></button><button id="result-menu" class="text-button">返回飞行局</button></div></section>
+      <footer id="menu-footer"><span>一封信，一场没有终点的旅行。</span><span>PROCEDURAL WORLD · THREE.JS</span></footer>
+      <div id="error" class="error" role="alert" hidden></div>
+    </div>
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

@@ -1,0 +1,19 @@
+{
+  "name": "aeromail-gpt-6-astra-max",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node --test tests/simulation.test.mjs",
+    "check:browser": "node tests/browser-check.mjs"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "8.2.2"
+  }
+}
