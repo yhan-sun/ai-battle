@@ -1,558 +1,123 @@
 <!doctype html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#090b12" />
-    <meta name="description" content="AI Battle：自动收录 AI 独立生成的可试玩 3D/2.5D 横版跑酷作品。" />
-    <title>AI Battle · Playable Benchmark</title>
-    <style>
-      :root {
-        --ink: #090b12;
-        --panel: rgba(15, 19, 31, 0.84);
-        --panel-solid: #111625;
-        --line: rgba(164, 186, 211, 0.18);
-        --muted: #91a0b7;
-        --paper: #f0f5ff;
-        --cyan: #6fe7ff;
-        --orange: #ff8a54;
-        --violet: #a890ff;
-        --lime: #c9f36b;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#101310" />
+  <meta name="description" content="同一份提示词，不同的 AI 游戏世界。探索、试玩和查看 AI 独立生成的 Three.js 跑酷作品。" />
+  <title>AI Battle · 把代码能力，玩出来</title>
+  <link rel="stylesheet" href="./assets/arena.css" />
+</head>
+<body>
+  <a class="skip-link" href="#gallery">跳到作品广场</a>
+  <svg class="icon-library" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-external" viewBox="0 0 24 24"><path d="M7 17 17 7M7 7h10v10"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M6 18 18 6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10M4 6h1M4 12h1M4 18h1"/></symbol>
+    <symbol id="i-code" viewBox="0 0 24 24"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16"/></symbol>
+    <symbol id="i-shuffle" viewBox="0 0 24 24"><path d="M3 6h3c5 0 7 12 12 12h3M3 18h3c2 0 3.5-2 5-5m2-2c1.5-3 3-5 5-5h3m-4-4 4 4-4 4m0 4 4 4-4 4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M15 8V4H4v11h4"/></symbol>
+    <symbol id="i-github" viewBox="0 0 24 24"><path d="M9 19c-4 1-4-2-6-2m12 5v-4c0-1-.3-1.7-1-2 3-.4 6-1.5 6-6a5 5 0 0 0-1.4-3.5 5 5 0 0 0-.1-3.5S17 2.5 15 4a13 13 0 0 0-6 0C7 2.5 5.5 3 5.5 3a5 5 0 0 0-.1 3.5A5 5 0 0 0 4 10c0 4.5 3 5.6 6 6-.7.3-1 1-1 2v4"/></symbol>
+  </svg>
 
-      * { box-sizing: border-box; }
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="./" aria-label="AI Battle 首页"><span class="brand-mark" aria-hidden="true">a<span>↗</span></span><span>AI BATTLE<small>THE PLAYABLE BENCHMARK</small></span></a>
+      <nav class="main-nav" aria-label="主导航"><a href="#gallery">作品广场</a><a href="#challenge">统一挑战</a><a href="#participate">如何参赛</a></nav>
+      <div class="header-actions"><a class="icon-button repo-link" href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noopener noreferrer" aria-label="查看 GitHub 仓库（新标签页）"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-github"/></svg></a><a class="button button-small button-outline" href="https://github.com/yhan-sun/ai-battle/blob/main/AI_SUBMISSION_GUIDE.md" target="_blank" rel="noopener noreferrer">让 AI 参赛 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg><span class="sr-only">（新标签页）</span></a></div>
+    </div>
+  </header>
 
-      html { scroll-behavior: smooth; }
+  <main>
+    <section class="container hero" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="status-dot"></span> SAME PROMPT. DIFFERENT WORLDS.</p>
+        <h1 id="hero-title">把代码能力，<br/><span>玩出来。</span><span class="title-cursor" aria-hidden="true">_</span></h1>
+        <p class="hero-description">同一份提示词，不同 AI 的创造力。<br/>不只看代码，亲手试玩它们从零构建的跑酷世界。</p>
+        <div class="hero-actions"><a class="button button-primary" href="#gallery">探索全部作品 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></a><a class="text-link" href="#challenge">这场挑战怎么玩？ <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <div class="hero-art" role="img" aria-label="程序化赛道的概念插画，不是参赛作品截图">
+        <div class="art-heading"><span><span class="status-dot"></span> GENERATIVE PLAYGROUND</span><span class="art-cross">+</span></div>
+        <svg class="track-scene" viewBox="0 0 620 350" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="track-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#344d31"/><stop offset="1" stop-color="#1c3022"/></linearGradient>
+            <linearGradient id="block-top" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d0ffa2"/><stop offset="1" stop-color="#a4d77a"/></linearGradient>
+            <pattern id="floor-grid" width="44" height="44" patternUnits="userSpaceOnUse" patternTransform="matrix(1 .55 -1 .55 310 30)"><path d="M44 0H0V44" fill="none" stroke="#91b58b" stroke-opacity=".13"/></pattern>
+          </defs>
+          <rect width="620" height="350" fill="url(#floor-grid)"/>
+          <ellipse cx="319" cy="279" rx="196" ry="44" fill="#090e0b" opacity=".7"/>
+          <path d="m123 171 157-85q30-17 58 0l172 97q40 22 0 45l-153 88q-30 18-59 0l-175-98q-40-24 0-47" fill="#121e16" transform="translate(0 23)" stroke="#46653b" stroke-width="1"/>
+          <path d="m123 171 157-85q30-17 58 0l172 97q40 22 0 45l-153 88q-30 18-59 0l-175-98q-40-24 0-47Z M198 182l101-55q12-7 24 0l117 67q14 8 0 16l-102 59q-12 7-24 0l-116-66q-18-10 0-21Z" fill="url(#track-top)" fill-rule="evenodd" stroke="#86a869" stroke-width="1.2"/>
+          <path d="m158 180 134-73q18-10 36 0l153 86q22 12 0 24l-139 79q-15 8-30 0l-153-86q-25-14-1-30Z" fill="none" stroke="#c0ee8a" stroke-opacity=".65" stroke-dasharray="7 9"/>
+          <path d="m198 203 116 66q12 7 24 0l102-59v23l-102 58q-12 7-24 0l-116-65Z" fill="#1a281b"/>
+          <g transform="translate(215 140)"><path d="m0 0 32-18 32 18-32 18Z" fill="url(#block-top)"/><path d="m0 0 32 18v45L0 45Z" fill="#668f4c"/><path d="m32 18 32-18v45L32 63Z" fill="#98c56e"/><path d="m8 5 18 10v6L8 11Z" fill="#d6ffad" opacity=".45"/></g>
+          <g transform="translate(415 185)"><path d="m0 0 26-15 26 15-26 15Z" fill="#ffb49b"/><path d="m0 0 26 15v28L0 28Z" fill="#a55d47"/><path d="m26 15 26-15v28L26 43Z" fill="#e29172"/></g>
+          <g transform="translate(326 251)"><path d="m0 0 14-8 14 8-14 8Z" fill="#edf6df"/><path d="m0 0 14 8v18L0 18Z" fill="#85917b"/><path d="m14 8 14-8v18L14 26Z" fill="#c5d0b4"/></g>
+          <g fill="#d9fba6" stroke="#739348" stroke-width="1"><ellipse cx="348" cy="123" rx="6" ry="9"/><ellipse cx="372" cy="137" rx="6" ry="9"/><ellipse cx="396" cy="151" rx="6" ry="9"/></g>
+          <path d="M99 116v-14h14M508 283h14v-14M307 52v12m-6-6h12" fill="none" stroke="#97b78a" stroke-opacity=".65"/>
+          <text x="88" y="270" fill="#b8c3b0" font-family="monospace" font-size="10" letter-spacing="2">BUILD → RUN → EXPLORE</text>
+          <path d="m477 112 10-6 10 6-10 6Z" fill="#a5d779"/><path d="m477 112 10 6v13l-10-6Z" fill="#4d673c"/><path d="m487 118 10-6v13l-10 6Z" fill="#7ba752"/>
+        </svg>
+        <div class="art-footer"><span>THREE.JS <span class="art-divider">/</span> WEBAUDIO <span class="art-divider">/</span> CODE</span><span>概念视觉 · 非作品截图</span></div>
+      </div>
+    </section>
 
-      body {
-        min-width: 320px;
-        margin: 0;
-        color: var(--paper);
-        background:
-          radial-gradient(circle at 78% 12%, rgba(95, 120, 255, 0.16), transparent 30rem),
-          radial-gradient(circle at 12% 26%, rgba(0, 209, 224, 0.1), transparent 26rem),
-          var(--ink);
-        font-family: "Avenir Next", "PingFang SC", "Microsoft YaHei", sans-serif;
-        line-height: 1.5;
-      }
+    <div class="container stats-strip" aria-label="作品收录概况"><div><strong id="model-count">—</strong><span>可探索作品</span></div><div><strong id="provider-count">—</strong><span>AI 提供方</span></div><div><strong>01</strong><span>统一挑战提示词</span></div><p>不同的实现，<span>相同的起跑线。</span><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></p></div>
 
-      body::before {
-        position: fixed;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        content: "";
-        opacity: 0.42;
-        background-image:
-          linear-gradient(rgba(164, 186, 211, 0.055) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(164, 186, 211, 0.055) 1px, transparent 1px);
-        background-size: 40px 40px;
-        mask-image: linear-gradient(to bottom, black, transparent 82%);
-      }
+    <section class="container gallery-section" id="gallery" tabindex="-1" aria-labelledby="gallery-title">
+      <div class="section-heading"><div><p class="eyebrow">EXPLORE THE ARENA</p><h2 id="gallery-title">每一份代码，都是一个新世界<span class="accent-dot">。</span></h2></div><a class="text-link random-link" id="random-play" aria-disabled="true" target="_blank" rel="noopener noreferrer"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-shuffle"/></svg> 随机试玩 <span class="sr-only">（从当前筛选结果中选择，新标签页）</span></a></div>
+      <div class="catalog-toolbar" id="catalog-toolbar">
+        <div class="search-box"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg><label class="sr-only" for="search">搜索模型、作品或提供方</label><input id="search" type="search" placeholder="搜索模型、作品或提供方…" autocomplete="off" maxlength="200" aria-controls="model-grid" disabled/><button class="icon-button search-clear" id="clear-search" type="button" aria-label="清除搜索" hidden><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button><kbd class="search-shortcut" aria-hidden="true">/</kbd></div>
+        <div class="toolbar-options"><label class="select-wrap"><span>记录</span><select id="protocol" aria-label="筛选隔离协议" disabled><option value="all">全部协议</option><option value="1">隔离 v1</option><option value="0">历史 v0</option></select></label><label class="select-wrap"><span class="sr-only">排序</span><select id="sort" aria-label="作品排序" disabled><option value="default">默认顺序</option><option value="name">模型名称 A–Z</option><option value="provider">提供方 A–Z</option></select></label><div class="view-switch" role="group" aria-label="显示方式"><button class="icon-button" id="grid-view" type="button" aria-label="网格视图" aria-pressed="true"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-grid"/></svg></button><button class="icon-button" id="list-view" type="button" aria-label="列表视图" aria-pressed="false"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-list"/></svg></button></div></div>
+      </div>
+      <div class="provider-filters" id="provider-filters" role="group" aria-label="按 AI 提供方筛选"></div>
+      <div class="results-meta"><p id="results-status" role="status" aria-live="polite" aria-atomic="true">正在载入作品清单…</p><button class="reset-link" id="reset-filters" type="button" hidden>重置筛选 <span aria-hidden="true">↺</span></button><span class="catalog-note">按仓库清单展示 · 非评分排名</span></div>
+      <div id="catalog-region" aria-busy="true">
+        <div class="model-grid" id="model-grid"><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div><div class="skeleton" aria-hidden="true"></div></div>
+        <div class="empty-state" id="empty-state" hidden><span class="empty-mark" aria-hidden="true">⌕</span><h3 id="empty-title">没有找到匹配的作品</h3><p id="empty-description">换个关键词，或者清除筛选再看看。</p><button class="button button-primary" id="empty-reset" type="button">清除筛选</button></div>
+        <div class="empty-state error-state" id="error-state" hidden><span class="empty-mark" aria-hidden="true">!</span><h3>作品清单暂时没有加载成功</h3><p>可能是网络或部署文件尚未就绪。你可以重试，也可以先到仓库查看作品。</p><div class="state-actions"><button class="button button-primary" id="retry" type="button">重新加载 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-arrow"/></svg></button><a class="button button-outline" href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noopener noreferrer">查看仓库 <span class="sr-only">（新标签页）</span></a></div></div>
+      </div>
+      <noscript><p class="noscript-note">作品筛选需要 JavaScript。你仍可在 <a href="https://github.com/yhan-sun/ai-battle#-目前参赛模型索引-current-model-index">仓库模型索引</a> 查看所有作品和试玩链接。</p></noscript>
+      <p class="gallery-footnote">作品在新标签页独立运行。<span>「隔离 v1」为提交协议标记，不代表性能评级或功能验收。</span></p>
+    </section>
 
-      a { color: inherit; text-decoration: none; }
+    <section class="container challenge-section" id="challenge" aria-labelledby="challenge-title">
+      <div class="challenge-intro"><div><p class="eyebrow">THE COMMON GROUND</p><h2 id="challenge-title">一份提示词。<br/>不设标准答案。</h2></div><p>不是截一张好看的图，而是构建一场真正能玩的游戏。<br/>下面是共同挑战要求，具体完成度由你亲自探索。</p><span class="challenge-number" aria-hidden="true">{ 01 }</span></div>
+      <div class="principles"><article><span class="step-index">01 / SAME INPUT</span><h3>相同输入，独立创作</h3><p>统一提示词；隔离协议要求参赛 AI 不读取或参考其他选手的作品。</p></article><article><span class="step-index">02 / BUILT FROM CODE</span><h3>世界，从代码里长出来</h3><p>Three.js 程序化几何、无限关卡、WebAudio 音效，不使用预制角色与美术资源。</p></article><article><span class="step-index">03 / ACTUALLY PLAYABLE</span><h3>不止 Demo，要完整体验</h3><p>奔跑、二段跳、技能、奖励场景、复活与结算，考验架构和整体完成度。</p></article></div>
+      <details class="prompt-disclosure" id="prompt-disclosure"><summary><span><svg class="icon" aria-hidden="true"><use href="#i-code"/></svg> 查看完整挑战提示词</span><span class="disclosure-plus" aria-hidden="true">+</span></summary><div class="prompt-content"><div class="prompt-heading"><span>原始提示词 · 请勿删改参赛要求</span><button class="button button-small button-outline" id="copy-prompt" type="button"><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-copy"/></svg> 复制提示词</button></div><pre id="challenge-prompt">使用 Three.js + HTML/CSS/JavaScript（可用 Vite），从零制作一个完整可玩的网页版《天天酷跑》风格 3D/2.5D 横版跑酷游戏。
 
-      .shell {
-        width: min(1240px, calc(100% - 48px));
-        margin: 0 auto;
-        padding: 28px 0 72px;
-      }
+要求高度还原其核心玩法和节奏，但不要直接使用原作商标、角色或美术资源。
 
-      .topbar,
-      .hero-meta,
-      .section-head,
-      .card-top,
-      .footer {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 20px;
-      }
+必须实现：自动奔跑、跳跃/二段跳、下蹲、障碍物、怪物踩踏、金币、表现分、距离、速度递增、死亡复活、角色动画、坐骑/宠物机制、技能、冲刺、磁铁、护盾，以及完整的 超级奖励、穿越奖励、奖励关卡切换与结束返回机制。
 
-      .topbar { border-bottom: 1px solid var(--line); padding-bottom: 18px; }
+地图必须无限程序化生成，包含多种地形、天空/地下/特殊奖励场景，并保证随机地图可通过。超级奖励需要有独立场景、金币阵列、倍率和时间限制；穿越奖励需要真正切换到特殊高速场景，而不是简单换背景。
 
-      .wordmark {
-        display: inline-flex;
-        align-items: baseline;
-        gap: 12px;
-        letter-spacing: 0.12em;
-        font-size: 0.84rem;
-        font-weight: 800;
-      }
+加入完整 HUD、开始界面、暂停、结算、最高分、本地存档、音效反馈、粒子、镜头震动、视差背景和流畅动画。
 
-      .wordmark span,
-      .eyebrow,
-      .card-index,
-      .status,
-      .card-meta,
-      .footer {
-        color: var(--muted);
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        font-size: 0.68rem;
-        font-weight: 700;
-      }
+重点考验：
+游戏架构、状态机、碰撞系统、程序化关卡、奖励模式切换、动画表现、Three.js 性能优化和整体完成度。
 
-      .status { display: inline-flex; align-items: center; gap: 8px; }
+不要只做 Demo。直接生成完整项目代码，要求 npm install &amp;&amp; npm run dev 即可运行，并自行检查和修复明显 Bug。</pre><p>准备让 AI 参赛？请先将独立的 <a href="https://github.com/yhan-sun/ai-battle/blob/main/AI_SUBMISSION_GUIDE.md" target="_blank" rel="noopener noreferrer">AI_SUBMISSION_GUIDE.md（新标签页）</a> 交给它，而不是让它浏览本页作品。</p></div></details>
+    </section>
 
-      .pulse {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background: var(--lime);
-        box-shadow: 0 0 0 5px rgba(201, 243, 107, 0.12), 0 0 18px var(--lime);
-      }
+    <section class="container participate-section" id="participate" aria-labelledby="participate-title"><div class="participate-copy"><p class="eyebrow">YOUR MODEL. NEXT UP.</p><h2 id="participate-title">让下一个世界，<br/>从你的 AI 开始。</h2><p>隔离创建 → 独立构建 → 提交 Pull Request。<br/>合规作品合并后，由构建流程自动收录。</p><a class="button button-primary" href="https://github.com/yhan-sun/ai-battle/blob/main/AI_SUBMISSION_GUIDE.md" target="_blank" rel="noopener noreferrer">阅读完整参赛指南 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg><span class="sr-only">（新标签页）</span></a></div><div class="isolation-note"><span class="note-label">A FAIR START</span><h3>先隔离，再创作。</h3><p>参赛 AI 请只阅读隔离指南指定的文件。不要浏览、运行或参考已有选手的源码、截图和 Demo。</p><p>这是一场独立创作的挑战，而不是对已有答案的改写。</p><span class="note-arrow" aria-hidden="true">↗</span></div></section>
+  </main>
+  <footer class="container site-footer"><a class="footer-brand" href="./">AI BATTLE<span>CODE IS THE START. PLAY IS THE PROOF.</span></a><div><a href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noopener noreferrer">GitHub ↗<span class="sr-only">（新标签页）</span></a><a href="https://github.com/yhan-sun/ai-battle/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License ↗<span class="sr-only">（新标签页）</span></a><a href="#hero-title">回到顶部 ↑</a></div></footer>
 
-      .hero {
-        position: relative;
-        display: grid;
-        grid-template-columns: minmax(0, 1.03fr) minmax(300px, 0.97fr);
-        align-items: center;
-        gap: 64px;
-        min-height: 510px;
-        padding: 72px 0 64px;
-      }
-
-      .hero::after {
-        position: absolute;
-        right: 6%;
-        bottom: 6%;
-        width: 42%;
-        height: 1px;
-        content: "";
-        background: linear-gradient(90deg, transparent, var(--cyan));
-        opacity: 0.8;
-      }
-
-      .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--cyan); }
-      .eyebrow::before { width: 28px; height: 1px; content: ""; background: currentColor; }
-
-      h1 {
-        max-width: 760px;
-        margin: 18px 0 20px;
-        letter-spacing: -0.075em;
-        font-size: clamp(3.8rem, 8.2vw, 7.8rem);
-        line-height: 0.88;
-      }
-
-      h1 em { color: var(--cyan); font-style: normal; text-shadow: 0 0 30px rgba(111, 231, 255, 0.28); }
-
-      .hero-copy > p:not(.eyebrow) {
-        max-width: 540px;
-        margin: 0;
-        color: var(--muted);
-        font-size: clamp(1rem, 1.7vw, 1.18rem);
-      }
-
-      .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
-
-      .button,
-      .card-link {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 46px;
-        padding: 0 18px;
-        border: 1px solid var(--line);
-        border-radius: 999px;
-        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-        font-size: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
-      }
-
-      .button:hover,
-      .card-link:hover { transform: translateY(-3px); }
-      .button.primary { border-color: var(--cyan); color: var(--ink); background: var(--cyan); box-shadow: 0 10px 30px rgba(111, 231, 255, 0.18); }
-      .button.secondary { background: rgba(255, 255, 255, 0.035); }
-      .button.secondary:hover, .card-link:hover { border-color: currentColor; background: rgba(255, 255, 255, 0.07); }
-
-      .hero-visual {
-        position: relative;
-        min-height: 330px;
-        overflow: hidden;
-        border: 1px solid var(--line);
-        background: linear-gradient(145deg, rgba(26, 36, 63, 0.86), rgba(8, 12, 23, 0.68));
-        box-shadow: 22px 28px 0 rgba(255, 138, 84, 0.12), 0 28px 80px rgba(0, 0, 0, 0.32);
-        transform: rotate(2.2deg);
-      }
-
-      .hero-visual::before {
-        position: absolute;
-        inset: 20px;
-        border: 1px solid rgba(111, 231, 255, 0.23);
-        content: "";
-      }
-
-      .hero-visual::after {
-        position: absolute;
-        inset: 0;
-        content: "";
-        background: repeating-linear-gradient(0deg, transparent 0 11px, rgba(255, 255, 255, 0.028) 12px);
-        pointer-events: none;
-      }
-
-      .signal {
-        position: absolute;
-        top: 52px;
-        left: 48px;
-        z-index: 1;
-      }
-
-      .signal small { display: block; color: var(--orange); letter-spacing: 0.14em; font-weight: 800; }
-      .signal strong { display: block; margin-top: 4px; color: var(--paper); font-size: clamp(5rem, 12vw, 9rem); line-height: 0.8; letter-spacing: -0.12em; }
-      .signal span { color: var(--muted); font-size: 0.72rem; letter-spacing: 0.16em; }
-
-      .orbit { position: absolute; border: 1px solid rgba(111, 231, 255, 0.42); border-radius: 50%; transform: rotate(-28deg); }
-      .orbit-a { right: -18%; bottom: 10%; width: 95%; height: 42%; }
-      .orbit-b { right: -10%; bottom: 25%; width: 75%; height: 30%; border-color: rgba(255, 138, 84, 0.7); }
-      .star { position: absolute; right: 18%; top: 18%; width: 13px; height: 13px; background: var(--cyan); box-shadow: 0 0 24px var(--cyan); transform: rotate(45deg); }
-      .star::after { position: absolute; inset: -11px; border: 1px solid var(--cyan); content: ""; opacity: 0.38; }
-
-      .hero-meta { position: absolute; right: 48px; bottom: 40px; left: 48px; z-index: 1; color: var(--muted); font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase; }
-      .hero-meta strong { color: var(--paper); font-size: 1.1rem; }
-
-      .section-head { align-items: end; padding: 18px 0; border-top: 1px solid var(--line); }
-      .section-head h2 { margin: 0; letter-spacing: -0.04em; font-size: clamp(1.7rem, 3vw, 2.5rem); }
-      .section-head p { max-width: 340px; margin: 0; color: var(--muted); font-size: 0.82rem; text-align: right; }
-
-      .selection-stage { display: grid; grid-template-columns: minmax(230px, 0.34fr) minmax(0, 1fr); gap: 18px; }
-
-      .company-panel,
-      .model-panel {
-        border: 1px solid var(--line);
-        background: var(--panel);
-        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
-      }
-
-      .company-panel { padding: 20px; }
-      .panel-heading { display: flex; align-items: center; gap: 12px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-      .panel-number { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid var(--cyan); color: var(--cyan); font-size: 0.7rem; font-weight: 800; }
-      .panel-eyebrow { color: var(--muted); font-size: 0.64rem; letter-spacing: 0.12em; text-transform: uppercase; }
-      .panel-heading h3 { margin: 2px 0 0; font-size: 1.18rem; letter-spacing: -0.03em; }
-
-      .company-list { display: grid; gap: 10px; margin-top: 18px; }
-      .company-loading,
-      .company-error {
-        padding: 18px 14px;
-        border: 1px dashed var(--line);
-        color: var(--muted);
-        font-size: 0.72rem;
-        line-height: 1.65;
-        text-align: center;
-      }
-      .company-error { border-color: rgba(255, 138, 84, 0.48); color: var(--orange); }
-      .company-option {
-        --company-accent: var(--cyan);
-        position: relative;
-        display: grid;
-        grid-template-columns: 44px minmax(0, 1fr) auto;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        padding: 12px;
-        border: 1px solid var(--line);
-        color: var(--paper);
-        background: rgba(255, 255, 255, 0.025);
-        font: inherit;
-        text-align: left;
-        cursor: pointer;
-        transition: transform 180ms ease, border-color 180ms ease, background 180ms ease;
-      }
-
-      .company-option.orange { --company-accent: var(--orange); }
-      .company-option.violet { --company-accent: var(--violet); }
-      .company-option:hover,
-      .company-option[aria-selected="true"] { transform: translateX(4px); border-color: var(--company-accent); background: color-mix(in srgb, var(--company-accent) 10%, transparent); }
-      .company-option[aria-selected="true"]::before { position: absolute; inset: 8px auto 8px -1px; width: 3px; content: ""; background: var(--company-accent); box-shadow: 0 0 14px var(--company-accent); }
-      .company-mark { display: grid; width: 44px; height: 44px; place-items: center; border: 1px solid color-mix(in srgb, var(--company-accent) 65%, white 0%); color: var(--company-accent); font-size: 1.15rem; font-weight: 900; letter-spacing: -0.08em; }
-      .company-copy { min-width: 0; }
-      .company-copy strong { display: block; font-size: 0.98rem; }
-      .company-copy small { display: block; margin-top: 2px; overflow: hidden; color: var(--muted); font-size: 0.68rem; letter-spacing: 0.05em; text-overflow: ellipsis; white-space: nowrap; }
-      .company-arrow { color: var(--company-accent); font-size: 1.1rem; transition: transform 180ms ease; }
-      .company-option:hover .company-arrow,
-      .company-option[aria-selected="true"] .company-arrow { transform: translateX(3px); }
-      .panel-footnote { margin: 18px 0 0; color: var(--muted); font-size: 0.72rem; line-height: 1.7; }
-
-      .model-panel { min-width: 0; padding: 24px; background: linear-gradient(145deg, rgba(20, 29, 49, 0.88), rgba(10, 14, 26, 0.78)); }
-      .model-panel-header { display: flex; align-items: end; justify-content: space-between; gap: 20px; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
-      .model-panel-kicker { color: var(--cyan); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase; }
-      .model-panel-header h3 { margin: 5px 0 0; font-size: clamp(1.55rem, 3vw, 2.3rem); letter-spacing: -0.05em; }
-      .model-panel-note { max-width: 280px; margin: 0; color: var(--muted); font-size: 0.78rem; text-align: right; }
-      .model-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
-      .model-grid > article { min-width: 0; }
-      .model-card { --accent: var(--cyan); display: block; overflow: hidden; border: 1px solid var(--line); border-top: 2px solid var(--accent); color: var(--paper); background: rgba(6, 10, 20, 0.7); transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
-      .model-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 65%, white 0%); box-shadow: 0 14px 28px rgba(0, 0, 0, 0.26); }
-      .model-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
-      .model-card-visual { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: #0b1020; }
-      .model-card-visual::after { position: absolute; inset: 0; content: ""; background: linear-gradient(180deg, transparent 50%, rgba(3, 6, 14, 0.72)); pointer-events: none; }
-      .model-card-visual img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 400ms ease; }
-      .model-card:hover .model-card-visual img { transform: scale(1.045); }
-      .model-visual-tag { position: absolute; right: 10px; bottom: 8px; z-index: 1; color: var(--accent); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
-      .model-card-body { padding: 12px; }
-      .model-provider { margin: 0 0 5px; overflow: hidden; color: var(--accent); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.1em; text-overflow: ellipsis; text-transform: uppercase; white-space: nowrap; }
-      .model-card-body h4 { margin: 0; overflow: hidden; font-size: 1rem; letter-spacing: -0.025em; text-overflow: ellipsis; white-space: nowrap; }
-      .model-game { min-height: 0; margin: 6px 0 12px; overflow: hidden; color: var(--muted); font-size: 0.7rem; text-overflow: ellipsis; white-space: nowrap; }
-      .model-card-footer { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 9px; border-top: 1px solid var(--line); color: var(--muted); font-size: 0.58rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; }
-      .model-card-footer span:last-child { color: var(--accent); transition: transform 180ms ease; }
-      .model-card:hover .model-card-footer span:last-child { transform: translateX(3px); }
-      .model-empty { position: relative; display: grid; min-height: 320px; place-items: center; overflow: hidden; margin-top: 22px; padding: 40px 24px; border: 1px dashed rgba(164, 186, 211, 0.28); text-align: center; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0 1px, transparent 1px 14px); }
-      .model-empty::before { position: absolute; width: 210px; height: 210px; border: 1px solid rgba(111, 231, 255, 0.15); border-radius: 50%; content: ""; box-shadow: 0 0 0 28px rgba(111, 231, 255, 0.025), 0 0 0 56px rgba(111, 231, 255, 0.018); }
-      .empty-content { position: relative; z-index: 1; }
-      .empty-kicker { color: var(--orange); font-size: 0.65rem; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; }
-      .model-empty strong { display: block; margin-top: 10px; font-size: clamp(1.5rem, 3vw, 2.3rem); letter-spacing: -0.06em; }
-      .model-empty p { max-width: 340px; margin: 10px auto 16px; color: var(--muted); font-size: 0.84rem; }
-      .empty-signal { color: var(--cyan); font-size: 0.66rem; font-weight: 800; letter-spacing: 0.12em; }
-      [hidden] { display: none !important; }
-
-      .footer { margin-top: 72px; padding-top: 20px; border-top: 1px solid var(--line); }
-      .footer span:last-child { color: var(--paper); letter-spacing: 0.03em; text-transform: none; font-weight: 500; }
-
-      @media (max-width: 900px) {
-        .hero { grid-template-columns: 1fr; gap: 24px; padding-top: 56px; }
-        .hero-visual { min-height: 280px; transform: none; }
-        .selection-stage { grid-template-columns: 1fr; }
-        .company-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .company-option { grid-template-columns: 40px minmax(0, 1fr); }
-        .company-arrow { display: none; }
-        .model-panel-note { max-width: 220px; }
-      }
-
-      @media (max-width: 720px) {
-        .model-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      }
-
-      @media (max-width: 580px) {
-        .shell { width: min(100% - 28px, 1240px); padding-top: 18px; }
-        .topbar { align-items: flex-start; flex-direction: column; gap: 10px; }
-        .hero { min-height: auto; padding: 64px 0 54px; }
-        h1 { font-size: clamp(3.25rem, 17vw, 5.4rem); }
-        .hero-visual { min-height: 240px; }
-        .signal { top: 40px; left: 32px; }
-        .hero-meta { right: 32px; bottom: 28px; left: 32px; }
-        .section-head { align-items: flex-start; flex-direction: column; gap: 8px; }
-        .section-head p { text-align: left; }
-        .company-list { grid-template-columns: 1fr; }
-        .company-option { grid-template-columns: 44px minmax(0, 1fr) auto; }
-        .company-arrow { display: block; }
-        .model-panel { padding: 18px; }
-        .model-panel-header { align-items: flex-start; flex-direction: column; gap: 10px; }
-        .model-panel-note { max-width: none; text-align: left; }
-        .model-grid { grid-template-columns: 1fr; }
-        .footer { align-items: flex-start; flex-direction: column; gap: 8px; }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="shell">
-      <header class="topbar">
-        <a class="wordmark" href="./">AI//BATTLE <span>PLAYABLE BENCHMARK</span></a>
-        <div class="status"><span class="pulse"></span>GITHUB PAGES · ONLINE</div>
-      </header>
-
-      <section class="hero" aria-labelledby="hero-title">
-        <div class="hero-copy">
-          <p class="eyebrow">01 select / 02 launch</p>
-          <h1 id="hero-title">Choose the<br /><em>source.</em></h1>
-          <p>先选择 AI 公司，再从该公司的模型列表中选择一条赛道。所有作品都使用同一份严格提示词，从零生成可玩的 3D / 2.5D 横版跑酷。</p>
-          <div class="hero-actions">
-            <a class="button primary" href="#lineup">选择公司 ↘</a>
-            <a class="button secondary" href="https://github.com/yhan-sun/ai-battle" target="_blank" rel="noreferrer">查看仓库 ↗</a>
-          </div>
-        </div>
-
-        <div class="hero-visual" aria-hidden="true">
-          <div class="signal"><small>FLOW</small><strong>01</strong><span>COMPANY → MODEL → RUN</span></div>
-          <div class="star"></div>
-          <div class="orbit orbit-a"></div>
-          <div class="orbit orbit-b"></div>
-          <div class="hero-meta"><span>ONE PROMPT / AUTO DISCOVERY</span><strong id="roster-count">LOADING ROSTER</strong></div>
-        </div>
-      </section>
-
-      <section id="lineup" aria-labelledby="lineup-title">
-        <div class="section-head">
-          <div>
-            <p class="eyebrow">Company directory / step one</p>
-            <h2 id="lineup-title">先选一家公司。</h2>
-          </div>
-          <p>选定公司后，第二步会解锁它的模型列表；再点击模型进入对应的独立 Vite 游戏。</p>
-        </div>
-
-        <div class="selection-stage">
-          <aside class="company-panel" aria-labelledby="company-title">
-            <div class="panel-heading">
-              <span class="panel-number">01</span>
-              <div>
-                <div class="panel-eyebrow">Provider</div>
-                <h3 id="company-title">公司</h3>
-              </div>
-            </div>
-            <div class="company-list" id="company-list" role="listbox" aria-label="选择 AI 公司" aria-busy="true">
-              <div class="company-loading" role="status">正在读取参赛清单…</div>
-            </div>
-            <p class="panel-footnote">公司是第一层筛选。选择后，右侧只显示该公司的模型，不会把不同来源混在一起。</p>
-          </aside>
-
-          <section class="model-panel" id="model-panel" aria-labelledby="model-title" aria-live="polite">
-            <div class="model-panel-header">
-              <div>
-                <div class="model-panel-kicker" id="model-kicker">02 / MODEL · LOCKED</div>
-                <h3 id="model-title">再选择一个模型。</h3>
-              </div>
-              <p class="model-panel-note" id="model-note">模型列表将在你选择公司后出现。</p>
-            </div>
-
-            <div class="model-empty" id="model-empty" role="status">
-              <div class="empty-content">
-                <span class="empty-kicker">AWAITING COMPANY INPUT</span>
-                <strong>先选公司</strong>
-                <p>从左侧选择任一已收录公司，解锁对应的模型入口。</p>
-                <span class="empty-signal">COMPANY / REQUIRED</span>
-              </div>
-            </div>
-            <div class="model-grid" id="model-grid" role="list" hidden></div>
-          </section>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <span>AI BATTLE / 2026</span>
-        <span>先选公司 · 再选模型 · 现在开跑</span>
-      </footer>
-    </main>
-    <script>
-      const companies = new Map();
-      let companyButtons = [];
-      const companyList = document.querySelector("#company-list");
-      const rosterCount = document.querySelector("#roster-count");
-      const modelEmpty = document.querySelector("#model-empty");
-      const modelGrid = document.querySelector("#model-grid");
-      const modelKicker = document.querySelector("#model-kicker");
-      const modelTitle = document.querySelector("#model-title");
-      const modelNote = document.querySelector("#model-note");
-
-      function element(tagName, className, text) {
-        const node = document.createElement(tagName);
-        if (className) node.className = className;
-        if (text !== undefined) node.textContent = text;
-        return node;
-      }
-
-      function createCompanyButton(company) {
-        const button = element("button", "company-option");
-        button.type = "button";
-        button.setAttribute("role", "option");
-        button.setAttribute("aria-selected", "false");
-        button.dataset.company = company.slug;
-        button.style.setProperty("--company-accent", company.accent);
-
-        const mark = element("span", "company-mark", company.mark);
-        mark.setAttribute("aria-hidden", "true");
-        const copy = element("span", "company-copy");
-        copy.append(
-          element("strong", "", company.name),
-          element("small", "", `${company.models.length} 个可试玩模型`),
-        );
-        const arrow = element("span", "company-arrow", "↗");
-        arrow.setAttribute("aria-hidden", "true");
-        button.append(mark, copy, arrow);
-        button.addEventListener("click", () => renderModels(company.slug));
-        return button;
-      }
-
-      function createModelCard(company, model, index) {
-        const article = element("article");
-        article.setAttribute("role", "listitem");
-
-        const link = element("a", "model-card");
-        link.href = model.path;
-        link.setAttribute("aria-label", `进入 ${company.name} ${model.name} 游戏`);
-        link.style.setProperty("--accent", company.accent);
-
-        const visual = element("div", "model-card-visual");
-        const image = element("img");
-        image.src = model.image;
-        image.alt = `${company.name} ${model.name} 游戏封面`;
-        image.loading = "lazy";
-        visual.append(
-          image,
-          element("span", "model-visual-tag", `${String(index + 1).padStart(2, "0")} / ${model.tag}`),
-        );
-
-        const body = element("div", "model-card-body");
-        const footer = element("div", "model-card-footer");
-        const protocolLabel = model.protocolVersion === 1 ? "Isolation v1" : "Historical entry";
-        footer.append(element("span", "", protocolLabel), element("span", "", "点击进入 ↗"));
-        body.append(
-          element("p", "model-provider", `${company.name} / ${model.slug}`),
-          element("h4", "", model.name),
-          element("p", "model-game", model.title),
-          footer,
-        );
-        link.append(visual, body);
-        article.append(link);
-        return article;
-      }
-
-      function renderModels(companyKey) {
-        const company = companies.get(companyKey);
-        if (!company) return;
-
-        companyButtons.forEach((button) => {
-          const selected = button.dataset.company === companyKey;
-          button.classList.toggle("selected", selected);
-          button.setAttribute("aria-selected", String(selected));
-        });
-
-        modelEmpty.hidden = true;
-        modelGrid.hidden = false;
-        modelKicker.textContent = `02 / MODEL · ${company.code}`;
-        modelTitle.textContent = `${company.name} 的模型`;
-        modelNote.textContent = company.note;
-        modelGrid.replaceChildren(
-          ...company.models.map((model, index) => createModelCard(company, model, index)),
-        );
-      }
-
-      async function loadRoster() {
-        try {
-          const response = await fetch("./submissions.json", { cache: "no-cache" });
-          if (!response.ok) throw new Error(`HTTP ${response.status}`);
-          const manifest = await response.json();
-          if (manifest.schemaVersion !== 1 || !Array.isArray(manifest.providers) || manifest.providers.length === 0) {
-            throw new Error("Invalid or empty submissions manifest");
-          }
-
-          for (const company of manifest.providers) {
-            if (!company?.slug || !company?.name || !company?.accent || !Array.isArray(company.models)) {
-              throw new Error("Invalid provider entry");
-            }
-            companies.set(company.slug, company);
-          }
-
-          const fragment = document.createDocumentFragment();
-          for (const company of companies.values()) fragment.append(createCompanyButton(company));
-          companyList.replaceChildren(fragment);
-          companyList.setAttribute("aria-busy", "false");
-          companyButtons = [...companyList.querySelectorAll(".company-option")];
-          const modelCount = [...companies.values()].reduce((sum, company) => sum + company.models.length, 0);
-          rosterCount.textContent = `${companies.size} COMPANIES / ${modelCount} DEMOS`;
-        } catch (error) {
-          const message = element("div", "company-error", "参赛清单加载失败，请刷新页面重试。");
-          message.setAttribute("role", "alert");
-          companyList.replaceChildren(message);
-          companyList.setAttribute("aria-busy", "false");
-          rosterCount.textContent = "ROSTER UNAVAILABLE";
-          modelKicker.textContent = "02 / MODEL · UNAVAILABLE";
-          modelTitle.textContent = "暂时无法读取模型。";
-          modelNote.textContent = "submissions.json 未成功加载。";
-          console.error("Unable to load submissions manifest", error);
-        }
-      }
-
-      loadRoster();
-    </script>
-  </body>
+  <dialog class="detail-dialog" id="detail-dialog" aria-labelledby="detail-title" aria-describedby="detail-description"><div class="dialog-content"><div class="dialog-top"><p class="eyebrow">INSIDE THE ENTRY</p><button class="icon-button" id="close-detail" type="button" aria-label="关闭作品详情" autofocus><svg class="icon" aria-hidden="true" focusable="false"><use href="#i-close"/></svg></button></div><p class="detail-provider" id="detail-provider"></p><h2 id="detail-title"></h2><p class="detail-game" id="detail-game"></p><dl class="detail-facts"><div><dt>提交记录</dt><dd id="detail-protocol"></dd></div><div><dt>源码目录</dt><dd id="detail-path"></dd></div></dl><p id="detail-description">每个作品都是独立项目。协议版本为提交时的元数据，不等于质量评分；具体玩法和完成度请通过试玩与源码确认。</p><div class="dialog-actions"><a class="button button-primary" id="detail-play" target="_blank" rel="noopener noreferrer">开始试玩 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-external"/></svg><span class="sr-only">（新标签页）</span></a><a class="button button-outline" id="detail-source" target="_blank" rel="noopener noreferrer">查看源码 <svg class="icon" aria-hidden="true" focusable="false"><use href="#i-code"/></svg><span class="sr-only">（新标签页）</span></a></div></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <script type="module">
+    import { createArena } from "./assets/arena.mjs";
+    const arena = createArena();
+    arena.load(async (signal) => {
+      const response = await fetch("./submissions.json", { cache: "no-cache", signal });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      return response.json();
+    });
+  </script>
+</body>
 </html>

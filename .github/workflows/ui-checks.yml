@@ -1,0 +1,33 @@
+name: Platform UI checks
+
+on:
+  pull_request:
+    paths:
+      - 'pages/**'
+      - 'scripts/verify-ui.mjs'
+      - 'scripts/test-ui-browser.py'
+      - 'scripts/build-pages.mjs'
+      - 'package.json'
+      - '.github/workflows/ui-checks.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Platform logic and integration contracts
+        run: npm run test:ui
+      - name: Install maintainer-only browser test tooling
+        run: |
+          python -m pip install playwright==1.57.0
+          python -m playwright install --with-deps chromium
+      - name: Offline browser interactions and responsive layout
+        run: python scripts/test-ui-browser.py
