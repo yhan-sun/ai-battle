@@ -1,0 +1,7 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": { "slug": "openai", "name": "OpenAI", "accent": "#167D8D", "order": 1000 },
+  "model": { "slug": "gpt-6-astra-max", "name": "GPT-6 Astra Max", "order": 1000 },
+  "demo": { "title": "星途邮差 · AEROMAIL", "tag": "云端无尽跑酷" }
+}
