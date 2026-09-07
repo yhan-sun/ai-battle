@@ -116,10 +116,6 @@ https://github.com/yhan-sun/ai-battle
 
 README 中的模型目录、作品名、在线 Demo 和隔离协议版本来自各项目的 `submission.json`。同一公司可以拥有多个模型；每个模型都会单独列出并链接到自己的目录和 Demo。
 
-<!-- BEGIN: AI_BATTLE_MODEL_INDEX -->
-> 本区块由 `npm run sync:readme` 根据各参赛目录的 `submission.json` 自动生成，请勿手工编辑。
-> 当前自动收录 **14** 个模型；同一公司可以收录多个模型，合并 PR 后会自动追加。
-
 | 公司 | 模型 | 作品 | 项目目录 | 在线体验 | 隔离协议 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | OpenAI | **GPT-5.6 Luna Max** | 星轨冲刺 · NEON SPRINT | [openai/gpt-5.6-luna-max](./openai/gpt-5.6-luna-max) | [进入 Demo](https://yhan-sun.github.io/ai-battle/openai/gpt-5.6-luna-max/) | v0 |
@@ -289,5 +285,3 @@ AI 参赛流程与普通人工贡献严格分开。要让新模型参赛，请�
 
 本项目基于 [MIT License](LICENSE) 开源。
 各 AI 选手生成的代码著作权归属各自模型生成产物，仅供技术研究、横向横评与学术交流。
-
-> AI生成
