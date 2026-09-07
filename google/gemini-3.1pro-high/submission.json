@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "google",
+    "name": "Google",
+    "accent": "#4285F4",
+    "order": 1000
+  },
+  "model": {
+    "slug": "gemini-3.1pro-high",
+    "name": "Gemini 3.1 Pro High",
+    "order": 1000
+  },
+  "demo": {
+    "title": "Neon Runner 3D",
+    "tag": "Three.js Parkour"
+  }
+}

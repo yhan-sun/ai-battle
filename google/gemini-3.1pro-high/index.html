@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Neon Runner 3D</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #000;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #fff;
+        }
+        #game-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        #ui-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .hud {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .skills {
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+        .skill-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            backdrop-filter: blur(4px);
+            transition: 0.2s;
+        }
+        .skill-btn:active { background: rgba(255, 255, 255, 0.5); }
+        .skill-btn.cooldown { opacity: 0.5; cursor: not-allowed; }
+        
+        .screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            z-index: 10;
+        }
+        .hidden { display: none !important; }
+        
+        h1 { font-size: 48px; text-transform: uppercase; letter-spacing: 4px; text-shadow: 0 0 15px #0ff; margin-bottom: 10px; }
+        p { font-size: 20px; max-width: 600px; text-align: center; line-height: 1.5; color: #ccc; }
+        .btn {
+            margin-top: 30px;
+            padding: 15px 40px;
+            font-size: 24px;
+            background: #0ff;
+            color: #000;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 0 20px #0ff;
+            transition: transform 0.2s;
+        }
+        .btn:hover { transform: scale(1.1); }
+        .btn:active { transform: scale(0.95); }
+
+        .stat-line { font-size: 24px; margin: 10px 0; }
+        
+        #mode-announcement {
+            position: absolute;
+            top: 30%;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            font-size: 64px;
+            font-weight: bold;
+            color: #ff0;
+            text-shadow: 0 0 20px #f00, 0 0 10px #f00;
+            opacity: 0;
+            transition: opacity 0.5s, transform 0.5s;
+            transform: scale(0.5);
+            pointer-events: none;
+        }
+        #mode-announcement.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .controls-hint {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #aaa;
+            text-align: center;
+        }
+        .key {
+            display: inline-block;
+            background: #333;
+            border: 1px solid #666;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 0 2px;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+    
+    <div id="ui-layer">
+        <div class="hud">
+            <div>Score: <span id="hud-score">0</span></div>
+            <div>Coins: <span id="hud-coins">0</span></div>
+            <div>Distance: <span id="hud-distance">0</span>m</div>
+        </div>
+        <div class="skills">
+            <button class="skill-btn" id="btn-dash">Dash [D]</button>
+            <button class="skill-btn" id="btn-shield">Shield [S]</button>
+            <button class="skill-btn" id="btn-magnet">Magnet [M]</button>
+            <button class="skill-btn" id="btn-pause" style="margin-left: auto;">Pause [Esc]</button>
+        </div>
+    </div>
+    
+    <div id="start-screen" class="screen">
+        <h1>Neon Runner</h1>
+        <p>Run, Jump, and Slide through an endless cyberpunk world.</p>
+        <div class="controls-hint">
+            <span class="key">Space</span> / <span class="key">↑</span> Jump (Double Jump)<br>
+            <span class="key">↓</span> Duck<br>
+            Stomp enemies for extra jumps!<br>
+            Collect coins and enter special zones!
+        </div>
+        <button class="btn" id="btn-start">START GAME</button>
+    </div>
+    
+    <div id="pause-screen" class="screen hidden">
+        <h1>PAUSED</h1>
+        <button class="btn" id="btn-resume">RESUME</button>
+    </div>
+    
+    <div id="game-over-screen" class="screen hidden">
+        <h1>GAME OVER</h1>
+        <div class="stat-line">Score: <span id="end-score">0</span></div>
+        <div class="stat-line">Distance: <span id="end-distance">0</span>m</div>
+        <div class="stat-line" style="color: #0ff;">High Score: <span id="high-score">0</span></div>
+        
+        <button class="btn" id="btn-revive" style="background: #f0f; box-shadow: 0 0 20px #f0f;">REVIVE (-1000 Score)</button>
+        <button class="btn" id="btn-restart">RESTART</button>
+    </div>
+
+    <div id="mode-announcement">SUPER MODE!</div>
+    
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
