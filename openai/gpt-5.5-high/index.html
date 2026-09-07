@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>OpenAI GPT-5.5 High · 星轨疾跑</title>
+    <meta name="description" content="Three.js 3D/2.5D 横版跑酷游戏，包含二段跳、下蹲、奖励关卡、穿越奖励、坐骑宠物、技能与本地存档。" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="gameCanvas" aria-label="星轨疾跑游戏画布"></canvas>
+
+      <section id="startScreen" class="screen screen--active">
+        <div class="panel hero-panel">
+          <p class="eyebrow">OpenAI · GPT-5.5 High</p>
+          <h1>星轨疾跑</h1>
+          <p class="subtitle">3D/2.5D 横版跑酷：冲刺、磁铁、护盾、坐骑、宠物、超级奖励与穿越奖励完整串联。</p>
+          <div class="hero-stats">
+            <span>程序化地图</span>
+            <span>可复活</span>
+            <span>本地最高分</span>
+          </div>
+          <button id="startButton" class="primary-button">开始奔跑</button>
+          <button id="muteButton" class="ghost-button" aria-pressed="false">音效：开</button>
+          <p class="hint">键盘：Space/W 跳跃 · S/↓ 下蹲 · E 技能 · P 暂停 · R/T 调试奖励入口</p>
+        </div>
+      </section>
+
+      <section id="pauseScreen" class="screen">
+        <div class="panel compact-panel">
+          <p class="eyebrow">PAUSED</p>
+          <h2>已暂停</h2>
+          <button id="resumeButton" class="primary-button">继续</button>
+        </div>
+      </section>
+
+      <section id="reviveScreen" class="screen">
+        <div class="panel compact-panel">
+          <p class="eyebrow">REVIVE</p>
+          <h2>要复活吗？</h2>
+          <p>消耗本局能量，保留距离与分数并获得 2 秒护盾。</p>
+          <button id="reviveButton" class="primary-button">立即复活</button>
+          <button id="finishButton" class="ghost-button">结束结算</button>
+        </div>
+      </section>
+
+      <section id="resultScreen" class="screen">
+        <div class="panel compact-panel">
+          <p class="eyebrow">RESULT</p>
+          <h2>本局结算</h2>
+          <div class="result-grid">
+            <span>表现分</span><strong id="finalScore">0</strong>
+            <span>距离</span><strong id="finalDistance">0m</strong>
+            <span>最高分</span><strong id="finalBest">0</strong>
+          </div>
+          <button id="restartButton" class="primary-button">再来一局</button>
+        </div>
+      </section>
+
+      <section id="hud" class="hud" aria-live="polite">
+        <div class="hud-card hud-card--wide">
+          <span>表现分</span>
+          <strong id="scoreText">0</strong>
+        </div>
+        <div class="hud-card">
+          <span>距离</span>
+          <strong id="distanceText">0m</strong>
+        </div>
+        <div class="hud-card">
+          <span>金币</span>
+          <strong id="coinText">0</strong>
+        </div>
+        <div class="hud-card">
+          <span>速度</span>
+          <strong id="speedText">1.0x</strong>
+        </div>
+        <div class="status-strip">
+          <span id="modeBadge">主赛道</span>
+          <span id="powerBadge">技能就绪</span>
+          <span id="shieldBadge">护盾 0s</span>
+        </div>
+      </section>
+
+      <div id="toast" class="toast"></div>
+
+      <div class="mobile-controls" aria-label="触屏操作">
+        <button data-action="slide">下蹲</button>
+        <button data-action="jump">跳跃</button>
+        <button data-action="skill">技能</button>
+      </div>
+    </div>
+
+    <script type="module" src="./src/main.js"></script>
+  </body>
+</html>

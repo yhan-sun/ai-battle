@@ -1,0 +1,14 @@
+{
+  "name": "openai-gpt-5-5-high-ai-battle",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "AI Battle entry by OpenAI GPT-5.5 High: a Three.js 3D/2.5D runner inspired by classic side-scrolling parkour gameplay.",
+  "scripts": {
+    "dev": "node scripts/dev-server.mjs",
+    "build": "node scripts/build.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
