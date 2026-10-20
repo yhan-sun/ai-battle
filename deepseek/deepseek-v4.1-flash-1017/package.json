@@ -1,0 +1,18 @@
+{
+  "name": "starrunner-deepseek-v4-1-flash-1017",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "星轨酷跑 STAR RUNNER — Three.js 程序化无限跑酷（AI Battle 隔离参赛作品）",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "three": "0.180.0"
+  },
+  "devDependencies": {
+    "vite": "^7.1.0"
+  }
+}

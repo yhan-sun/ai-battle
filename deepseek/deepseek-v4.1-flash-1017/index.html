@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="theme-color" content="#07061a" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2307061a'/%3E%3Cpath d='M32 7l6.4 18.6L57 32l-18.6 6.4L32 57l-6.4-18.6L7 32l18.6-6.4z' fill='%2363f4ff'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23ff4fb7'/%3E%3C/svg%3E"
+    />
+    <meta
+      name="description"
+      content="星轨酷跑 STAR RUNNER：Three.js 程序化无限跑酷，含二段跳、下蹲、踩怪、冲刺、磁铁、护盾、超级奖励与穿越奖励。"
+    />
+    <title>星轨酷跑 · STAR RUNNER</title>
+  </head>
+  <body>
+    <div id="app">
+      <canvas id="game-canvas" aria-label="星轨酷跑游戏画面"></canvas>
+      <div class="vignette" aria-hidden="true"></div>
+      <div id="flash" class="flash" aria-hidden="true"></div>
+
+      <!-- ===================== HUD ===================== -->
+      <div id="hud" class="hud hidden">
+        <div class="hud-top">
+          <div class="stat-cluster">
+            <div class="stat">
+              <span class="stat-label">表现分</span>
+              <strong id="hud-score" class="stat-value">0</strong>
+            </div>
+            <div class="stat stat-small">
+              <span class="stat-label">距离</span>
+              <strong id="hud-distance" class="stat-value">0 m</strong>
+            </div>
+          </div>
+
+          <div class="super-meter" aria-label="超级奖励进度">
+            <div class="super-meter-head">
+              <span>超级奖励</span>
+              <span id="hud-super-pct">0%</span>
+            </div>
+            <div class="meter-track"><div id="hud-super-fill" class="meter-fill"></div></div>
+          </div>
+
+          <div class="hud-right">
+            <div class="hud-pill coin-pill" title="本局金币">
+              <span class="coin-glyph"></span>
+              <span id="hud-coins">0</span>
+            </div>
+            <div class="hud-pill speed-pill" title="当前速度">
+              <span id="hud-speed">0</span><small>km/h</small>
+            </div>
+            <button id="btn-pause" class="icon-btn" type="button" aria-label="暂停">❚❚</button>
+            <button id="btn-mute" class="icon-btn" type="button" aria-label="切换音效">♪</button>
+          </div>
+        </div>
+
+        <div id="combo" class="combo hidden">
+          <span id="combo-count">0</span><small>连击</small><em id="combo-mult">×1</em>
+        </div>
+
+        <div id="reward-banner" class="reward-banner hidden">
+          <div class="reward-copy">
+            <strong id="reward-title">超级奖励</strong>
+            <span id="reward-sub">金币 ×3</span>
+          </div>
+          <div class="reward-clock">
+            <span id="reward-time">12.0</span><small>s</small>
+          </div>
+          <div class="reward-track"><div id="reward-fill"></div></div>
+        </div>
+
+        <div class="hud-bottom">
+          <div class="powerups">
+            <div class="powerup" id="pu-magnet">
+              <span class="pu-icon">磁</span>
+              <span class="pu-name">磁铁</span>
+              <span class="pu-time">--</span>
+            </div>
+            <div class="powerup" id="pu-shield">
+              <span class="pu-icon">盾</span>
+              <span class="pu-name">护盾</span>
+              <span class="pu-time">--</span>
+            </div>
+            <div class="powerup" id="pu-double">
+              <span class="pu-icon">×2</span>
+              <span class="pu-name">双倍</span>
+              <span class="pu-time">--</span>
+            </div>
+          </div>
+
+          <button id="btn-skill" class="skill-btn" type="button" aria-label="冲刺技能">
+            <span id="skill-energy" class="skill-ring">0%</span>
+            <span id="skill-label" class="skill-label">冲刺</span>
+          </button>
+        </div>
+
+        <div class="touch-controls" aria-hidden="true">
+          <button id="touch-jump" class="touch-btn touch-jump" type="button">跳跃</button>
+          <button id="touch-crouch" class="touch-btn touch-crouch" type="button">下蹲</button>
+          <button id="touch-skill" class="touch-btn touch-skill" type="button">冲刺</button>
+        </div>
+      </div>
+
+      <!-- ===================== 开始界面 ===================== -->
+      <section id="screen-start" class="screen screen-start">
+        <div class="start-layout">
+          <div class="start-main">
+            <div class="eyebrow"><span class="live-dot"></span>AI BATTLE · 隔离参赛作品</div>
+            <h1 class="brand">
+              <span class="brand-cn">星轨酷跑</span>
+              <em class="brand-en">STAR RUNNER</em>
+            </h1>
+            <p class="lede">
+              穿过晨曦浮岛、霓虹都市与地心晶簇，在无限星轨上奔跑。二段跳、滑铲、踩怪、冲刺，用金币点亮超级奖励，
+              撞开穿越之门冲进高速时空。
+            </p>
+
+            <div class="records">
+              <div class="record">
+                <span>最高表现分</span>
+                <strong id="start-best">0</strong>
+              </div>
+              <div class="record">
+                <span>最远距离</span>
+                <strong id="start-distance">0 m</strong>
+              </div>
+              <div class="record">
+                <span>金币银行</span>
+                <strong id="start-coins">0</strong>
+              </div>
+            </div>
+
+            <div class="loadout">
+              <div class="loadout-group">
+                <div class="group-head"><span>坐骑</span><small>被动加成</small></div>
+                <div id="mount-options" class="option-row"></div>
+              </div>
+              <div class="loadout-group">
+                <div class="group-head"><span>宠物</span><small>自动辅助</small></div>
+                <div id="pet-options" class="option-row"></div>
+              </div>
+            </div>
+
+            <div class="start-actions">
+              <button id="btn-start" class="btn btn-primary btn-lg" type="button">
+                <span>开始奔跑</span>
+                <small>ENTER / 点击</small>
+              </button>
+              <button id="btn-mute-start" class="btn btn-ghost" type="button">音效：开</button>
+            </div>
+
+            <div class="controls-hint">
+              <span><kbd>空格</kbd><kbd>↑</kbd> 跳跃 / 二段跳</span>
+              <span><kbd>↓</kbd> 下蹲 / 快速下落</span>
+              <span><kbd>K</kbd> 冲刺技能</span>
+              <span><kbd>Esc</kbd> 暂停</span>
+            </div>
+          </div>
+
+          <aside class="start-side">
+            <div class="side-card">
+              <span class="side-kicker">核心机制</span>
+              <ul class="feature-list">
+                <li><b>01</b><div><strong>无限程序化星轨</strong><span>四种地形主题轮换，坑洞与障碍保证可跳过。</span></div></li>
+                <li><b>02</b><div><strong>超级奖励</strong><span>金币充满能量，切入黄金场景，×3 表现分。</span></div></li>
+                <li><b>03</b><div><strong>穿越奖励</strong><span>时空之门开启高速隧道，×4 表现分。</span></div></li>
+                <li><b>04</b><div><strong>坐骑与宠物</strong><span>速度 / 跳跃加成，自动吸金或循环护盾。</span></div></li>
+              </ul>
+            </div>
+            <div class="side-foot">纯代码程序化美术 · WebAudio 合成音效 · Three.js</div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- ===================== 暂停 ===================== -->
+      <section id="screen-pause" class="screen screen-modal hidden">
+        <div class="modal-card">
+          <span class="modal-kicker">PAUSED</span>
+          <h2>暂停</h2>
+          <p class="modal-text">星轨已经冻结，随时可以继续。</p>
+          <div class="modal-actions">
+            <button id="btn-resume" class="btn btn-primary" type="button">继续奔跑</button>
+            <button id="btn-restart-pause" class="btn btn-ghost" type="button">重新开始</button>
+            <button id="btn-quit" class="btn btn-ghost" type="button">返回主菜单</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 复活 ===================== -->
+      <section id="screen-revive" class="screen screen-modal hidden">
+        <div class="modal-card modal-revive">
+          <span class="modal-kicker">SECOND WIND</span>
+          <h2>还能再跑一次</h2>
+          <div class="revive-timer">
+            <span id="revive-count">5</span><small>秒</small>
+          </div>
+          <p id="revive-note" class="modal-text">本次奔跑首次复活免费，恢复后获得 2.5 秒无敌。</p>
+          <div class="modal-actions">
+            <button id="btn-revive" class="btn btn-primary" type="button">立即复活</button>
+            <button id="btn-giveup" class="btn btn-ghost" type="button">结束本局</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===================== 结算 ===================== -->
+      <section id="screen-gameover" class="screen screen-modal hidden">
+        <div class="modal-card modal-gameover">
+          <span class="modal-kicker">RUN COMPLETE</span>
+          <h2>本局结算</h2>
+          <div class="final-score">
+            <strong id="go-score">0</strong>
+            <span>表现分</span>
+            <em id="go-record" class="record-badge hidden">新纪录</em>
+          </div>
+          <div class="result-grid">
+            <div><span>距离</span><strong id="go-distance">0 m</strong></div>
+            <div><span>金币</span><strong id="go-coins">0</strong></div>
+            <div><span>最高连击</span><strong id="go-combo">0</strong></div>
+            <div><span>奖励场次</span><strong id="go-rewards">0</strong></div>
+          </div>
+          <p class="modal-text">历史最高 <strong id="go-best">0</strong> · 金币银行 <strong id="go-bank">0</strong></p>
+          <div class="modal-actions">
+            <button id="btn-retry" class="btn btn-primary" type="button">再跑一次</button>
+            <button id="btn-menu" class="btn btn-ghost" type="button">返回主菜单</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="toast" class="toast hidden" role="status">
+        <strong id="toast-title"></strong>
+        <span id="toast-sub"></span>
+      </div>
+
+      <div id="fade" class="fade" aria-hidden="true"></div>
+
+      <div id="boot-error" class="boot-error hidden" role="alert">
+        <strong>游戏启动失败</strong>
+        <span id="boot-error-text"></span>
+      </div>
+
+      <noscript><div class="boot-error"><strong>需要启用 JavaScript 才能运行游戏。</strong></div></noscript>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

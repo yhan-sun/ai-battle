@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "protocolVersion": 1,
+  "provider": {
+    "slug": "deepseek",
+    "name": "DeepSeek",
+    "accent": "#4D6BFE",
+    "order": 1000
+  },
+  "model": {
+    "slug": "deepseek-v4.1-flash-1017",
+    "name": "DeepSeek V4.1 Flash 1017",
+    "order": 1000
+  },
+  "demo": {
+    "title": "星轨酷跑 STAR RUNNER",
+    "tag": "无限跑酷"
+  }
+}
